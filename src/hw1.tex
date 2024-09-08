@@ -13,10 +13,22 @@ Prove the following equality using induction on $n$:\footnote{Recall that $\math
     \end{align}
 \begin{enumerate}
     \item Check the base case ($n=1$).
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-    
+\begin{solution}
+\textit{Basis. }Consider $n=1$. Note $(1-r)(1+r^{1-1})=(1-r)=(1-r^1)$. Therefore $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$ for $n=1$.
+\end{solution}   
     \item Prove the inductive step.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{Hypothesis. }Let $k\in\mathbb{N}$. Of course, $k\geq 1$. Consider $n=k$. Assume the result is true for $n=k$; that is, assume $(1-r)(1+r+r^2+\cdots+r^{k-1})=1-r^k$.\\
+
+\textit{Induction. }Consider $n=k+1$. By the inductive hypothesis, $(1-r)(1+r+r^2+\cdots+r^{k-1})=1-r^k$. Observe
+\begin{align*}
+(1-r)(1+r+r^2+\cdots+r^{k-1})&=1-r^k\\
+(1-r)r^k+(1-r)(1+r+r^2+\cdots+r^{k-1})&=1-r^k+(1-r)r^k\\
+(1-r)(1+r+r^2+\cdots+r^{(k+1)-1})&=1-r^k+r^k-r^{k+1}\\
+&=1-r^{k+1}.
+\end{align*}
+Hence, by the principle of mathematical induction, for all $n\in\mathbb{N}$, we have $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$.~\square
+\end{solution}
     
     \item Using Eq.~\eqref{eq:geometric-sum}, evaluate the following sum:
     \begin{align*}
@@ -25,7 +37,22 @@ Prove the following equality using induction on $n$:\footnote{Recall that $\math
         3^n + 2\cdot 3^{n-1} + 2^2 \cdot 3^{n-2} + \cdots + 2^n =\; ???\;
     \end{align*}
     
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+Observe
+\begin{align*}
+\sum_{i=0}^{n}{2^i\cdot3^{n-i}}&=3^n\sum_{i=0}^{n}{2^i\cdot3^{-i}}\\
+&=3^n\sum_{i=0}^n{\left(\frac{2}{3}\right)^i}\\
+&=3^n\left[1+\frac{2}{3}+\left(\frac{2}{3}\right)^2+\cdots+\left(\frac{2}{3}\right)^{(n+1)-1}\right]\\
+&=3^n\left[\frac{\left(1+\frac{2}{3}+\left(\frac{2}{3}\right)^2+\cdots+\left(\frac{2}{3}\right)^{(n+1)-1}\right)\left(1-\frac{2}{3}\right)}{1-\frac{2}{3}}\right].
+\end{align*}
+Using the result from Eq.~\eqref{eq:geometric-sum}, we have
+\begin{align*}
+\sum_{i=0}^{n}{2^i\cdot3^{n-i}}&=3^n\left[\frac{1-\left(\frac{2}{3}\right)^{n+1}}{1-\frac{2}{3}}\right]\\
+&=3^{n+1}\left[1-\left(\frac{2}{3}\right)^{n+1}\right]\\
+&=3^{n+1}-2^{n+1}.
+\end{align*}
+Thus $\sum_{i=0}^{n}{2^i\cdot3^{n-i}}=3^{n+1}-2^{n+1}$.~\square
+\end{solution}
 \end{enumerate}
 
 
