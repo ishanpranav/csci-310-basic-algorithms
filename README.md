@@ -1,2 +1,3 @@
-# csci-310-basic-algorithms
-A collection of problem set solutions for NYU CSCI 310 Basic Algorithms
+# Basic Algorithms
+
+This is a collection of problem set solutions from the NYU CSCI 310 Basic Algorithms course.
