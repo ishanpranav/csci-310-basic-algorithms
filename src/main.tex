@@ -1,0 +1,180 @@
+% \documentclass[12pt, answers]{exam}
+\def\hw{0}
+\ifnum\hw=1
+\documentclass[12pt]{extarticle}
+\fi
+\ifnum\hw=0
+% \documentclass[12pt]{exam}
+\documentclass[12pt, answers]{exam}
+\fi
+\frenchspacing
+\usepackage[utf8]{inputenc}
+\ifnum\hw=1
+\usepackage{fancyhdr} % OR 2019/12/21 removed because of collision with exam documentclass (I think)
+\fi
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{nameref}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{hyperref}
+\usepackage{comment}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tkz-graph}
+\usetikzlibrary{arrows.meta,arrows}
+\usepackage{qtree}
+\usepackage{float}
+\usepackage{multicol}
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[makeroom]{cancel}
+\usepackage{tgtermes}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{mdframed}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\mypar}[1]{{\textsc{#1}}}
+\usepackage{diagbox}
+% \usepackage{emoji}
+% \usetikzlibrary{external}
+% \tikzexternalize[prefix=tikz]
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% SUBSECTION FORMATTING
+%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{subsection}{-1}
+\renewcommand\thesubsection{\arabic{subsection}}
+\titleformat{\subsection}{\bfseries\large}{}{0pt}{\noindent Question~\thesubsection: }
+\titleformat{name=\subsection,numberless}{\bfseries\large}{}{0pt}{\noindent}
+
+% Define custom commands
+\newcommand{\compresslist}{%
+	\setlength{\itemsep}{3pt}%
+	\setlength{\parskip}{0pt}%
+	\setlength{\parsep}{0pt}%
+}
+\newcommand{\course}{Basic Algorithms, Spring 2022}
+\newcommand{\cno}{CSCI-UA.0310-001,003}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% CUSTOM MATH COMMANDS
+
+\newcommand{\mj}[1]{\textcolor{blue}{[mj: #1]}} 
+\newcommand{\ia}[1]{\textcolor{red}{[ia: #1]}} 
+\newcommand{\hk}[1]{\textcolor{violet}{[hk: #1]}} 
+% Probability
+\newcommand{\prob}[1]{\mathrm{Pr}\left[#1\right]}
+% Expectation
+\newcommand{\expect}[1]{\mathbb{E}\left[#1\right]}
+% Big O
+\newcommand{\bigo}[1]{\mathrm{O}(#1)}
+% Little o
+\newcommand{\lito}[1]{\mathrm{o}(#1)}
+\newcommand{\Ceil}[1]{\lceil #1\rceil}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+\newcommand{\note}[1]{{\color{red} {\bf Note}: {#1}}}
+\newcommand{\intro}{\subsection*{Instructions}
+	
+
+
+% \ifnum\hw=0
+% \newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+%   {\qed \end{trivlist}}
+% \fi
+\begin{itemize}
+    \item {\bf Answer each question on a separate page.}
+    \item {\bf Honors questions are optional. They will not count towards your grade in the course. However you are encouraged to submit your solutions to these problems to receive feedback on your attempts. Our estimation of the difficulty level of these problems is expressed through an indicative number of stars $('*'=\text{easiest})$ to $('*****'=\text{hardest})$.}
+    \item{\bf You must enter the names of your collaborators or other sources as a response to Question $0$. Do NOT leave this blank; if you worked on the homework entirely on your own, please write ``None'' here. Even though collaborations in groups of up to $3$ people are encouraged, you are required to write your own solution.}
+\end{itemize}
+
+\subsection*{List all your collaborators and sources: (\texorpdfstring{$-\infty$}{-∞} points if left blank)}
+\vspace{0.5cm}
+}
+% ====== Code Environment====
+\newenvironment{code}{\begin{tabbing}
+    12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+  {\end{tabbing}}
+\newcommand{\For}{\mbox{\bf for }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\DownTo}{\mbox{\bf downto }}
+\newcommand{\Do}{\mbox{\bf do }}
+\newcommand{\If}{\mbox{\bf if }}
+\newcommand{\Then}{\mbox{\bf then }}
+\newcommand{\Else}{\mbox{\bf else }}
+\newcommand{\While}{\mbox{\bf while }}
+\newcommand{\Repeat}{\mbox{\bf repeat }}
+\newcommand{\Until}{\mbox{\bf until }}
+\newcommand{\Return}{\mbox{\bf return }}
+\newcommand{\Halt}{\mbox{\bf halt }}
+\newcommand{\Swap}{\mbox{\bf swap }}
+\newcommand{\Ex}[2]{\textrm{exchange } #1 \textrm{ with } #2}
+\newcommand{\introMid}{\section*{Instructions}
+\begin{itemize}
+    \item {\bf Answer each question on a separate page.}
+    \item {\bf This exam is roughly representative of the difficulty and length of the actual midterm, for which you will have 75 minutes.}
+    \item{\bf You may use any algorithm or theorem we saw in class without proof, as long as you state it correctly. For all questions asking you to give algorithms, you do \emph{not} have to give detailed pseudo-code, or even any pseudo-code. It is enough to give a clear description of your algorithm.}
+    \item{\bf \bf This exam is only for practice. You need not submit your solutions.}
+\end{itemize}
+}
+
+
+\newcommand{\introActualMidterm}
+{
+
+
+
+
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+%\usepackage[landscape, top=1.5cm,outer=1cm, bottom=1cm, inner=1cm]{geometry}
+\usepackage[top=2cm, outer=2cm, bottom=2cm, inner=2cm]{geometry}
+\begin{document}
+\ifnum\hw=1
+\setlength{\headheight}{30pt} 
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Left}
+\fancyhead[R]{Right}
+%\fancyhead[C]{Center}
+
+\newlength\FHoffset
+\setlength\FHoffset{1cm}
+\addtolength\headwidth{2\FHoffset}
+
+\fancyheadoffset{\FHoffset}
+\newlength\FHleft
+\newlength\FHright
+\setlength\FHleft{1cm}
+\setlength\FHright{0cm}
+\rhead{\cno}
+\lhead{\course}
+\fi
+\renewcommand{\epsilon}{\varepsilon}
+% \runningheadrule
+% \firstpageheadrule
+% \cfoot{}
+  \include{hw1}
+  %\include{hw2}
+  %\include{hw3}
+  %\include{hw4}
+  %\include{hw5}
+%  \include{hw6}
+%  \include{hw7}
+%  \include{hw8}
+  %\include{hw9}
+  %\include{hw10}
+  %\include{hw11}
+  %\include{hw12}
+  %\include{pm}
+\end{document}
