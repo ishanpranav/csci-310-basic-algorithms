@@ -20,7 +20,7 @@ Prove the following equality using induction on $n$:\footnote{Recall that $\math
 \begin{solution}
 \textit{Hypothesis. }Let $k\in\mathbb{N}$. Of course, $k\geq 1$. Consider $n=k$. Assume the result is true for $n=k$; that is, assume $(1-r)(1+r+r^2+\cdots+r^{k-1})=1-r^k$.\\
 
-\textit{Induction. }Consider $n=k+1$. By the inductive hypothesis, $(1-r)(1+r+r^2+\cdots+r^{k-1})=1-r^k$. Observe
+\textit{Inductive step. }Consider $n=k+1$. By the inductive hypothesis, $(1-r)(1+r+r^2+\cdots+r^{k-1})=1-r^k$. Observe
 \begin{align*}
 (1-r)(1+r+r^2+\cdots+r^{k-1})&=1-r^k\\
 (1-r)r^k+(1-r)(1+r+r^2+\cdots+r^{k-1})&=1-r^k+(1-r)r^k\\
@@ -29,14 +29,12 @@ Prove the following equality using induction on $n$:\footnote{Recall that $\math
 \end{align*}
 Hence, by the principle of mathematical induction, for all $n\in\mathbb{N}$, we have $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$.~\square
 \end{solution}
-    
     \item Using Eq.~\eqref{eq:geometric-sum}, evaluate the following sum:
     \begin{align*}
         \sum_{i = 0}^n 2^i \cdot 3^{n-i}
         =
         3^n + 2\cdot 3^{n-1} + 2^2 \cdot 3^{n-2} + \cdots + 2^n =\; ???\;
     \end{align*}
-    
 \begin{solution}
 Observe
 \begin{align*}
@@ -54,36 +52,24 @@ Using the result from Eq.~\eqref{eq:geometric-sum}, we have
 Thus $\sum_{i=0}^{n}{2^i\cdot3^{n-i}}=3^{n+1}-2^{n+1}$.~\square
 \end{solution}
 \end{enumerate}
-
-
-
-
-\subsection*{Question 2: (5 points)}
+\subsection*{Question 2}
 Find a flaw in the following ``proof by induction'' (see Figure~\ref{fig:horse} for an illustration). In particular, state why the inductive step is incorrect:
 \vspace{0.5cm}
-
 \noindent \textbf{Claim:} For all $n \in \mathbb{N}$, and any set of $n$ horses, all horses in the set have the same color.
-
 \begin{enumerate}
     \item Base Case ($n=1$): If there is just one horse in the set, obviously all horses have the same color.
     \item Inductive Step: Suppose the induction hypothesis holds for all $1,2,\ldots,n$. Our goal is to prove the statement for sets of $n+1$ horses. So take any such set. Now exclude one horse, call this horse $A$, and look at the set of $n$ remaining horses. By the induction hypothesis, they all have the same color. Now exclude a different horse, call it $B$, and look at the set of $n$ remaining horses, which includes horse $A$. Then, all horses in this set must also have the same color. This implies that $A$ and $B$ also have the same color. Hence, we obtain that all $n+1$ horses in our set have the same color, ``proving'' the claim. 
 \end{enumerate}
-
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-
-
+\begin{solution}
+The error is in the inductive step. The author states that, supposing the induction hypothesis holds for all $1,2,\dots,n$, the goal is to prove the statement for sets of $n+1$. This is acceptable. However, The author then assumes a set of $n+1$ horses and removes one to achieve a set of $n$ horses. This argument is flawed because the author is relying on the conclusion of the inductive step (that the property holds for all sets of $n+1$) in order to prove the claim. Instead, if the claim were true, the author should have been able to take a set of $n$ horses with the desired property and show that \textit{adding} a horse results in a set of $n+1$ horses with the property that all horses in the set have the same color.
+\end{solution}
 \begin{figure}[h]
     \centering
     \includegraphics{images/horse_venn.pdf}
     \caption{Horses $A$ and $B$, with all the rest of the horses lying in the violet region common to both sets.}
     \label{fig:horse}
 \end{figure}
-
-
-
-
-\subsection*{Question 3: Insertion Sort (6+4=10 points)}
-
+\subsection*{Question 3}
 Recall the {\sc Insertion-Sort} algorithm discussed in the lecture:
 \begin{code}
 	{\sc Insertion-Sort}$(A,n)$\\
@@ -121,7 +107,9 @@ Solve the following tasks:
 	\item Prove the while loop invariant above using induction over $i$. Start your base case at $i=j-1$ and use backwards induction to show that the claim holds for all smaller $i$. (Prove this for an arbitrary value of $j$,
  where $1 \leq j \leq n$.)
 	
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+
+\end{solution}
 	
 	\item Use the inner loop invariant to show the induction step of the outer loop invariant.
 	
