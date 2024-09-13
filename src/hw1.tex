@@ -27,7 +27,7 @@ Prove the following equality using induction on $n$:\footnote{Recall that $\math
 (1-r)(1+r+r^2+\cdots+r^{(k+1)-1})&=1-r^k+r^k-r^{k+1}\\
 &=1-r^{k+1}.
 \end{align*}
-Hence, by the principle of mathematical induction, for all $n\in\mathbb{N}$, we have $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$.~\square
+Hence, by the principle of mathematical induction, for all $n\in\mathbb{N}$, we have $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$.$~\square$
 \end{solution}
     \item Using Eq.~\eqref{eq:geometric-sum}, evaluate the following sum:
     \begin{align*}
@@ -49,7 +49,7 @@ Using the result from Eq.~\eqref{eq:geometric-sum}, we have
 &=3^{n+1}\left[1-\left(\frac{2}{3}\right)^{n+1}\right]\\
 &=3^{n+1}-2^{n+1}.
 \end{align*}
-Thus $\sum_{i=0}^{n}{2^i\cdot3^{n-i}}=3^{n+1}-2^{n+1}$.~\square
+Thus $\sum_{i=0}^{n}{2^i\cdot3^{n-i}}=3^{n+1}-2^{n+1}$.$~\square$
 \end{solution}
 \end{enumerate}
 \subsection*{Question 2}
@@ -108,12 +108,54 @@ Solve the following tasks:
  where $1 \leq j \leq n$.)
 	
 \begin{solution}
+Let $A_{j,i}[1,\dots,n]$ denote the array at the beginning of iteration $i$ of the Insertion-Sort inner loop, where $i,j\in\mathbb{Z}$ and $0\leq i\leq j-1$.
 
+We will demonstrate that
+\begin{itemize}
+    \item if the loop executes with value $i+1$, then 
+    \begin{enumerate}[nosep]
+    \item$A_{j,i}[1,\ldots,i] = A_j[1,\ldots,i]$, and
+    \item if $i+2\leq j$, then $A_{j,i}[i+2,\ldots,j] = A_j[i+1,\ldots,j-1]$ and $A_j[j] < A_{j,i}[i+2]$;
+\end{enumerate}
+\item otherwise, $A_{j,i} = A_{j,i+1}$,
+\end{itemize}
+by induction on $i$.\\
+
+\textit{Basis. }Consider $i=j-1$.
+
+Suppose $A_j[j-1]>A_j[j]$. Then the inner loop body executes. In the array, only $A_j[i+1]$ is updated. Thus $A_{i,j}[1,\dots,i]=A_j[1,\dots,i]$. Since $i=j-1$, we have $i+2>j$. The loop invariant holds in this case.
+
+Suppose instead $A_j[j-1]\leq A_j[j]$. Then the inner loop body does not execute. There is no change to the array, so $A_{j,i}=A_{j,i+1}$. The loop invariant holds in this case.
+\\
+
+\textit{Hypothesis. }Let $k\in\mathbb{N}$ where $0\leq k\leq j-1$. Consider $i=k$. Assume that
+\begin{itemize}
+    \item if the loop executes with value $k+1$, then 
+    \begin{enumerate}[nosep]
+    \item$A_{j,k}[1,\ldots,k] = A_j[1,\ldots,k]$, and
+    \item if $k+2\leq j$, then $A_{j,k}[k+2,\ldots,j] = A_j[k+1,\ldots,j-1]$ and $A_j[j] < A_{j,k}[k+2]$;
+\end{enumerate}
+\item otherwise, $A_{j,k} = A_{j,k+1}$.
+\end{itemize}
+
+\textit{Inductive step. }Consider $i=k-1$.
+\begin{itemize}
+\item Suppose $A_{j,k-1}[k-1]>A_j[j]$. Then the inner loop body executes. By the induction hypothesis, the invariant holds for $i=k$. The only modification is that the value $A_j[k-1]$ is assigned into $A_{j,k-1}[k]$.
+\begin{enumerate}[nosep]
+    \item The first $k-1$ elements remain unchanged. Thus, on iteration $i=k-1$, we have $A_{j,k-1}[1,\dots,k-1]=A_j[1,\dots,k-1]$.
+    \item The elements between indices $k+1$ and $j$ also remain unchanged. Thus, if $k+1\leq j$, then $A_j[k+1,\dots,j]=A_{j,k-1}[k,\dots,j-1]$. Since the invariant holds for $i=k$, we know that $A_j[j]<A_{j,k}[k+2]$. Since the value $A_j[k-1]$ was greater than $A_j[j]$ and was shifted into $A_{j,k-1}[k]$, we know $A_j[j]<A_{j,k-1}[k+1]$. Before the inductive step, $A_j[j]$ was smaller than the first unshifted element $A_{j,k}[k+2]$. After the inductive step, $A_j[j]$ remains smaller than the first unshifted element $A_{j,k-1}[k+1]$.
+\end{enumerate}
+The loop invariant holds in this case.
+\item Suppose instead that $A_{j,k-1}[k-1]\leq A_j[j]$. Then the inner loop body does not execute. Thus $A_{j,k-1}=A_{j,k}$. The loop invariant holds in this case.
+\end{itemize}
+Hence, by the principle of mathematical induction, for all $i$ where $0\leq i\leq j-1$, the loop invariant holds.$~\square$
 \end{solution}
 	
-	\item Use the inner loop invariant to show the induction step of the outer loop invariant.
+\item Use the inner loop invariant to show the induction step of the outer loop invariant.
 	
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-	
-\end{enumerate}
+\begin{solution}
+\textit{Hypothesis.} Let $m\in\mathbb{N}$ where $2\leq m\leq n$. Assume that the loop invariant holds for $j=m$.\\
 
+\textit{Inductive step. }Consider $j=m+1$. By the induction hypothesis, we have $A_m[1,\dots,m-1]$ contains the elements $A[1,\dots,m-1]$ in sorted order. The inner loop invariant asserts that $A_{m+1}[\ell]=A[\ell]$ for $m+1\leq\ell\leq n$. The loop body assigns $A[m+1]$ into a position such that, by the inner loop invariant, $A[m]\leq A[m+1]\leq A[m+2]$. Thus, $A_{m+1}[1,\dots,m]$ contains the elements $A[1,\dots,m]$ in sorted order.  The loop invariant holds.
+\end{solution}
+\end{enumerate}
