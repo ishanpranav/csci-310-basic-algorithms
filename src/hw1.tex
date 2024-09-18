@@ -14,7 +14,7 @@ Prove the following equality using induction on $n$:\footnote{Recall that $\math
 \begin{enumerate}
     \item Check the base case ($n=1$).
 \begin{solution}
-\textit{Basis. }Consider $n=1$. Note $(1-r)(1+r^{1-1})=(1-r)=(1-r^1)$. Therefore $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$ for $n=1$.
+\textit{Basis. }Consider $n=1$. Note $(1-r)(r^{1-1})=(1-r)=(1-r^1)$. Therefore $(1-r)(1+r+r^2+\cdots+r^{n-1})=1-r^n$ for $n=1$.
 \end{solution}   
     \item Prove the inductive step.
 \begin{solution}
@@ -52,6 +52,7 @@ Using the result from Eq.~\eqref{eq:geometric-sum}, we have
 Thus $\sum_{i=0}^{n}{2^i\cdot3^{n-i}}=3^{n+1}-2^{n+1}$.$~\square$
 \end{solution}
 \end{enumerate}
+\newpage
 \subsection*{Question 2}
 Find a flaw in the following ``proof by induction'' (see Figure~\ref{fig:horse} for an illustration). In particular, state why the inductive step is incorrect:
 \vspace{0.5cm}
@@ -61,7 +62,9 @@ Find a flaw in the following ``proof by induction'' (see Figure~\ref{fig:horse} 
     \item Inductive Step: Suppose the induction hypothesis holds for all $1,2,\ldots,n$. Our goal is to prove the statement for sets of $n+1$ horses. So take any such set. Now exclude one horse, call this horse $A$, and look at the set of $n$ remaining horses. By the induction hypothesis, they all have the same color. Now exclude a different horse, call it $B$, and look at the set of $n$ remaining horses, which includes horse $A$. Then, all horses in this set must also have the same color. This implies that $A$ and $B$ also have the same color. Hence, we obtain that all $n+1$ horses in our set have the same color, ``proving'' the claim. 
 \end{enumerate}
 \begin{solution}
-The error is in the inductive step. The author states that, supposing the induction hypothesis holds for all $1,2,\dots,n$, the goal is to prove the statement for sets of $n+1$. This is acceptable. However, The author then assumes a set of $n+1$ horses and removes one to achieve a set of $n$ horses. This argument is flawed because the author is relying on the conclusion of the inductive step (that the property holds for all sets of $n+1$) in order to prove the claim. Instead, if the claim were true, the author should have been able to take a set of $n$ horses with the desired property and show that \textit{adding} a horse results in a set of $n+1$ horses with the property that all horses in the set have the same color.
+The error is in the inductive step. First, the author takes a set of $n+1$. The author must show that all horses in this set have the same color. To do this, the author removes horse $A$. By the strong induction hypothesis, the remaining $n$ horses have the same color. To complete the proof, the author's objective is to show that $A$ has the same color as the remaining $n$ horses.\\
+
+Then, the author removes another horse $B$ where $B\neq A$ and groups the other $n$ horses, including $A$. This is an error because it presumes that the induction hypothesis applies to a group of $n$ horses which includes $A$, even though that fact remains unproven.
 \end{solution}
 \begin{figure}[h]
     \centering
@@ -69,6 +72,7 @@ The error is in the inductive step. The author states that, supposing the induct
     \caption{Horses $A$ and $B$, with all the rest of the horses lying in the violet region common to both sets.}
     \label{fig:horse}
 \end{figure}
+\newpage
 \subsection*{Question 3}
 Recall the {\sc Insertion-Sort} algorithm discussed in the lecture:
 \begin{code}
@@ -123,9 +127,7 @@ by induction on $i$.\\
 
 \textit{Basis. }Consider $i=j-1$.
 
-Suppose $A_j[j-1]>A_j[j]$. Then the inner loop body executes. In the array, only $A_j[i+1]$ is updated. Thus $A_{i,j}[1,\dots,i]=A_j[1,\dots,i]$. Since $i=j-1$, we have $i+2>j$. The loop invariant holds in this case.
-
-Suppose instead $A_j[j-1]\leq A_j[j]$. Then the inner loop body does not execute. There is no change to the array, so $A_{j,i}=A_{j,i+1}$. The loop invariant holds in this case.
+We check if the loop executes with value $(j-1)+1=j$. Since $A_{j,j-1}[j]\ngtr A_j[j]$  the loop does not execute. Therefore, there is no change to the array, so $A_{j,j-1}=A_{j,j}$. The loop invariant holds.
 \\
 
 \textit{Hypothesis. }Let $k\in\mathbb{N}$ where $0\leq k\leq j-1$. Consider $i=k$. Assume that
@@ -140,14 +142,19 @@ Suppose instead $A_j[j-1]\leq A_j[j]$. Then the inner loop body does not execute
 
 \textit{Inductive step. }Consider $i=k-1$.
 \begin{itemize}
-\item Suppose $A_{j,k-1}[k-1]>A_j[j]$. Then the inner loop body executes. By the induction hypothesis, the invariant holds for $i=k$. The only modification is that the value $A_j[k-1]$ is assigned into $A_{j,k-1}[k]$.
-\begin{enumerate}[nosep]
-    \item The first $k-1$ elements remain unchanged. Thus, on iteration $i=k-1$, we have $A_{j,k-1}[1,\dots,k-1]=A_j[1,\dots,k-1]$.
-    \item The elements between indices $k+1$ and $j$ also remain unchanged. Thus, if $k+1\leq j$, then $A_j[k+1,\dots,j]=A_{j,k-1}[k,\dots,j-1]$. Since the invariant holds for $i=k$, we know that $A_j[j]<A_{j,k}[k+2]$. Since the value $A_j[k-1]$ was greater than $A_j[j]$ and was shifted into $A_{j,k-1}[k]$, we know $A_j[j]<A_{j,k-1}[k+1]$. Before the inductive step, $A_j[j]$ was smaller than the first unshifted element $A_{j,k}[k+2]$. After the inductive step, $A_j[j]$ remains smaller than the first unshifted element $A_{j,k-1}[k+1]$.
+\item Suppose $A_{j,k}[k-1]>A_j[j]$. Then the inner loop body executes.
+\begin{enumerate}
+    \item The only modification occurs in position $k+1$ of the array. Therefore the first $k-1$ elements are unchanged relative to the previous iteration. By the inductive hypothesis, we have $A_{j,k-1}[1,\dots,k-1]=A_j[1,\dots,k-1]$.
+    \item Suppose $k+1\leq j$. By the induction hypothesis, $A_{j,k}[k+2,\dots,j]=A_j[k+1,\dots,j-1]$. Since we are running the loop on $k=(k-1)+1$, we assign from position $k$ of the array into position $k+1$ in the loop body. Therefore, we know that the shift has completed such that $A_{j,k-1}[k+1,\dots,j]=A_j[k,\dots,j-1]$.
+
+    Since the loop executed, we know that before execution $A_{j,k}[k-1]>A_j[j]$. In other words, the value shifted is known to be greater than the key; otherwise, the loop would not have executed. By the induction hypothesis, $A_j[j]<A_{j,k}[k+2]$. Since the element from position $k$ was assigned into $k+1$, and because that element is known to be greater than the key $A_j[j]$, we have $A_j[j]<A_{j,k-1}[k+1]$.
+    
 \end{enumerate}
 The loop invariant holds in this case.
-\item Suppose instead that $A_{j,k-1}[k-1]\leq A_j[j]$. Then the inner loop body does not execute. Thus $A_{j,k-1}=A_{j,k}$. The loop invariant holds in this case.
+\item Suppose instead that $A_{j,k}[k-1]\leq A_j[j]$. Then the inner loop body does not execute. Thus $A_{j,k-1}=A_{j,k}$. The loop invariant holds in this case.
 \end{itemize}
+The loop invariant holds for all cases where $i=k-1$.
+
 Hence, by the principle of mathematical induction, for all $i$ where $0\leq i\leq j-1$, the loop invariant holds.$~\square$
 \end{solution}
 	
@@ -156,6 +163,10 @@ Hence, by the principle of mathematical induction, for all $i$ where $0\leq i\le
 \begin{solution}
 \textit{Hypothesis.} Let $m\in\mathbb{N}$ where $2\leq m\leq n$. Assume that the loop invariant holds for $j=m$.\\
 
-\textit{Inductive step. }Consider $j=m+1$. By the induction hypothesis, we have $A_m[1,\dots,m-1]$ contains the elements $A[1,\dots,m-1]$ in sorted order. The inner loop invariant asserts that $A_{m+1}[\ell]=A[\ell]$ for $m+1\leq\ell\leq n$. The loop body assigns $A[m+1]$ into a position such that, by the inner loop invariant, $A[m]\leq A[m+1]\leq A[m+2]$. Thus, $A_{m+1}[1,\dots,m]$ contains the elements $A[1,\dots,m]$ in sorted order.  The loop invariant holds.
+\textit{Inductive step. }Consider $j=m+1$. By the induction hypothesis, we have that $A_m[1,\dots,m-1]$ contains the elements $A[1,\dots,m-1]$ in sorted order. After the inner loop executes, the inner loop invariant asserts that for all elements $a\in A[m,\dots,n]$, we have $m<a$. Given that $A[1,\dots,m-1]$ it follows that $A[1,\dots m]$. Suppose not: Then there is some element $a\in A[m,\dots n]$ where $a>m$, which contradicts the inner loop invariant. Otherwise, $m$ would belong in $A[1,\dots m-1]$ which contradicts the induction hypothesis. So $m$ is in its sorted position and $A[1,\dots m]$ is sorted, thus the loop invariant holds.
+
+Since the inner loop terminates before $i=m$ and runs only from $i=m-1$ down to $m=0$, and, based on the inner loop body and invariant, modifies values from $i=m$ down to $i=1$, we know $A_{m+1}[\ell]=A[\ell]$ for $m+1\leq\ell\leq n$.
+
+The loop invariant holds for $j=m+1$.
 \end{solution}
 \end{enumerate}

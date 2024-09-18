@@ -1,0 +1,148 @@
+\lhead{\textbf{Basic Algorithms, Fall 2024 \\ CSCI-UA.0310-001}}
+\chead{\Large{\textbf{Homework 2}}}
+\def\lc{\left\lceil}   
+\def\rc{\right\rceil}
+\rhead{\textbf{Instructor: Rotem Oshman \\
+Ishan Pranav}}
+\runningheadrule
+\firstpageheadrule
+\cfoot{}
+\subsection*{Question 1}
+$f=\mathcal{O}(g)$ is defined for functions $f$ and $g$ (both from $\mathbb{N}$ to $\mathbb{N}$) to mean that exist a positive constant $C$ such that for sufficiently large $n$, $f(n)\leq C\cdot g(n)$. A bit more formally, there exist positive constants $n_0$ and $C$ such that:
+$$f(n)\leq C\cdot g(n) \ \text{ for all } n\geq n_0.$$
+For each of the following statements either prove the statement if it is true or otherwise provide a counter-example and justify why your counterexample is indeed a counterexample:
+\begin{enumerate}
+\item If $f=\mathcal{O}(g)$ then $g=\mathcal{O}(f)$.
+
+\textit{Counterexample. }Consider $f(n)=n$ and $g(n)=n^2$. Now $n\leq 1\cdot n^2$ for all $n\geq 2$. There exist positive constants $n_0=2$ and $C=1$ such that $f(n)\leq C\cdot g(n)$ for all $n\geq n_0$, therefore $f=\mathcal{O}(g)$.
+
+Assume, for the sake of contradiction, that $g=\mathcal{O}(f)$. Then there exist constants $n_0'$ and $C'$ for which $g(n)\leq C'\cdot f(n)$ for all $n\geq n_0'$. This implies that there exists a constant $\lim_{n\to\infty}{\frac{g(n)}{f(n)}}$. However, substituting $f$ and $g$ gives $\lim_{n\to\infty}{\frac{n^2}{n}}$, which is unbounded. This contradicts the hypothesis. We conclude that for $f(n)=n$ and $g(n)=n^2$, we have $g\neq\mathcal{O}(f)$.
+
+Hence, the claim that if $f=\mathcal{O}(g)$, then $g=\mathcal{O}(f)$, is false.$~\square$
+\item If $f=\mathcal{O}(g)$ and $g=\mathcal{O}(f)$ and $\forall n, f(n)>g(n)$ then $f-g=\mathcal{O}(1)$.
+
+\textit{Counterexample. }Consider $f(n)=2n$ and $g(n)=n$.
+
+Now $2n\leq\frac{1}{2}n$ for all $n\geq 1$. There exist positive constants $n_0=1$ and $C=\frac{1}{2}$ such that $f(n)\leq C\cdot g(n)$ for all $n\geq n_0$, therefore $f=\mathcal{O}(g)$.
+
+Next, $n\leq\frac{1}{2}\cdot 2n$ for all $n\geq 1$. There exist positive constants $n_0'=1$ and $C'=\frac{1}{2}$ such that $g(n)\leq C'\cdot f(n)$ for all $n\geq n_0'$, therefore $g=\mathcal{O}(f)$.
+
+Of course, $2n>n$ for all $n$, therefore $f(n)>g(n)$ for all $n$.
+
+Assume, for the sake of contradiction, that $f-g=\mathcal{O}(1)$. Then there exist positive constants $n_0''$ and $C''$ such that $f(n)-g(n)\leq C''\cdot 1$ for all $n\geq n_0''$. This implies that there exists a constant  $\lim_{n\to\infty}\left[f(n)-g(n)\right]$. However, substituting $f$ and $g$ gives $\lim_{n\to\infty}{[2n-n]}$, which is unbounded. This contradicts the hypothesis. We conclude that for $f(n)=2n$ and $g(n)=n$, we have $f-g\neq\mathcal{O}(n)$.
+
+Hence, the claim that if $f=\mathcal{O}(g)$ and $g=\mathcal{O}(f)$, and for all $n$, we have $f(n)>g(n)$, then $f-g=\mathcal{O}(1)$, is false.$~\square$
+\item If $f=\mathcal{O}(g)$ and $g=\mathcal{O}(f)$ then $\frac{f}{g}=\mathcal{O}(1)$.
+
+\textit{Proof. }Suppose $f=\mathcal{O}(g)$ and $g=\mathcal{O}(f)$. Then there exist positive constants $n_0,n_0',C$ and $C'$ such that $f(n)\leq C\cdot g(n)$ for $n\geq n_0$ and $g(n)\leq C'\cdot f(n)$ for $n\geq n_0'$. Observe
+\begin{align*}
+f(n)\leq C\cdot g(n).
+\end{align*}
+\begin{align*}
+\frac{f(n)}{g(n)}\leq C\cdot\frac{g(n)}{g(n)}\leq C.
+\end{align*}
+There exist positive constants $n_0$ and $C$ for which $\frac{f(n)}{g(n)}\leq C\cdot 1$ for all $n\geq n_0$. Therefore, $\frac{f}{g}=\mathcal{O}(1)$.$~\square$
+\end{enumerate}
+\newpage
+\subsection*{Question 2}
+
+Consider the following functions:
+\begin{multicols}{3}
+\begin{description}
+    \item a) $\left(\frac{1}{2}\right)^n + 3 n^{17}$
+    \item b) $2^{n+\log_2 n}$
+    \item c) $2^{4n}$
+    \item d) $\sqrt{n^2+n^4}$
+    \item e) $\frac{n^8 - n^7}{24}$
+\end{description}
+\end{multicols}
+
+\begin{enumerate}
+    \item For each of the above functions $f(n)$, find a ``canonical'' function $g(n)$ such that $f(n) = \Theta(g(n))$. By canonical we mean that $g$ should be of the form $g(n) = a^n n^b \log^c n$ for constants $a\ge 1$ and $b,c\ge 0$. For example,  $3200n + 2n^2 \log^{24} (n^2) = \Theta(n^2\log^{24} n)$.
+
+\begin{solution}
+\begin{enumerate}
+\item$\left(\frac{1}{2}\right)^n+3n^{17}=\Theta(n^{17})$. As $n\to\infty$, we have $\left(\frac{1}{2}\right)^n\to 0$ and $3n^{17}\to\infty$. We have the asymptotically dominant term $3n^{17}$; ignoring constants gives $\Theta(n^{17})$.
+\item$2^{n+\log_2{n}}=\Theta(2^n)$. As $n\to\infty$, the $n$ term dominates $\log_2{n}$. Ignoring the dominated term, we have $\Theta(2^n)$.
+\item$2^{4n}=\Theta(2^n)$. There exists a constant $\lim_{n\to\infty}{\frac{2^{4n}}{2^n}}$; as $n\to\infty$, ignoring constants gives $\Theta(2^n)$.
+\item$\sqrt{n^2+n^4}=\Theta(n^2)$. As $n\to\infty$, the $n^4$ term dominates $n^2$. Ignoring the dominated term, we have $\sqrt{n^4}=n^2$, giving $\Theta(n^2)$.
+\item$\frac{n^8-n^7}{24}=\Theta(n^8)$. As $n\to\infty$, the $n^8$ term dominates $n^7$; ignoring constants gives $\Theta(n^8)$.
+\end{enumerate}
+\end{solution}
+\item Based on your answers from above, sort the functions above in asymptotically increasing order. Are there any two functions with the same order of growth? If yes, which ones?
+\begin{solution}
+In increasing order of asymptotic growth, we have (d), (e), (a), (b), and (c). Functions (b) and (c) have the same order of growth.
+\end{solution}
+\end{enumerate}
+\newpage
+\subsection*{Question 3}
+\label{question:3}
+In this problem, we will solve the following recurrence using the \textbf{substitution method} (i.e., induction). Assume $T(1)=0,\; T(2)=1$ and that the recurrences below define $T(n)$ for $n>2$:
+\begin{align}
+T(n) = T\Big(\frac{n}{3}\Big)+T\Big(\frac{2n}{3}\Big)+1\;. \label{eq:recurrence}
+\end{align}
+
+You do not need to worry about the $n/3$ and $2n/3$ terms in~\eqref{eq:recurrence} being fractions. 
+
+\begin{enumerate}
+    \item Try $T(n) = \sqrt{n}$. Does the recurrence hold? You may ignore the base cases ($n=1$ and $2$) and only look at whether $T(n)$ satisfies Eq.~\eqref{eq:recurrence}. Is the RHS bigger than the LHS? Show your calculations.
+    \item Try $T(n) = n$. Does the recurrence hold? You may ignore the base cases ($n=1$ and $2$) and only look at whether $T(n)$ satisfies Eq.~\eqref{eq:recurrence}. Is the RHS bigger than the LHS? Show your calculations.
+    \item Try $T(n) = n^2$. Does the recurrence hold? You may ignore the base cases ($n=1$ and $2$) and only look at whether $T(n)$ satisfies Eq.~\eqref{eq:recurrence}. Is the RHS bigger than the LHS? Show your calculations.
+\end{enumerate}
+Among parts $1$ to $3$, which choice of $T(n)$ ``almost'' satisfied recurrence~\eqref{eq:recurrence}? That is, for which choice of $T(n)$ was the left-hand side \emph{almost equal} to the right-hand side of~\eqref{eq:recurrence}? Reflect on this question because it would help solve the next part. 
+\begin{enumerate}[resume]
+    \item Let $T(n) = n^p + c$ for some $c \in \mathbb{R}$, and $p > 0$ and solve for $p$ and $c$. Based on the $p$ and $c$ you obtained, prove your result formally using the substitution method. (Note that parts $1$-$3$ correspond to $c=0$ and $p=1/2,p=1,p=2$, respectively.)
+\end{enumerate}
+
+
+
+\subsection*{Question 4: Merge Sort (5+5=10 points)}
+
+Recall Merge Sort, in which a list is sorted by first sorting the left and right halves, and then merging the two lists. 
+We define the \textit{3-Merge Sort} algorithm, in which the input list is split into $3$
+equal length parts (or as equal as possible), each is sorted recursively, and then the three lists are merged to create a final sorted list. 
+\begin{enumerate}
+    \item Write a recurrence for $T(n)$, the worst-case run time for 3-Merge Sort on any input containing $n$ elements.
+    \item Solve this recurrence for $T(n)$. Prove your result formally using the substitution method (i.e., induction). For full credit, you'll need to show matching upper and lower bounds. 
+\end{enumerate}
+
+
+
+\subsection*{Honors Question 1:}
+{\bf (**)}
+Solve the following recurrences (assume $T(1)=T(2)=1$ and that the recurrences below define $T(n)$ for $n>2$):
+\begin{enumerate}
+    \item $T(n)=2T(\lc \sqrt{n} \rc)+\log_2 n$
+    \item $T(n)=\lc \sqrt{n} \rc T(\lc \sqrt{n} \rc)+n$
+\end{enumerate}
+In all cases you must prove the correctness of your solution. It is good enough to get an answer $f(n)$ such that $T(n)=\Theta(f(n))$.
+
+\subsection*{Honors Question 2:}
+{\bf (***)} Solve the following recurrence relation
+\begin{equation*}
+	T(n)=8T\left(n/4\right)+n^2,~T(1)=1.
+\end{equation*}
+\emph{exactly} using the following steps.
+
+\begin{enumerate}
+	\item %\disppoints{2}
+	Transform $T(n)$ into an equivalent	recurrence of the form $S(k) = a S(k-1) + f_1(k)$. Do not forget to specify the base case. \hint{Consider $n=4^k$}
+	
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+	
+	\item %\disppoints{2}
+	Transform $S(k)$ into an equivalent	recurrence of the form $G(k) = G(k-1) + f_2(k)$. Do not forget to specify the base case.
+	
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+	
+	\item %\disppoints{2}
+	Solve $G(k)$ exactly by expanding the sum.
+	
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+	\item %\disppoints{2}
+	Substitute back to solve for $T(n)$.
+	
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
