@@ -6,15 +6,16 @@
 \runningheadrule
 \firstpageheadrule
 \cfoot{}
+\subsection*{References}
 Collaborated with Crystal Huang.
-\subsection*{Question 1: Insertion Sort vs QuickSort}
+\subsection*{Question 1: {\sc InsertionSort} \textit{vs.} {\sc QuickSort}}
 
 Recall that in the worst case the running time of (non-randomized) {\sc QuickSort}, that uses the last element as the pivot, and {\sc InsertionSort} are $\Theta(n^2)$. Refer to the lecture notes for the {\sc QuickSort} implementation.
 
 \begin{enumerate}
     \item Give an example of an array of length $n$ where both take time $\Omega(n^2)$. Justify your answer.  
 \begin{solution}
-Let $A[1,\dots n]$ be an $n$-element array where $A[i]\geq A[i+1]$ for all $1\leq i<n$.\\
+Let $A[1,\dots n]$ be an $n$-element array where $A[i]\geq A[i+1]$ for all $1\leq i<n$.
 \end{solution}
     \item Give an example of an array of length $n$ where (non-randomized) {\sc QuickSort} runs in $\Omega(n^2)$ but {\sc Insertion-Sort} runs in time $O(n)$. Justify your answer. 
 \begin{solution}
@@ -22,7 +23,7 @@ Let $A[1,\dots n]$ be an $n$-element array where $A[i]\leq A[i+1]$ for all $1\le
 \end{solution}
 \end{enumerate}
 \newpage
-\subsection*{Question 2: Fast Exponentiation}
+\subsection*{Question 2: Fast exponentiation}
 In this problem, you will design an algorithm to compute $2024^n$ given $n \in \mathbb{N}$ as input. In each case, prove the correctness of your algorithm, and an upper bound on the number of multiplications used.
 \begin{enumerate}
     \item Using $n-1$ many multiplications.
@@ -64,7 +65,7 @@ Hence, by the principle of mathematical induction, the {\sc NaiveExponentiation}
 
 \textit{Inductive step. }Consider $n=k+1$. Then the number of multiplications is $1$, plus the number of multiplications used by {\sc NaiveExponentiation}($(k+1)-1$). That is, $1$ plus the number of multiplications used by {\sc NaiveExponentiation}($k$). By the inductive hypothesis, the number of multiplications used by {\sc NaiveExponentiation}($k$) is at most $k-1$. Therefore, the number of multiplications used by {\sc NaiveExponentiation}($k+1$) is at most $1+(k-1)=(k+1)-1$, thus completing the inductive step.
 
-Hence, by the principle of mathematical induction,the {\sc NaiveExponentiation} algorithm uses at most $n-1$ multiplications for all $n\in\mathbb{N}$.\\
+Hence, by the principle of mathematical induction, the {\sc NaiveExponentiation} algorithm uses at most $n-1$ multiplications for all $n\in\mathbb{N}$.\\
 
 \textbf{Proof. }
 
@@ -209,11 +210,11 @@ By Lemma I, {\sc FastExponentiation}($2024,n$) computes $2024^n$ for all $n\in\m
 
 By Lemma II, {\sc FastExponentiation}($2024,n$) uses $O(\log_2n)$ many multiplications for all $n\in\mathbb{N}$. Therefore, the {\sc FastPow2024} algorithm uses $O(\log_2n)$ many multiplications for all $n\in\mathbb{N}$.
 
-Ergo, for all $n\in\mathbb{N}$, we have demonstrateed that {\sc FastPow2024}($n$) computes $2024^n$ using $O(\log_2n)$ many multiplications.$~\square$
+Ergo, for all $n\in\mathbb{N}$, we have demonstrated that {\sc FastPow2024}($n$) computes $2024^n$ using $O(\log_2n)$ many multiplications.$~\square$
 \end{solution}
 \newpage
 \end{enumerate}
-\subsection*{Question 3: Close to Sorted}
+\subsection*{Question 3: Close to sorted}
 Suppose you are given a list $A$ of $n$ distinct numbers. You are guaranteed that this list is `close to sorted' in the following sense: if $A_{\text{sorted}}$ denotes the list fully sorted in increasing order, then $A_{\text{sorted}}$ differs from $A$ in at most $\log_2 n$ many positions. Intuitively, this says that at most $\log_2 n$ elements are out of place in the original list. For instance, in the list 
 \[
 (2,5,9,11,20,14,15,12,25,30)
@@ -222,23 +223,21 @@ only two elements are out of place (20 and 12), since after sorting, we get
 \[
 (2,5,9,11,12,14,15,20,25,30) \;.
 \]
-The following exercises will ultimately lead to an algorithm which sorts $A$ in time $O(n)$~\footnote{Note that sorting algorithms take $O(n\log n)$ time without any assumptions on the inputs. Here, we are able to get the faster $O(n)$ run-time by \emph{assuming} that the input array $A$ is already close to being sorted.}. Answer each exercise. \textbf{Don't forget to read the hints!}
+The following exercises will ultimately lead to an algorithm which sorts $A$ in time $O(n)$~\footnote{Note that sorting algorithms take $O(n\log n)$ time without any assumptions on the inputs. Here, we are able to get the faster $O(n)$ run-time by \emph{assuming} that the input array $A$ is already close to being sorted.}. Answer each exercise.
 
 \begin{enumerate}
-    \item (Warm up) Prove that the leftmost (first) out of place element must be too big (not too small) for its place.
+    \item Prove that the leftmost (first) out of place element must be too big (not too small) for its place.
 \begin{solution}
-\textit{Claim. }Let $k$ represent the position of the leftmost out-of-place element in $A$.
+\textit{Claim. }Let $k$ represent the position of the leftmost out-of-place element in $A$. Then $A[k]$ is too big (not too small) for its position.
 
 \textit{Proof. }Assume, for the sake of contradiction, that $k$ is too small for its position. Since $A[k]$ is too small for its position, we know $k>1$. Otherwise, if $k=1$, it could not be too small for its position. Of course, since $A[k]$ is too small for its position, $A[k]<A[k-1]$.
 
 This implies that $A[k-1]>A[k]$, meaning that $A[k-1]$ is too big for its place. $A[k-1]$ is out of place and $k-1<k$. Therefore, $A[k-1]$ is out of place and \textit{further left} than $A[k]$. This contradicts the hypothesis that $A[k]$ is the leftmost out-of-place element in $A$.
 
-We conclude that the leftmost out-of-place element in $A$ must not be too small for its place. Hence, the leftmost out-of-place element in $A$ must be too big for its place.
+We conclude that the leftmost out-of-place element in $A$ must \textit{not} be too small for its place. Hence, the leftmost out-of-place element in $A$ must be too big for its place.$~\square$
 \end{solution}
-    
     \item Suppose we construct a stack $S$ as follows: We go through $A$ from left to right, pushing elements one by one into $S$ as long as the next element from $A$ is larger than the top element $s$ of the stack so far. If at any step $i$ the element $A[i]$ which we are currently considering in $A$ is smaller than $s$, we instead pop $s$ from $S$ and continue.
     This idea is described in the pseudo code below:
-    
     \begin{minipage}{\linewidth}
     \begin{algorithm}[H]
     \label{incsubseq}
@@ -258,17 +257,28 @@ We conclude that the leftmost out-of-place element in $A$ must not be too small 
     \end{algorithmic}
     \end{algorithm}
     \end{minipage}
-    
     \smallskip
+    
     If $A$ is initially $(2,5,9,11,20,14,15,12,25,30)$, what will $S$ be after Algorithm 1 has run?
-
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-
-    
-    
+\begin{solution}
+Let $A=(2,5,9,11,20,14,15,12,25,30)$. Let $S$ be an empty stack and $S_i$ represent the stack at the end of iteration $1\leq i\leq\text{len}(A)$. Stepping through the algorithm:
+\begin{align*}
+S_1&=(2)&\textit{since $S$ is empty before iteration $i=1$.}\\
+S_2&=(2,5)&\textit{since $2\leq 5$.}\\
+~&\vdots&\vdots\\
+S_5&=(2,5,9,11,20)&\textit{since $5\leq 9\leq 11\leq 20$.}\\
+S_6&=(2,5,9,11)&\textit{since $S$ is not empty, $20\nleq 14$.}\\
+S_7&=(2,5,9,11,15)&\textit{since $11\leq 15$.}\\
+S_8&=(2,5,9,11)&\textit{since $S$ is not empty, $15\nleq 12$.}\\
+~&\vdots&\vdots\\
+S_{10}&=(2,5,9,11,25,30)&\textit{since $11\leq 25\leq 30$.}
+\end{align*}
+After Algorithm 1 has run, $S=(2,5,9,11,25,30)$.
+\end{solution}
     \item Prove that $S$ is an increasing subsequence of $A$ (the elements of the output stack are increasing from bottom to top).
+\begin{solution}
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{solution}
     
     
     \item Prove that $S$ contains all elements of $A$ except at most $2\log_2 n$. (Hint: show that every time we leave out a pair of elements (the ``else'' case) at least one of them must have been an out of place element.)
