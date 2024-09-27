@@ -1,0 +1,167 @@
+\lhead{\textbf{Basic Algorithms, Fall 2024 \\ CSCI-UA.0310-001}}
+\chead{\Large{\textbf{Homework 3}}}
+\def\lc{\left\lceil}   
+\def\rc{\right\rceil}
+\rhead{\textbf{Instructor: Rotem Oshman \\ Name: Ishan Pranav}}
+\runningheadrule
+\firstpageheadrule
+\cfoot{}
+Collaborated with Crystal Huang.
+\subsection*{Question 1: Insertion Sort vs QuickSort}
+
+Recall that in the worst case the running time of (non-randomized) {\sc QuickSort}, that uses the last element as the pivot, and {\sc InsertionSort} are $\Theta(n^2)$. Refer to the lecture notes for the {\sc QuickSort} implementation.
+
+\begin{enumerate}
+    \item Give an example of an array of length $n$ where both take time $\Omega(n^2)$. Justify your answer.  
+\begin{solution}
+Let $A[1,\dots n]$ be an $n$-element array where $A[i]\geq A[i+1]$ for all $1\leq i<n$.\\
+\end{solution}
+    \item Give an example of an array of length $n$ where (non-randomized) {\sc QuickSort} runs in $\Omega(n^2)$ but {\sc Insertion-Sort} runs in time $O(n)$. Justify your answer. 
+\begin{solution}
+Let $A[1,\dots n]$ be an $n$-element array where $A[i]\leq A[i+1]$ for all $1\leq i<n$.
+\end{solution}
+\end{enumerate}
+\subsection*{Question 2: Fast Exponentiation}
+In this problem, you will design an algorithm to compute $2024^n$ given $n \in \mathbb{N}$ as input. In each case, prove the correctness of your algorithm, and an upper bound on the number of multiplications used.
+\begin{enumerate}
+    \item Using $n-1$ many multiplications.
+\begin{solution}
+{\sc NaiveExponentiation}($n$) where $n\in\mathbb{N}$:
+\begin{itemize}
+\item if $n=1$, then return $2024$;
+\item otherwise, return the product $2024~\times~${\sc NaiveExponentiation}($n-1$).
+\end{itemize}
+\textbf{Proof of correctness. }
+
+\textit{Claim. }{\sc NaiveExponentiation}($n$)$~=2024^n$. We can demonstrate the claim by induction on $n$.
+
+\textit{Basis. }Consider $n=1$. Since $n=1$, we have {\sc NaiveExponentiation}($n$)$~=2024=2024^1$. The claim holds in the base case.
+
+\textit{Hypothesis. }Consider $n=k$ where $k>1$. Assume that {\sc NaiveExponentiation}($k$)$~=2024^k$.
+
+\textit{Inductive step. }Consider $n=k+1$. Then
+
+{\sc NaiveExponentiation}($k+1$)$~=2024~\times~${\sc NaiveExponentiation}($(k+1)-1$). That is,
+
+{\sc NaiveExponentiation}($k+1$)$~=2024~\times~${\sc NaiveExponentiation}($k$).
+
+By the inductive hypothesis, we have {\sc NaiveExponentiation}($k$)$~=2024^k$. Thus
+
+{\sc NaiveExponentiation}($k+1$)$~=2024\times2024^k$. Ergo,
+
+{\sc NaiveExponentiation}($k+1$)$~=2024^{k+1}$, thus completing the inductive step.
+
+Hence, by the principle of mathematical induction, the {\sc NaiveExponentiation} algorithm produces the correct result for all $n\in\mathbb{N}$.$~\square$\\
+
+\textbf{Proof of performance. }
+
+\textit{Claim. }{\sc NaiveExponentiation}($n$) uses at most $n-1$ multiplications. We can demonstrate the claim by induction on $n$.
+
+\textit{Basis. }Consider $n=1$. Since $n=1$, the number of multiplications is $0=1-1\leq n-1$. The claim holds in the base case.
+
+\textit{Hypothesis. }Consider $n=k$ where $k>1$. Assume that {\sc NaiveExponentiation}($k$) uses at most $k-1$ multiplications.
+
+\textit{Inductive step. }Consider $n=k+1$. Then the number of multiplications is $1$, plus the number of multiplications used by {\sc NaiveExponentiation}($(k+1)-1$). That is, $1$ plus the number of multiplications used by {\sc NaiveExponentiation}($k$). By the inductive hypothesis, the number of multiplications used by {\sc NaiveExponentiation}($k$) is at most $k-1$. Therefore, the number of multiplications used by {\sc NaiveExponentiation}($k+1$) is at most $1+(k-1)=(k+1)-1$, thus completing the inductive step.
+
+Hence, by the principle of mathematical induction,the {\sc NaiveExponentiation} algorithm uses at most $n-1$ multiplications for all $n\in\mathbb{N}$.$~\square$
+\textit{}
+\end{solution}    
+    \item Using $O(\log_2 n)$ many multiplications, assuming $n$ is a power of $2$, i.e., $n=2^k$.
+\begin{solution}
+
+\end{solution}
+    
+    \item Using $O(\log_2 n)$ many multiplications for \emph{any} $n$ (not necessarily a power of $2$).
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+\subsection*{Question 3: Close to Sorted}
+Suppose you are given a list $A$ of $n$ distinct numbers. You are guaranteed that this list is `close to sorted' in the following sense: if $A_{\text{sorted}}$ denotes the list fully sorted in increasing order, then $A_{\text{sorted}}$ differs from $A$ in at most $\log_2 n$ many positions. Intuitively, this says that at most $\log_2 n$ elements are out of place in the original list. For instance, in the list 
+\[
+(2,5,9,11,20,14,15,12,25,30)
+\]
+only two elements are out of place (20 and 12), since after sorting, we get 
+\[
+(2,5,9,11,12,14,15,20,25,30) \;.
+\]
+The following exercises will ultimately lead to an algorithm which sorts $A$ in time $O(n)$~\footnote{Note that sorting algorithms take $O(n\log n)$ time without any assumptions on the inputs. Here, we are able to get the faster $O(n)$ run-time by \emph{assuming} that the input array $A$ is already close to being sorted.}. Answer each exercise. \textbf{Don't forget to read the hints!}
+
+\begin{enumerate}
+    \item (Warm up) Prove that the leftmost (first) out of place element must be too big (not too small) for its place.
+\begin{solution}
+\textit{Claim. }Let $k$ represent the position of the leftmost out-of-place element in $A$.
+
+\textit{Proof. }Assume, for the sake of contradiction, that $k$ is too small for its position. Since $A[k]$ is too small for its position, we know $k>1$. Otherwise, if $k=1$, it could not be too small for its position. Of course, since $A[k]$ is too small for its position, $A[k]<A[k-1]$.
+
+This implies that $A[k-1]>A[k]$, meaning that $A[k-1]$ is too big for its place. $A[k-1]$ is out of place and $k-1<k$. Therefore, $A[k-1]$ is out of place and \textit{further left} than $A[k]$. This contradicts the hypothesis that $A[k]$ is the leftmost out-of-place element in $A$.
+
+We conclude that the leftmost out-of-place element in $A$ must not be too small for its place. Hence, the leftmost out-of-place element in $A$ must be too big for its place.
+\end{solution}
+    
+    \item Suppose we construct a stack $S$ as follows: We go through $A$ from left to right, pushing elements one by one into $S$ as long as the next element from $A$ is larger than the top element $s$ of the stack so far. If at any step $i$ the element $A[i]$ which we are currently considering in $A$ is smaller than $s$, we instead pop $s$ from $S$ and continue.
+    This idea is described in the pseudo code below:
+    
+    \begin{minipage}{\linewidth}
+    \begin{algorithm}[H]
+    \label{incsubseq}
+    \caption{Construct increasing subsequence $S$}
+    \begin{algorithmic}
+    \REQUIRE $A$ and an empty stack $S$.
+    \ENSURE $S$ representing an increasing subsequence of $A$
+    \STATE $n \leftarrow \text{len}(A)$
+    \FOR {$i = 1 \text{ to } n$}
+        \IF {$S$ is empty \OR $S.\text{topElement}() \leq A[i]$}
+        \STATE $S.\text{push}(A[i])$
+        \ELSE 
+        \STATE $S.\text{pop}()$
+        \ENDIF
+    \ENDFOR
+    \STATE \RETURN $S$
+    \end{algorithmic}
+    \end{algorithm}
+    \end{minipage}
+    
+    \smallskip
+    If $A$ is initially $(2,5,9,11,20,14,15,12,25,30)$, what will $S$ be after Algorithm 1 has run?
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    
+    
+    \item Prove that $S$ is an increasing subsequence of $A$ (the elements of the output stack are increasing from bottom to top).
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+    
+    
+    \item Prove that $S$ contains all elements of $A$ except at most $2\log_2 n$. (Hint: show that every time we leave out a pair of elements (the ``else'' case) at least one of them must have been an out of place element.)
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    
+    \item Use the previous statements to design and prove the correctness and run-time of an algorithm to sort the nearly sorted array in time $O(n)$. 
+    
+    \hint{Suppose you could split $A$ into a large sorted subsequence and only a few remaining unsorted elements in time $O(n)$. (This is what parts 3 and 4 show.) Now think of the ``Merge'' subroutine in Merge Sort.}
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+
+
+
+
+    
+
+
+
+\subsection*{Honors Question: The Counterfeit Gem}
+Suppose you strike up a relationship with a jeweler and get a bulk deal on $n$ diamonds. However, you were warned beforehand that one (and only one) of the diamonds is a convincing fake, and the only difference between it and the real gems is that the fake one's weight is different, while all real ones have the same weight. Luckily, you have a balance scale at home, which can test two (disjoint) subsets of the diamonds and tell us which is lighter. 
+
+\begin{enumerate}
+    \item $(**)$ Assume that you know that the fake one is lighter. Give an algorithm that finds the counterfeit gem in $O(\log n)$ uses of the scale. Justify the correctness and time complexity of your proposed algorithm.
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item $(****)$ Now consider the general case where you only know it has a different weight from the real ones. What can you do in this case? Can you still do it with $O(\log n)$ measurements? For concrete numbers, consider $n=12$ and show how you can identify the fake one only using the scale $3$ times.
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
