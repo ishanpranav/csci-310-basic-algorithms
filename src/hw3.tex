@@ -261,29 +261,89 @@ We conclude that the leftmost out-of-place element in $A$ must \textit{not} be t
     
     If $A$ is initially $(2,5,9,11,20,14,15,12,25,30)$, what will $S$ be after Algorithm 1 has run?
 \begin{solution}
-Let $A=(2,5,9,11,20,14,15,12,25,30)$. Let $S$ be an empty stack and $S_i$ represent the stack at the end of iteration $1\leq i\leq\text{len}(A)$. Stepping through the algorithm:
+Let $A=(2,5,9,11,20,14,15,12,25,30)$. Let $S$ be an empty stack. 
+
+Let $S_i$ denote $S$ before iteration $1\leq i\leq\text{len}(A)+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. $S_{n+1}$ represents $S$ after the final iteration. Stepping through the algorithm:
 \begin{align*}
-S_1&=(2)&\textit{since $S$ is empty before iteration $i=1$.}\\
-S_2&=(2,5)&\textit{since $2\leq 5$.}\\
+S_1&=()&\textit{before the first iteration.}\\
+S_2&=(2)&\textit{since $S_1$ is empty.}\\
+S_3&=(2,5)&\textit{since $2\leq 5$.}\\
 ~&\vdots&\vdots\\
-S_5&=(2,5,9,11,20)&\textit{since $5\leq 9\leq 11\leq 20$.}\\
-S_6&=(2,5,9,11)&\textit{since $S$ is not empty, $20\nleq 14$.}\\
-S_7&=(2,5,9,11,15)&\textit{since $11\leq 15$.}\\
-S_8&=(2,5,9,11)&\textit{since $S$ is not empty, $15\nleq 12$.}\\
+S_6&=(2,5,9,11,20)&\textit{since $5\leq 9\leq 11\leq 20$.}\\
+S_7&=(2,5,9,11)&\textit{since $S$ is not empty, $20\nleq 14$.}\\
+S_8&=(2,5,9,11,15)&\textit{since $11\leq 15$.}\\
+S_9&=(2,5,9,11)&\textit{since $S$ is not empty, $15\nleq 12$.}\\
 ~&\vdots&\vdots\\
-S_{10}&=(2,5,9,11,25,30)&\textit{since $11\leq 25\leq 30$.}
+S_{11}&=(2,5,9,11,25,30)&\textit{since $11\leq 25\leq 30$.}
 \end{align*}
 After Algorithm 1 has run, $S=(2,5,9,11,25,30)$.
 \end{solution}
-    \item Prove that $S$ is an increasing subsequence of $A$ (the elements of the output stack are increasing from bottom to top).
-\begin{solution}
+\item Prove that $S$ is an increasing subsequence of $A$ (the elements of the output stack are increasing from bottom to top).
+\begin{solution}\textbf{Invariant I.}
 
+\textit{Claim. }Let $A$ be an array and $S$ be an empty stack. Consider Algorithm 1.
+
+Let $S_i$ denote $S$ before iteration $1\leq i\leq\text{len}(A)+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. 
+
+We want to demonstrate that, for every iteration of the loop in Algorithm 1, the stack $S$ is a monotonically increasing subsequence of $A$.
+
+That is, for all $i\leq\text{len}(A)+1$, for all $s\in S_i$, we have $s\in A$, and for all $1\leq j\leq\text{len}(S_i)$, we have $S_i[j]\leq S_i[j+1]$.
+
+We can prove this invariant by induction on $i$.
+
+\textit{Basis. }Consider $i=1$ (before iteration $1$). Here $S_1$ is an empty stack. Vacuously, for all $s\in S_1$, we have $s\in A$. Similarly, for all $1\leq j<\text{len}(S_1)$, we have $S_1[j]\leq S_1[j+1]$. The invariant holds in the base case.
+
+\textit{Hypothesis. }Consider $1<i\leq k\leq\text{len}(A)$ (before iteration $k$). Assume that for all $s\in S_k$, we have $s\in A$, and for all $1\leq j\leq\text{len}(S_k)$, we have $S_k[j]\leq S_k[j+1]$.
+
+\textit{Inductive step. }Consider $i=k+1$ (after iteration $k$, but before iteration $k+1$):
+\begin{itemize}
+\item Suppose $k+1=\text{len}(A)+1$. Then the loop terminated after iteration $k$. We have $S_{k+1}=S_k$, so, by the induction hypothesis, the loop invariant holds.
+\item Suppose instead $k+1\leq\text{len}(A)$. Then the loop body executed after iteration $k$:
+\begin{itemize}
+\item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack. Then the top element of the stack has been updated such that $S_{k+1}[\text{len}(S_{k+1})]=A[k]$. Of course $A[k]\in A$. Also, $A[k]\geq S_k[\text{len}(S_k)]$ so $S_{k+1}[\text{len}(S_{k+1})-1]\leq S_{k+1}[\text{len}(S_{k+1})]$. 
+
+By the induction hypothesis, $S_k$ is a monotonically increasing subsequence of $A$. By showing that the new top element in $S_{k+1}$ is a member of $A$ and is no smaller than the old top element, we have shown that $S_{k+1}$ is also a monotonically increasing subsequence of $A$, and thus that the loop invariant holds.
+\item Suppose instead $S_k$ was not empty and $S_k[\text{len}(S_k)]>A[k]$. Then the top element of the stack has been updated such that $S_{k+1}[\text{len}(S_{k+1})]=S_k[\text{len}(S_k)-1]$. By the induction hypothesis, $S_k[\text{len}(S_k)-1]\leq S_k[\text{len}(S_k)]$ and $S_k[\text{len}(S_k)-1]\in A$. By substituting and leveraging the strong induction hypothesis, we know that $S_{k+1}[\text{len}(S_{k+1}-1)]\leq S_{k+1}[\text{len}(S_{k+1})]$ and $S_{k+1}[\text{len}(S_{k+1})]\in A$.
+
+Essentially, we have shown that by removing the top element of $S_k$ to produce $S_{k+1}$, we have returned to a prior state of $S$ for which the strong induction hypothesis asserts that the invariant holds.
+\end{itemize}
+\end{itemize}
+In all cases, the loop invariant holds for $i=k+1$.
+
+Hence, by the principle of mathematical induction, for all $1\leq i\leq\text{len}(A)+1$, we can conclude that $S_i$ is a monotonically increasing subsequence of $A$. 
+
+By proving the loop invariant at initialization ($i=1$), maintenance ($1\leq i\leq\text{len}(A)$), and termination ($i=\text{len}(A)+1$), we have shown that $S$ is an increasing subsequence of $A$.$~\square$
 \end{solution}
-    
-    
-    \item Prove that $S$ contains all elements of $A$ except at most $2\log_2 n$. (Hint: show that every time we leave out a pair of elements (the ``else'' case) at least one of them must have been an out of place element.)
+\item Prove that $S$ contains all elements of $A$ except at most $2\log_2 n$.
+\begin{solution}\textbf{Invariant II.}
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Claim. }Let $A$ be a close-to-sorted array such that at most $\log_2n$ elements are out of place. Let $S$ be an empty stack. Consider Algorithm 1.
+
+We want to demonstrate that, for every iteration of the loop in Algorithm 1, the stack $S$ contains all elements of $A$ except at most $2\log_2n$. In other words, denoting the number of excluded elements $m$, we want to show that $m\leq 2\log_2n$.
+
+Let $S_i$ denote $S$ before iteration $1\leq i\leq\text{len}(A)+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. Similarly, let $m_i$ denote the number of excluded elements of $A$ before iteration $i$.
+
+We can prove this invariant by induction on $i$.
+
+\textit{Basis. }Consider $i=1$ (before iteration 1). Here $S_1$ is an empty stack and $m_1=0$ since no elements have been examined or excluded. Of course, for all $n\in\mathbb{N}$, we have $0\leq 2\log_2n$, so $m_1\leq 2\log_2n$. The loop invariant holds in the base cases.
+
+\textit{Hypothesis. }Consider $1<i<k\leq\text{len}(A)$ (before iteration $k$). Assume that $m_k\leq 2\log_2 n$.
+
+\textit{Inductive step. }Consider $i=k+1$ (after iteration $k$, but before iteration $k+1$):
+\begin{itemize}
+\item Suppose $k+1=\text{len}(A)+1$. Then the loop terminated after iteration $k$. We have $m_{k+1}=m_k$, so, by the induction hypothesis, the loop invariant holds.
+\item Suppose instead $k+1\leq\text{len}(A)$. Then the loop body executed after iteration $k$:
+\begin{itemize}
+\item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack. No additional elements are excluded, so $m_{k+1}=m_k$. By the induction hypothesis, the loop invariant holds.
+\item Suppose instead $S_k$ was not empty and $S_k[\text{len}(S_k)]>A[k]$. Then $A[k]$ is not pushed onto $S_{k+1}$, so one element is excluded. An element is popped from $S_k$, so another element is excluded. Considering these exclusions, $m_{k+1}=m_k+2$.
+
+This case only occurs when $A[k]$ is out of place. Now, $A[k]$ is out of place for at most $\log_2n$ many iterations (since $A$ is almost sorted), so this case occurs at most $\log_2n$ many times. On each such iteration, exactly $2$ elements are excluded. Considering these bounds, taken together with the induction hypothesis ($m_k\leq 2\log_2n$), we can conclude that $m_{k+1}\leq 2\log_2n$ on any such iteration $k+1$. Thus the loop invariant holds.
+\end{itemize}
+\end{itemize}
+In all cases, the loop invariant holds.
+
+Hence, by the principle of mathematical induction, we conclude that the number of excluded elements $m\leq 2\log_2n$.
+\end{solution}
 
     
     \item Use the previous statements to design and prove the correctness and run-time of an algorithm to sort the nearly sorted array in time $O(n)$. 
