@@ -81,7 +81,7 @@ Ergo, for all $n\in\mathbb{N}$, we have demonstrated that {\sc NaiveExponentiati
 {\sc SquareExponentiation}($n$) where $n=2^x$ for $x\geq 0$:
 \begin{itemize}
 \item if $n=2^0$, then return $2024$;
-\item otherwise, compute $y~=~${\sc SquareExponentiation}($n/2$), and return $y\times y$.
+\item otherwise, compute $y\leftarrow~${\sc SquareExponentiation}($n/2$), and return $y\times y$.
 \end{itemize}
 \textbf{Lemma I. }
 
@@ -140,7 +140,7 @@ Ergo, for all $n=2^x$ where $x\geq 0$, we have demonstrated that {\sc SquareExpo
 \textbf{Algorithm I. }{\sc FastExponentiation}($b,n$) where $n\in\mathbb{N}$:
 \begin{itemize}
 \item if $n=1$, then return $b$;
-\item otherwise, compute $b'=b\times b$, and:
+\item otherwise, compute $b'\leftarrow b\times b$, and:
 \begin{itemize}
     \item if $n$ is even, then return {\sc FastExponentiation}($b',n/2$);
     \item otherwise, return the product $b~\times~${\sc FastExponentiation}($b',(n-1)/2$).
@@ -236,6 +236,7 @@ This implies that $A[k-1]>A[k]$, meaning that $A[k-1]$ is too big for its place.
 
 We conclude that the leftmost out-of-place element in $A$ must \textit{not} be too small for its place. Hence, the leftmost out-of-place element in $A$ must be too big for its place.$~\square$
 \end{solution}
+\newpage
     \item Suppose we construct a stack $S$ as follows: We go through $A$ from left to right, pushing elements one by one into $S$ as long as the next element from $A$ is larger than the top element $s$ of the stack so far. If at any step $i$ the element $A[i]$ which we are currently considering in $A$ is smaller than $s$, we instead pop $s$ from $S$ and continue.
     This idea is described in the pseudo code below:
     \begin{minipage}{\linewidth}
@@ -261,9 +262,9 @@ We conclude that the leftmost out-of-place element in $A$ must \textit{not} be t
     
     If $A$ is initially $(2,5,9,11,20,14,15,12,25,30)$, what will $S$ be after Algorithm 1 has run?
 \begin{solution}
-Let $A=(2,5,9,11,20,14,15,12,25,30)$. Let $S$ be an empty stack. 
+Let $A[1,\dots,n]=(2,5,9,11,20,14,15,12,25,30)$. Let $S$ be an empty stack. 
 
-Let $S_i$ denote $S$ before iteration $1\leq i\leq\text{len}(A)+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. $S_{n+1}$ represents $S$ after the final iteration. Stepping through the algorithm:
+Let $S_i$ denote $S$ before iteration $1\leq i\leq n+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. $S_{n+1}$ represents $S$ after the final iteration. Stepping through the algorithm:
 \begin{align*}
 S_1&=()&\textit{before the first iteration.}\\
 S_2&=(2)&\textit{since $S_1$ is empty.}\\
@@ -278,16 +279,16 @@ S_{11}&=(2,5,9,11,25,30)&\textit{since $11\leq 25\leq 30$.}
 \end{align*}
 After Algorithm 1 has run, $S=(2,5,9,11,25,30)$.
 \end{solution}
-\item Prove that $S$ is an increasing subsequence of $A$ (the elements of the output stack are increasing from bottom to top).
+\newpage\item Prove that $S$ is an increasing subsequence of $A$ (the elements of the output stack are increasing from bottom to top).
 \begin{solution}\textbf{Invariant I.}
 
-\textit{Claim. }Let $A$ be an array and $S$ be an empty stack. Consider Algorithm 1.
+\textit{Claim. }Let $A[1,\dots,n]$ be an array and $S$ be an empty stack. Consider Algorithm 1.
 
-Let $S_i$ denote $S$ before iteration $1\leq i\leq\text{len}(A)+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. 
+Let $S_i$ denote $S$ before iteration $1\leq i\leq n+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. 
 
 We want to demonstrate that, for every iteration of the loop in Algorithm 1, the stack $S$ is a monotonically increasing subsequence of $A$.
 
-That is, for all $i\leq\text{len}(A)+1$, for all $s\in S_i$, we have $s\in A$, and for all $1\leq j\leq\text{len}(S_i)$, we have $S_i[j]\leq S_i[j+1]$.
+That is, for all $i\leq n+1$, for all $s\in S_i$, we have $s\in A$, and for all $1\leq j\leq\text{len}(S_i)$, we have $S_i[j]\leq S_i[j+1]$.
 
 We can prove this invariant by induction on $i$.
 
@@ -297,8 +298,8 @@ We can prove this invariant by induction on $i$.
 
 \textit{Inductive step. }Consider $i=k+1$ (after iteration $k$, but before iteration $k+1$):
 \begin{itemize}
-\item Suppose $k+1=\text{len}(A)+1$. Then the loop terminated after iteration $k$. We have $S_{k+1}=S_k$, so, by the induction hypothesis, the loop invariant holds.
-\item Suppose instead $k+1\leq\text{len}(A)$. Then the loop body executed after iteration $k$:
+\item Suppose $k+1=n+1$. Then the loop terminated after iteration $k$. We have $S_{k+1}=S_k$, so, by the induction hypothesis, the loop invariant holds.
+\item Suppose instead $k+1\leq n$. Then the loop body executed after iteration $k$:
 \begin{itemize}
 \item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack. Then the top element of the stack has been updated such that $S_{k+1}[\text{len}(S_{k+1})]=A[k]$. Of course $A[k]\in A$. Also, $A[k]\geq S_k[\text{len}(S_k)]$ so $S_{k+1}[\text{len}(S_{k+1})-1]\leq S_{k+1}[\text{len}(S_{k+1})]$. 
 
@@ -310,29 +311,30 @@ Essentially, we have shown that by removing the top element of $S_k$ to produce 
 \end{itemize}
 In all cases, the loop invariant holds for $i=k+1$.
 
-Hence, by the principle of mathematical induction, for all $1\leq i\leq\text{len}(A)+1$, we can conclude that $S_i$ is a monotonically increasing subsequence of $A$. 
+Hence, by the principle of mathematical induction, for all $1\leq i\leq n+1$, we can conclude that $S_i$ is a monotonically increasing subsequence of $A$. 
 
-By proving the loop invariant at initialization ($i=1$), maintenance ($1\leq i\leq\text{len}(A)$), and termination ($i=\text{len}(A)+1$), we have shown that $S$ is an increasing subsequence of $A$.$~\square$
+By proving the loop invariant at initialization ($i=1$), maintenance ($1\leq i\leq n$), and termination ($i=n+1$), we have shown that $S$ is an increasing subsequence of $A$.$~\square$
 \end{solution}
+\newpage
 \item Prove that $S$ contains all elements of $A$ except at most $2\log_2 n$.
 \begin{solution}\textbf{Invariant II.}
 
-\textit{Claim. }Let $A$ be a close-to-sorted array such that at most $\log_2n$ elements are out of place. Let $S$ be an empty stack. Consider Algorithm 1.
+\textit{Claim. }Let $A[1,\dots,n]$ be a close-to-sorted array such that at most $\log_2n$ elements are out of place. Let $S$ be an empty stack. Consider Algorithm 1.
 
 We want to demonstrate that, for every iteration of the loop in Algorithm 1, the stack $S$ contains all elements of $A$ except at most $2\log_2n$. In other words, denoting the number of excluded elements $m$, we want to show that $m\leq 2\log_2n$.
 
-Let $S_i$ denote $S$ before iteration $1\leq i\leq\text{len}(A)+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. Similarly, let $m_i$ denote the number of excluded elements of $A$ before iteration $i$.
+Let $S_i$ denote $S$ before iteration $1\leq i\leq n+1$. For example, $S_1$ represents the stack before iteration $1$ and $S_2$ represents the stack after iteration $1$ but before iteration $2$. Similarly, let $m_i$ denote the number of excluded elements of $A$ before iteration $i$.
 
 We can prove this invariant by induction on $i$.
 
 \textit{Basis. }Consider $i=1$ (before iteration 1). Here $S_1$ is an empty stack and $m_1=0$ since no elements have been examined or excluded. Of course, for all $n\in\mathbb{N}$, we have $0\leq 2\log_2n$, so $m_1\leq 2\log_2n$. The loop invariant holds in the base cases.
 
-\textit{Hypothesis. }Consider $1<i<k\leq\text{len}(A)$ (before iteration $k$). Assume that $m_k\leq 2\log_2 n$.
+\textit{Hypothesis. }Consider $1<i<k\leq n$ (before iteration $k$). Assume that $m_k\leq 2\log_2 n$.
 
 \textit{Inductive step. }Consider $i=k+1$ (after iteration $k$, but before iteration $k+1$):
 \begin{itemize}
-\item Suppose $k+1=\text{len}(A)+1$. Then the loop terminated after iteration $k$. We have $m_{k+1}=m_k$, so, by the induction hypothesis, the loop invariant holds.
-\item Suppose instead $k+1\leq\text{len}(A)$. Then the loop body executed after iteration $k$:
+\item Suppose $k+1=n+1$. Then the loop terminated after iteration $k$. We have $m_{k+1}=m_k$, so, by the induction hypothesis, the loop invariant holds.
+\item Suppose instead $k+1\leq n$. Then the loop body executed after iteration $k$:
 \begin{itemize}
 \item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack. No additional elements are excluded, so $m_{k+1}=m_k$. By the induction hypothesis, the loop invariant holds.
 \item Suppose instead $S_k$ was not empty and $S_k[\text{len}(S_k)]>A[k]$. Then $A[k]$ is not pushed onto $S_{k+1}$, so one element is excluded. An element is popped from $S_k$, so another element is excluded. Considering these exclusions, $m_{k+1}=m_k+2$.
@@ -342,35 +344,55 @@ This case only occurs when $A[k]$ is out of place. Now, $A[k]$ is out of place f
 \end{itemize}
 In all cases, the loop invariant holds.
 
-Hence, by the principle of mathematical induction, we conclude that the number of excluded elements $m\leq 2\log_2n$.
+Hence, by the principle of mathematical induction, we conclude that the number of excluded elements $m\leq 2\log_2n$.$~\square$
 \end{solution}
+\newpage\item Use the previous statements to design and prove the correctness and run-time of an algorithm to sort the nearly sorted array in time $O(n)$.
+\begin{solution}{\sc CloseSort}($A$) where $A[1,\dots,n]$ is a close-to-sorted array such that at most $\log_2n$ elements are out of place:
 
-    
-    \item Use the previous statements to design and prove the correctness and run-time of an algorithm to sort the nearly sorted array in time $O(n)$. 
-    
-    \hint{Suppose you could split $A$ into a large sorted subsequence and only a few remaining unsorted elements in time $O(n)$. (This is what parts 3 and 4 show.) Now think of the ``Merge'' subroutine in Merge Sort.}
+Let $S$ be an empty stack. Perform Algorithm 1 using $A$ and $S$, storing each of the $\ell$ pairs of elements $(a,b)$ excluded from $S$ in $\ell$-many $2$-element arrays $(a_1,b_1),(a_2,b_2),\dots,(a_\ell,b_\ell)$ such that $a_i<b_i$ for all $1\leq i\leq\ell$. 
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+Return $A'\leftarrow~${\sc Merge}($S$,$(a_1,b_1),(a_2,b_2),\dots,(a_\ell,b_\ell)$). Here {\sc Merge}($A_1,A_2,\dots,A_k$) is the well-known algorithm to merge $k$-many monotonically increasing sequences into a single sorted array. Note that the running time of {\sc Merge} is known to be $O(n)$, where $n$ is the sum of the lengths of the $k$ arrays to merge. Intuitively, this is because the algorithm involves scanning each sequences and copying values from the source sequences into the destination array.\\
+
+\textbf{Lemma I.}
+
+\textit{Claim. }{\sc CloseSort}($A$) returns an array $A'$ containing the elements of $A$ in sorted order.
+
+\textit{Proof. }
+From Invariant I, we have that $S$ is a monotonically increasing subsequence of $A$.
+
+By construction, each of $(a_i,b_i)$ for $1\leq i\leq\ell$ is monotonically increasing.
+
+From the {\sc Merge} invariant, $A'$ contains the elements of $S$ and $(a_1,b_1),(a_2,b_2),\dots,(a_\ell,b_\ell)$ in sorted order.
+
+By construction, $S$ is the result of Algorithm 1 and the arrays $(a_1,b_1),(a_2,b_2),\dots,(a_\ell,b_\ell)$ contain all 
+elements in $A$ not included in $S$, and only those elements in $A$ not included in $S$. Therefore $A'$ contains all elements in $A$, and only elements in $A$. That is, for all $a\in A$, we have $a\in A'$ and for all $a'\in A'$, we have $a'\in A$.
+
+Hence, {\sc CloseSort} returns an array $A'$ containing the elements of $A$ in sorted order.\\
+
+\textbf{Lemma II.}
+
+\textit{Claim. }The running time of {\sc CloseSort}($A$) is $O(n)$.
+
+\textit{Proof. }Let $T(n)$ denote the running time of {\sc CloseSort}($A$). From Invariant II, we have that the number of excluded elements $m\leq 2\log_2n$.
+
+Therefore, there are at most $\log_2n$ pairs of excluded elements. We have $\ell\leq\log_2n$.
+
+The running time of {\sc CloseSort} is the sum of the running times of Algorithm 1, $T_1(n)$, and {\sc Merge}, $T_2(n)$, plus some constant overhead $C$. The running times of Algorithm 1 and {\sc Merge} are given to be linear with respect to their inputs.
+\begin{align*}
+T(n)&=T_1(n)+T_2(n)+C&~\\
+&=O(n)+O(\text{len}(S)+2\ell)+C&\textit{considering the number of elements to merge,}\\
+&=O(n)+O(n)+C&\textit{$\text{len}(S)+2\ell=n$ by construction,}\\
+&=O(n)&\textit{asymptotically.}
+\end{align*}
+
+\textbf{Proof.}
+
+Let $A[1,\dots n]$ be a close-to-sorted array such that at most $\log_2n$ elements are out of place.
+
+From Lemma I, {\sc CloseSort}($A$) returns $A'$, the sorted version of $A$. 
+
+From Lemma II, the running time of {\sc CloseSort}($A$) is $O(n)$.
+
+Ergo, {\sc CloseSort} sorts a close-to-sorted array in linear time.$~\square$
+\end{solution}
 \end{enumerate}
-
-
-
-
-
-    
-
-
-
-\subsection*{Honors Question: The Counterfeit Gem}
-Suppose you strike up a relationship with a jeweler and get a bulk deal on $n$ diamonds. However, you were warned beforehand that one (and only one) of the diamonds is a convincing fake, and the only difference between it and the real gems is that the fake one's weight is different, while all real ones have the same weight. Luckily, you have a balance scale at home, which can test two (disjoint) subsets of the diamonds and tell us which is lighter. 
-
-\begin{enumerate}
-    \item $(**)$ Assume that you know that the fake one is lighter. Give an algorithm that finds the counterfeit gem in $O(\log n)$ uses of the scale. Justify the correctness and time complexity of your proposed algorithm.
-
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-
-    \item $(****)$ Now consider the general case where you only know it has a different weight from the real ones. What can you do in this case? Can you still do it with $O(\log n)$ measurements? For concrete numbers, consider $n=12$ and show how you can identify the fake one only using the scale $3$ times.
-
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-\end{enumerate}
-
