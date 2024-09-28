@@ -7,7 +7,7 @@
 \firstpageheadrule
 \cfoot{}
 \subsection*{References}
-Collaborated with Crystal Huang.
+Collaborated with Crystal Huang. See \href{https://en.wikipedia.org/wiki/Exponentiation_by_squaring}{Exponentiation by squaring -- Wikipedia}.
 \subsection*{Question 1: {\sc InsertionSort} \textit{vs.} {\sc QuickSort}}
 
 Recall that in the worst case the running time of (non-randomized) {\sc QuickSort}, that uses the last element as the pivot, and {\sc InsertionSort} are $\Theta(n^2)$. Refer to the lecture notes for the {\sc QuickSort} implementation.
@@ -15,11 +15,132 @@ Recall that in the worst case the running time of (non-randomized) {\sc QuickSor
 \begin{enumerate}
     \item Give an example of an array of length $n$ where both take time $\Omega(n^2)$. Justify your answer.  
 \begin{solution}
-Let $A[1,\dots n]$ be an $n$-element array where $A[i]\geq A[i+1]$ for all $1\leq i<n$.
+Let $A[1,\dots,n]$ be an $n$-element array where $A[i]>A[i+1]$ for all $1\leq i<n$.\\
+
+\textbf{Lemma I. }
+
+\textit{Claim: }{\sc QuickSort}($A$) has running time $\Omega(n^2)$.
+
+We will analyze each recursive call $i$ to {\sc QuickSort}, where $i\geq 1$.
+\begin{itemize}
+\item Consider $i=1$. This recursive call operates on $A$:
+\begin{align*}
+A&=(A[1],A[2],\dots,A[n]).
+\end{align*}
+
+Since the pivot is chosen to be the last element of $A$, and since $A$ is sorted in reverse order, the last element is the least element in $A$. In other words, the pivot is chosen to be $A[n]$ where $A[n]\leq A[i]$ for all $1<i<n$.
+
+During the {\sc Partition} step, all elements are greater than or equal to $A[n]$, so no swaps are performed. Finally, $A[1]$ and $A[n]$ are swapped to place the pivot in its correct position. Note the resulting array $A_1$:
+\begin{align*}
+A_1&=(A[n],A[2],A[3]\dots,A[n-1],A[1]).
+\end{align*}
+
+\item Consider $i=2$. This recursive call operates on the subarray of $A_1$:
+\begin{align*}
+(A[2],A[3],\dots,A[n-1],A[1]).
+\end{align*}
+The pivot is chosen to be the last element of this subarray, which is the value $A[1]$. Because of the previous swap, in this case $A[1]$ is the largest element in the subarray. 
+
+During the {\sc Partition} step, all elements in the subarray are less than or equal to $A[1]$, so no swaps are performed. Finally, the values $A[n-1]$ and $A[1]$ are swapped to place the pivot in its correct position. Note the resulting array $A_2$:
+\begin{align*}
+A_2=(A[2],A[3],\dots,A[1],A[n-1]).
+\end{align*}
+\end{itemize}
+
+For each odd recursive step $i=2k+1$, the pivot is the least element; for each even recursive step $i=2k$, the pivot is the greatest element. Thus, for each recursive step, the pivot is an extreme within its working subarray. As a result, the {\sc Partition} step results in a lopsided set of subarrays, with one of length $n-1$ and the other of length $0$.
+
+On every recursive step, the size of the current working subarray is reduced by exactly 1. Therefore, there are $n$ levels, and on each level $i$, there are $n-i$ operations performed. Thus the amount of work is no less than
+\begin{equation*}
+\sum_{i=1}^n(n-i)=n+(n-1)+(n-2)+\dots=\Omega(n).
+\end{equation*}
+
+Therefore {\sc QuickSort}($A$) has running time $\Omega(n^2)$.\\
+
+\textbf{Lemma II.}
+
+\textit{Claim. }{\sc InsertionSort}($A$) has running time $\Omega(n^2)$.
+
+We will analyze each iteration $i$ of {\sc InsertionSort}, where $i\geq 1$.
+
+\begin{itemize}
+\item Consider $i=1$. This iteration operates on $A[2]$. Note $A[2]<A[1]$, so a comparison and a shift is required.
+\item Consider $i=2$. This iteration operates on $A[3]$. Note $A[3]<A[2]$ and $A[3]<A[1]$, so two comparisons and two shifts are required.
+\end{itemize}
+For each iteration $i$, there are $i$-many comparisons and shifts required to insert $A[i+1]$ into its sorted position. Thus the amount of work is no less than
+\begin{equation*}
+\sum_{i=1}^n{i}=1+2+\dots+n=\Omega(n^2).
+\end{equation*}
+Therefore {\sc InsertionSort}($A$) has running time $\Omega(n^2)$.\\
+
+\textbf{Proof. }
+
+From Lemma I, We have that {\sc QuickSort}($A$) has running time $\Omega(n^2)$.
+
+From Lemma II, We have that {\sc InsertionSort}($A$) has running time $\Omega(n^2)$.
+
+Hence proven.$~\square$
 \end{solution}
-    \item Give an example of an array of length $n$ where (non-randomized) {\sc QuickSort} runs in $\Omega(n^2)$ but {\sc Insertion-Sort} runs in time $O(n)$. Justify your answer. 
+\newpage
+\item Give an example of an array of length $n$ where (non-randomized) {\sc QuickSort} runs in $\Omega(n^2)$ but {\sc Insertion-Sort} runs in time $O(n)$. Justify your answer. 
 \begin{solution}
-Let $A[1,\dots n]$ be an $n$-element array where $A[i]\leq A[i+1]$ for all $1\leq i<n$.
+Let $A[1,\dots,n]$ be an $n$-element array where $A[i]<A[i+1]$ for all $1\leq i<n$.\\
+
+\textbf{Lemma I. }
+
+\textit{Claim: }{\sc QuickSort}($A$) has running time $\Omega(n^2)$.
+
+We will analyze each recursive call $i$ to {\sc QuickSort}, where $i\geq 1$.
+\begin{itemize}
+\item Consider $i=1$. This recursive call operates on $A$:
+\begin{align*}
+A&=(A[1],A[2],\dots,A[n]).
+\end{align*}
+
+Since the pivot is chosen to be the last element of $A$, and since $A$ is sorted, the last element is the greatest element in $A$. In other words, the pivot is chosen to be $A[n]$ where $A[n]\geq A[i]$ for all $1<i<n$.
+
+During the {\sc Partition} step, all elements are less than or equal to $A[n]$, so no swaps are performed. The pivot $A[n]$ remains in its correct position. There is no change to the array.
+
+\item Consider $i=2$. This recursive call operates on the subarray of $A$:
+\begin{align*}
+(A[2],A[3],\dots,A[n]).
+\end{align*}
+Again, the pivot is chosen to be the last element of this subarray, which remains the value $A[n]$, the largest element in $A$.
+
+During the {\sc Partition} step, all elements in the subarray are less than or equal to $A[n]$, so no swaps are performed. Again, the pivot $A[n]$ remains in its correct position. Again, there is no change to the array.
+\end{itemize}
+
+For each recursive step $i$, the pivot is the greatest element. Thus, for each recursive step, the pivot is an extreme within its working subarray. As a result, the {\sc Partition} step results in a lopsided set of subarrays, with one of length $n-1$ and the other of length $0$.
+
+On every recursive step, the size of the current working subarray is reduced by exactly 1. Therefore, there are $n$ levels, and on each level $i$, there are $n-i$ operations performed. Thus the amount of work is no less than
+\begin{equation*}
+\sum_{i=1}^n(n-i)=n+(n-1)+(n-2)+\dots=\Omega(n).
+\end{equation*}
+
+Therefore {\sc QuickSort}($A$) has running time $\Omega(n^2)$.\\
+
+\textbf{Lemma II.}
+
+\textit{Claim. }{\sc InsertionSort}($A$) has running time $\Omega(n^2)$.
+
+We will analyze each iteration $i$ of {\sc InsertionSort}, where $i\geq 1$.
+
+\begin{itemize}
+\item Consider $i=1$. This iteration operates on $A[2]$. Note $A[2]>A[1]$, so only a comparison is required.
+\item Consider $i=2$. This iteration operates on $A[3]$. Note $A[3]>A[2]$, so only a comparison is required.
+\end{itemize}
+For each iteration $i$, there is 1 comparison required to ensure $A[i+1]$ is in its sorted position. Let $c$ be the positive constant that denotes the running time of each comparison operation. Thus the amount of work is no less than
+\begin{equation*}
+\sum_{i=1}^n{c}=cn=\Omega(n).
+\end{equation*}
+Therefore {\sc InsertionSort}($A$) has running time $\Omega(n)$.\\
+
+\textbf{Proof. }
+
+From Lemma I, We have that {\sc QuickSort}($A$) has running time $\Omega(n^2)$.
+
+From Lemma II, We have that {\sc InsertionSort}($A$) has running time $\Omega(n)$.
+
+Hence proven.$~\square$
 \end{solution}
 \end{enumerate}
 \newpage
@@ -106,7 +227,7 @@ Hence, by the principle of mathematical induction, the {\sc SquareExponentiation
 
 \textit{Basis. }Consider $n=2^0$. Then there are no multiplications, so $M(2^0)=0$. Since $\log_2n\geq 0$ for $n\geq 1$, we can choose any positive constant $C$ and any $n_0\geq 1$ such that $0\leq C\log_2n$ for $n>n_0$. Therefore $M(n)=O(\log_2n)$ holds in the base case.
 
-\textit{Hypothesis. }Consider $n=2^k$ where $k>0$. Assume that $M(2^k)=O(\log_2n)$.
+\textit{Hypothesis. }Consider $n=2^k$ where $k>0$. Assume that $M(2^k)=O(\log_2k)$.
 
 \textit{Inductive step. }Consider $n=2^{k+1}$. Then the number of multiplications is $1$ (to compute $y\times y$), plus the number of multiplications used by the recursive call. That is, 
 \begin{align*}
@@ -114,11 +235,11 @@ M(2^{k+1})&=1+M\left(\frac{2^{k+1}}{2}\right)\\
 &=1+M(2^k).
 \end{align*}
 
-By the inductive hypothesis, we have $M(2^k)=O(\log_2n)$. Asymptotically,
+By the inductive hypothesis, we have $M(2^k)=O(\log_2(k+1))$. Asymptotically,
 \begin{align*}
-M(2^{k+1})&=1+O(\log_2n)\\
-&=O(1)+O(\log_2n)\\
-&=O(\log_2n).
+M(2^{k+1})&=1+O(\log_2(k+1))\\
+&=O(1)+O(\log_2k)\\
+&=O(\log_2k).
 \end{align*}
 
 This completes the inductive step.
@@ -155,7 +276,7 @@ Ergo, for all $n=2^x$ where $x\geq 0$, we have demonstrated that {\sc SquareExpo
 
 \textit{Basis. }Consider $n=1$. We have {\sc FastExponentiation}($b,1$)$~=b=b^1$ for all $b\in\mathbb{N}$. The claim holds in the base case.
 
-\textit{Hypothesis. }Consider $1<n<k$. Assume that {\sc FastExponentiation}($b,k$)$~=b^k$ for all $b\in\mathbb{N}$.
+\textit{Hypothesis. }Consider $1<n\leq k$. Assume that {\sc FastExponentiation}($b,k$)$~=b^k$ for all $b\in\mathbb{N}$.
 
 \textit{Inductive step. }Consider $n=k+1$. Since $k+1>1$, we compute $b'=b\times b$. Of course, since $b\in\mathbb{N}$, we have $b'\in\mathbb{N}$. Since $k\in\mathbb{N}$, either $k+1$ is even or $k+1$ is odd:
 \begin{itemize}
@@ -185,7 +306,7 @@ Hence, by the principle of mathematical induction, the {\sc FastExponentiation} 
 
 \textit{Basis. }Consider $n=1$. Then, regardless of the base $b$, there are no multiplications, so $M(b,1)=0$ for all $b\in\mathbb{N}$. Since $\log_2n\geq 0$ for $n\geq 1$, we can choose any positive constant $C$ and any $n_0\geq 1$ such that $0\leq C\log_2n$ for $n\geq n_0$. Therefore $M(b,n)=O(\log_2n)$ holds for all $b\in\mathbb{N}$ in the base case.
 
-\textit{Hypothesis. }Consider $1<n<k$. Assume that $M(b,k)=O(\log_2 n)$ for all $b\in\mathbb{N}$.
+\textit{Hypothesis. }Consider $1<n\leq k$. Assume that $M(b,k)=O(\log_2 n)$ for all $b\in\mathbb{N}$.
 
 \textit{Inductive step. }Consider $n=k+1$. Since $k+1>1$, we know $1$ multiplication is required to compute $b'=b\times b$. Since $k\in\mathbb{N}$, either $k+1$ is even or $k+1$ is odd:
 \begin{itemize}
@@ -204,7 +325,7 @@ Hence, by the principle of mathematical induction, the {\sc FastExponentiation} 
 
 \textbf{Proof.}
 
-By construction, {\sc FastPow2024}($n$) algorithm returns {\sc FastExponentiation}($2024,n$) and uses exactly as many multiplications as the {\sc FastExponentiation}($2024,n$) algorithm.
+By construction, the {\sc FastPow2024}($n$) algorithm returns {\sc FastExponentiation}($2024,n$) and uses exactly as many multiplications as the {\sc FastExponentiation}($2024,n$) algorithm.
 
 By Lemma I, {\sc FastExponentiation}($2024,n$) computes $2024^n$ for all $n\in\mathbb{N}$. Therefore, the {\sc FastPow2024} algorithm computes $2024^n$ for all $n\in\mathbb{N}$.
 
@@ -298,16 +419,18 @@ We can prove this invariant by induction on $i$.
 
 \textit{Inductive step. }Consider $i=k+1$ (after iteration $k$, but before iteration $k+1$):
 \begin{itemize}
-\item Suppose $k+1=n+1$. Then the loop terminated after iteration $k$. We have $S_{k+1}=S_k$, so, by the induction hypothesis, the loop invariant holds.
-\item Suppose instead $k+1\leq n$. Then the loop body executed after iteration $k$:
-\begin{itemize}
-\item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack. Then the top element of the stack has been updated such that $S_{k+1}[\text{len}(S_{k+1})]=A[k]$. Of course $A[k]\in A$. Also, $A[k]\geq S_k[\text{len}(S_k)]$ so $S_{k+1}[\text{len}(S_{k+1})-1]\leq S_{k+1}[\text{len}(S_{k+1})]$. 
+\item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack.
+
+Then the top element of the stack has been updated such that $S_{k+1}[\text{len}(S_{k+1})]=A[k]$.
+
+Of course $A[k]\in A$.
+
+Also, $A[k]\geq S_k[\text{len}(S_k)]$ so $S_{k+1}[\text{len}(S_{k+1})-1]\leq S_{k+1}[\text{len}(S_{k+1})]$. 
 
 By the induction hypothesis, $S_k$ is a monotonically increasing subsequence of $A$. By showing that the new top element in $S_{k+1}$ is a member of $A$ and is no smaller than the old top element, we have shown that $S_{k+1}$ is also a monotonically increasing subsequence of $A$, and thus that the loop invariant holds.
 \item Suppose instead $S_k$ was not empty and $S_k[\text{len}(S_k)]>A[k]$. Then the top element of the stack has been updated such that $S_{k+1}[\text{len}(S_{k+1})]=S_k[\text{len}(S_k)-1]$. By the induction hypothesis, $S_k[\text{len}(S_k)-1]\leq S_k[\text{len}(S_k)]$ and $S_k[\text{len}(S_k)-1]\in A$. By substituting and leveraging the strong induction hypothesis, we know that $S_{k+1}[\text{len}(S_{k+1}-1)]\leq S_{k+1}[\text{len}(S_{k+1})]$ and $S_{k+1}[\text{len}(S_{k+1})]\in A$.
 
 Essentially, we have shown that by removing the top element of $S_k$ to produce $S_{k+1}$, we have returned to a prior state of $S$ for which the strong induction hypothesis asserts that the invariant holds.
-\end{itemize}
 \end{itemize}
 In all cases, the loop invariant holds for $i=k+1$.
 
@@ -333,14 +456,10 @@ We can prove this invariant by induction on $i$.
 
 \textit{Inductive step. }Consider $i=k+1$ (after iteration $k$, but before iteration $k+1$):
 \begin{itemize}
-\item Suppose $k+1=n+1$. Then the loop terminated after iteration $k$. We have $m_{k+1}=m_k$, so, by the induction hypothesis, the loop invariant holds.
-\item Suppose instead $k+1\leq n$. Then the loop body executed after iteration $k$:
-\begin{itemize}
 \item Suppose $S_k$ was empty or $S_k[\text{len}(S_k)]\leq A[k]$. Note $S_k[\text{len}(S_k)]$ denotes the top element of the stack. No additional elements are excluded, so $m_{k+1}=m_k$. By the induction hypothesis, the loop invariant holds.
 \item Suppose instead $S_k$ was not empty and $S_k[\text{len}(S_k)]>A[k]$. Then $A[k]$ is not pushed onto $S_{k+1}$, so one element is excluded. An element is popped from $S_k$, so another element is excluded. Considering these exclusions, $m_{k+1}=m_k+2$.
 
 This case only occurs when $A[k]$ is out of place. Now, $A[k]$ is out of place for at most $\log_2n$ many iterations (since $A$ is almost sorted), so this case occurs at most $\log_2n$ many times. On each such iteration, exactly $2$ elements are excluded. Considering these bounds, taken together with the induction hypothesis ($m_k\leq 2\log_2n$), we can conclude that $m_{k+1}\leq 2\log_2n$ on any such iteration $k+1$. Thus the loop invariant holds.
-\end{itemize}
 \end{itemize}
 In all cases, the loop invariant holds.
 
@@ -384,6 +503,8 @@ T(n)&=T_1(n)+T_2(n)+C&~\\
 &=O(n)+O(n)+C&\textit{$\text{len}(S)+2\ell=n$ by construction,}\\
 &=O(n)&\textit{asymptotically.}
 \end{align*}
+
+Hence, the running time of {\sc CloseSort} on an $n$-element almost-sorted array is $O(n)$.
 
 \textbf{Proof.}
 
