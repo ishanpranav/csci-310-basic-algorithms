@@ -102,14 +102,14 @@ During the {\sc Partition} step, all elements are less than or equal to $A[n]$, 
 
 \item Consider $i=2$. This recursive call operates on the subarray of $A$:
 \begin{align*}
-(A[2],A[3],\dots,A[n]).
+(A[1],A[2],\dots,A[n-1]).
 \end{align*}
-Again, the pivot is chosen to be the last element of this subarray, which remains the value $A[n]$, the largest element in $A$.
+Again, the pivot is chosen to be the last element of this subarray, which is the value $A[n-1]$, the largest element in this subarray of $A$.
 
-During the {\sc Partition} step, all elements in the subarray are less than or equal to $A[n]$, so no swaps are performed. Again, the pivot $A[n]$ remains in its correct position. Again, there is no change to the array.
+During the {\sc Partition} step, all elements in the subarray are less than or equal to $A[n-1]$, so no swaps are performed. Again, the pivot $A[n-1]$ remains in its correct position. Again, there is no change to the array.
 \end{itemize}
 
-For each recursive step $i$, the pivot is the greatest element. Thus, for each recursive step, the pivot is an extreme within its working subarray. As a result, the {\sc Partition} step results in a lopsided set of subarrays, with one of length $n-1$ and the other of length $0$.
+For each recursive step $i$, the pivot is the greatest element. Thus, for each recursive step, the pivot is the maximum within its working subarray. As a result, the {\sc Partition} step results in a lopsided set of subarrays, with one of length $n-1$ and the other of length $0$.
 
 On every recursive step, the size of the current working subarray is reduced by exactly 1. Therefore, there are $n$ levels, and on each level $i$, there are $n-i$ operations performed. Thus the amount of work is no less than
 \begin{equation*}
