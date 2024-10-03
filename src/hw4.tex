@@ -1,0 +1,163 @@
+\lhead{\textbf{Basic Algorithms, Fall 2024 \\ CSCI-UA.0310-001}}
+\chead{\Large{\textbf{Homework 4}}}
+\def\lc{\left\lceil}   
+\def\rc{\right\rceil}
+\rhead{\textbf{Instructor: Rotem Oshman \\ Name: Ishan Pranav}}
+\runningheadrule
+\firstpageheadrule
+\cfoot{}
+
+\newcommand{\True}{\mathtt{true}}
+\newcommand{\False}{\mathtt{false}}
+
+\subsection*{References}
+
+Collaborated with Crystal Huang.
+
+\subsection*{Question 1: $k$-th Smallest Element from Two Lists}
+
+Suppose you are given two \emph{sorted} lists $A[1,\ldots,n]$ and $B[1,\ldots,m]$ of size $n$ and $m$, respectively. Give an $O(\log k)$ algorithm to find the $k$-th
+smallest element in $A \cup B$, i.e., of the combination of the two arrays. For simplicity, you can assume $k \leq \min(m,n)$. Justify the correctness and running time of your algorithm. 
+
+\begin{solution}\\
+
+\noindent\textbf{Algorithm. }{\sc FindIndex}($A,B,k$) where $A[1,\dots,n],B[1,\dots,m]$ are sorted lists and $k\in\mathbb{N}$ where $k\leq\min(n,m)$. That is, for all $1\leq i<n$, we have $A[i]\leq A[i+1]$, and for all $1\leq j<m$, we have $B[j]\leq B[j+1]$:
+\begin{itemize}
+\item if $n=0$, then return $B[k]$;
+\item if $m=0$, then return $A[k]$;
+\item if $k=1$, then return $\min(A[1],B[1])$;
+\item otherwise, for $k>1$, compute $i\leftarrow\left\lfloor\frac{k}{2}\right\rfloor$. Then:
+\begin{itemize}
+\item if $A[i]\leq B[i]$, then return {\sc FindIndex}($A[i+1,\dots,n],B[1,\dots,m],k-i$);
+\item otherwise, return {\sc FindIndex}($A[1,\dots,n],B[i+1,\dots,m],k-i$).
+\end{itemize}
+\end{itemize}
+
+\noindent\textbf{Proof I.}
+
+\noindent\textit{Claim. }For all sorted lists $A[1,\dots,n],B[1,\dots,m]$ and all $k\leq\min(n,m)$, {\sc FindIndex}($A,B,k$) returns $C[k]$, where $C=~${\sc Merge}($A,B$), the result of the well-known {\sc Merge} algorithm. That is, {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$ (and no other elements). Note $k\geq 1,m\geq 0,n\geq 0$.
+
+\begin{itemize}
+\item Suppose $n=0$. Then $m\geq 1$. Consider $C[1,\dots,m]$, the result of merging $A$ and $B$. Since $n=0$, we know $C=B$. For all $k\in\mathbb{N}$, {\sc FindIndex}($A,B,k$) returns $B[k]=C[k]$. Thus, when $n=0$, the claim holds for all $k\in\mathbb{N}$.
+\item Suppose $m=0$. Then $n\geq 1$. Consider $C[1,\dots,n]$, the result of merging $A$ and $B$. Since $m=0$, we know $C=A$. For all $k\in\mathbb{N}$, {\sc FindIndex}($A,B,k$) returns $A[k]=C[k]$. Thus, when $m=0$, the claim holds for all $k\in\mathbb{N}$.
+\item Suppose instead $m>0$ and $n>0$. We can demonstrate the claim for $m>0$ and $n>0$ by induction on $k$.\\
+
+\textit{Basis. }Consider $k=1$. Consider also $C[1,\dots,m+n]$, the result of merging $A$ and $B$. The least element in $C$ is either the least element in $A$ or the least element in $B$; specifically, it is the smaller of the least element in $A$ and the least element in $B$. Of course, in this case {\sc FindIndex}($A,B,k$) returns $\min(A[1],B[1])$. Since $A,B$ are sorted lists, $A[1]$ is the least element in $A$ and $B[1]$ is the least element in $B$. Therefore {\sc FindIndex}($A,B,k$) returns the first smallest element in $C$. Since $k=1$, the basis holds for all $A[1,\dots,n],B[1,\dots,m]$.\\
+
+\textit{Hypothesis. }Consider $1<k\leq\ell<\min(n,m)$. Assume that for all sorted lists $A[1,\dots,n]$ and $B[1,\dots,n]$, {\sc FindIndex}($A,B,\ell$) returns the $\ell$-th element of the sorted list that contains all elements of $A$ and $B$ (and no other elements).\\
+
+\textit{Inductive step. }Consider $k=\ell+1$. For all sorted lists $A[1,\dots,n],B[1,\dots,m]$, we have $i=\left\lfloor\frac{\ell+1}{2}\right\rfloor$. Consider $C[1,\dots,m+n]$, the result of merging $A$ and $B$.
+\begin{itemize}
+\item Suppose $A[i]\leq B[i]$. Since $A$ and $B$ are sorted, and since $A[i]\leq B[i]$, we know that the $(\ell+1)$-th element in $C$ is definitely not within the first $i$ elements of $A$. We can ignore the first $i$ elements in $A$, adjusting our index in the subarray from $\ell+1$ to $\ell+1-i$ (to account for the $i$ elements excluded, which precede it in sorted order).
+
+The result for the new subarray is given by {\sc FindIndex}($A[i+1,\dots,n],B[1,\dots,m],k-i$), which is the return value of the algorithm in this case. By the strong induction hypothesis, the claim holds for this result.
+\item Suppose instead $A[i]>B[i]$. Since $A$ and $B$ are sorted, and since $B[i]<A[i]$, we know that the $(\ell+1)$-th element in $C$ is definitely not within the first $i$ elements of $B$. We can ignore the first $i$ elements in $B$, adjusting our index in the subarray from $\ell+1$ to $\ell+1-i$ (to account for the $i$ elements excldued, which precede it in sorted order).
+
+The result for the new subarray is given by {\sc FindIndex}($A[1,\dots,n],B[i+1,\dots,m],k-i$), which is the return value of the algorithm in this case. By the strong induction hypothesis, the claim holds for this result.
+\end{itemize}
+
+In all cases, {\sc FindIndex}($A,B,\ell+1$) returns the ($\ell+1$)-th element of the sorted list that contains all elements of $A$ and $B$ (and no other elements), thus completing the inductive step.
+
+Hence, by the principle of mathematical induction, the claim holds for all $k\in\mathbb{N}$ when $m>0$ and $n>0$.
+\end{itemize}
+
+We have shown that for all sorted lists $A[1,\dots,n],B[1\dots,m],n\geq 0,m\geq 0,k\in\mathbb{N}$, if $k\leq\min(n,m)$, then {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$.$~\square$
+\end{solution}
+\subsection*{Question 2: Permutations (4+2+2+2+2=12 points)}
+
+Define the notation $[n] = \{1, 2, \ldots, n\}$, and let $S_n$ be the set of all possible permutations of $[n]$. The size of $S_n$ is given by $|S_n|=n!=n\cdot (n-1) \cdots 1$. Recall that $n!=O(n^n)$ and $2^n=O(n!)$. 
+Now, each input in $S_n$ can serve as an input for a sorting algorithm. Instead of a perfectly correct sorting algorithm, we will look at a class of algorithms that only produce a sorted result on some of the inputs. More concretely, we say that a sorting algorithm is $\eps$-correct if the algorithm produces the correct result (i.e., produces a sorted array as output) on exactly $\eps$ fraction of the set of inputs in $S_n$. In other words, an $\eps$-correct sorting algorithm is one that produces the correct result on $\eps \cdot (n!)$ possible inputs and produces an incorrect result otherwise.
+
+\begin{enumerate}
+    \item Show that for any $0\leq \epsilon\leq 1$, the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon \cdot n!$ leaves. \hint{Recall from the lecture that the output of a comparison-based sorting algorithm is a permutation that prescribes how the input array has to be shuffled to obtain the sorted output. For one of the inputs on which the algorithm is correct, how does the output permutation relate to the input permutation?}
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+\noindent
+In the following, we want to investigate whether lowering $\eps$ can yield a saving in the number of comparisons required by a sorting algorithm. Intuitively if the algorithm only has to be correct on a certain fraction of inputs this should speed up the algorithm. For instance, an algorithm that does not need to be correct at all clearly does not need $\Omega(n \log n)$ comparisons. \hint{Use the number of leaves in the decision tree to derive a lower bound on its height.} 
+
+\begin{enumerate}[resume]
+    \item Let $\eps=1/2$. Show that for any constant $C\geq 0$, there is no comparison-based $\eps$-correct sorting algorithm that can sort using less than $C \cdot n$ comparisons. This shows that taking $\eps=1/2$ does not help us reduce the number of comparisons to linear. 
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item Consider $\eps=1/n$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons? Justify your answer.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+    
+    \item Consider $\eps=\frac{1}{2^n}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons? Justify your answer.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+    
+    \item Consider $\eps=\frac{2^n}{n!}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons?
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+
+
+\subsection*{Disjointed Arrays (2+5+3=10 points)}
+Let $A[1,\ldots,m]$ and $B[1,\ldots,n]$ be two sorted
+arrays each containing distinct elements. Let
+$m\leq n$ and $n$ is a multiple of $m$. 
+The problem is to determine if the two arrays
+are disjointed or not. Two arrays are said
+to be disjointed if their intersection is
+$\emptyset$. 
+
+\begin{enumerate}
+	\item Let us assume that $A$ and $B$ are disjoint.
+	We define $C$ as the sorted combination of
+	$A$ and $B$, i.e., $C=A\cup B$ and $C$ is sorted. Clearly,
+	$|C|=m+n$ because $A\cap B=\emptyset$. Define
+	$D$ of length $m+n$ where $D[i]=1$ if $C[i]\in A$ and 0
+	otherwise. Give a count of the number of such possible
+	arrays $D$. Justify your answer. 
+
+\begin{solution}
+For each element $1\leq i\leq m+n$ in $D[1,\dots,m+n]$, the value $D[i]=1$ if $C[i]\in A$, and $0$ otherwise. Since $C=A\cup B$, we know $D[i]=1$ if $C[i]\in A$ or $0$ if $C[i]\in B$.
+
+There are $m+n$ many elements in $D$, and for each element, it is either in $A$ or not in $A$. It is known that there are $n$ elements in $A$, so $n$ of $m+n$ elements must be chosen to be $1$ and the other $m$ elements must be $0$.
+
+Thus, the number of such possible arrays is $\binom{m+n}{n}=\binom{m+n}{m}$.
+
+\end{solution}
+
+	\item We go back to the original problem---we do not know whether $A,B$ are disjoint. Let us assume that $A$ contains 1 element, and $B$ contains 2 elements. 
+	
+	\begin{itemize}
+	\item Draw a comparison-based decision tree for this problem.
+	\item You will also present a modification of the above tree
+	where you will change the label of every leaf node marked as $\True$ 
+	with a corresponding array $D$. 
+	\end{itemize}
+	
+	You will ensure that your decision tree makes 
+	the least number of comparisons possible and has
+	the shortest height possible. The internal 
+	node will be of the form $(i,j)$ which 
+	indicates that you are comparing $A[i]$ and $B[j]$. 
+	Now, each such internal node will have three children - 
+	one corresponding to $A[i]<B[j]$, one corresponding to $A[i]=B[j]$,
+	and one corresponding to $A[i]>B[j]$. The leaf
+	nodes will contain the values $\True,\False$
+	where $\True$ indicates that $A,B$ are disjoint
+	and $\False$ indicates the opposite. 
+	
+\begin{solution}
+
+\end{solution}
+
+
+	\item Now we look at the general problem, i.e.,
+	for any $m,n$. It can be shown that the decision
+	tree for this general problem will have every
+	leaf node labeled $\True$ correspond with
+	a distinct array $D$, as defined in part (a).
+	This is in fact a bijective mapping, i.e., every
+	leaf node labeled $\True$ has a corresponding array $D$
+	and every array $D$ has a corresponding leaf node
+	labeled $\True$
+	Now, using this and your answer from part (a),
+	show that problem has a worst-case lower
+	bound of $\Omega(m\log(1+n/m))$.
+	\hint{Use: ${a\choose b}\geq (a/b)^b$.}
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
