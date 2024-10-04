@@ -35,8 +35,9 @@ smallest element in $A \cup B$, i.e., of the combination of the two arrays. For 
 
 \noindent\textbf{Proof I.}
 
-\noindent\textit{Claim. }For all sorted lists $A[1,\dots,n],B[1,\dots,m]$ and all $k\leq\min(n,m)$, {\sc FindIndex}($A,B,k$) returns $C[k]$, where $C=~${\sc Merge}($A,B$), the result of the well-known {\sc Merge} algorithm. That is, {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$ (and no other elements). Note $k\geq 1,m\geq 0,n\geq 0$.
+\noindent\textit{Claim. }For all sorted lists $A[1,\dots,n],B[1,\dots,m]$ and all $k\leq\min(n,m)$, {\sc FindIndex}($A,B,k$) returns $C[k]$, where $C=~${\sc Merge}($A,B$), the result of the well-known {\sc Merge} algorithm. That is, {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$ (and no other elements). Note $k\geq 1,m\geq 0,n\geq 0$.\\
 
+\noindent\textit{Proof.}
 \begin{itemize}
 \item Suppose $n=0$. Then $m\geq 1$. Consider $C[1,\dots,m]$, the result of merging $A$ and $B$. Since $n=0$, we know $C=B$. For all $k\in\mathbb{N}$, {\sc FindIndex}($A,B,k$) returns $B[k]=C[k]$. Thus, when $n=0$, the claim holds for all $k\in\mathbb{N}$.
 \item Suppose $m=0$. Then $n\geq 1$. Consider $C[1,\dots,n]$, the result of merging $A$ and $B$. Since $m=0$, we know $C=A$. For all $k\in\mathbb{N}$, {\sc FindIndex}($A,B,k$) returns $A[k]=C[k]$. Thus, when $m=0$, the claim holds for all $k\in\mathbb{N}$.
@@ -61,13 +62,56 @@ In all cases, {\sc FindIndex}($A,B,\ell+1$) returns the ($\ell+1$)-th element of
 Hence, by the principle of mathematical induction, the claim holds for all $k\in\mathbb{N}$ when $m>0$ and $n>0$.
 \end{itemize}
 
-We have shown that for all sorted lists $A[1,\dots,n],B[1\dots,m],n\geq 0,m\geq 0,k\in\mathbb{N}$, if $k\leq\min(n,m)$, then {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$.$~\square$
+\noindent We have shown that for all sorted lists $A[1,\dots,n],B[1\dots,m],n\geq 0,m\geq 0,k\in\mathbb{N}$, if $k\leq\min(n,m)$, then {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$.$~\square$\\
+
+\noindent\textbf{Proof II.}
+
+\noindent\textit{Claim. }For all sorted lists $A[1,\dots,n],B[1,\dots,m]$ and all $k\leq\min(n,m)$, the running time of {\sc FindIndex}($A,B,k$) is $T(k)=O(\log{k})$.\\
+
+\noindent\textit{Proof. }On each recursive level, {\sc FindIndex}($A,B,k$) performs a constant number of operations: At most, one element from $A$ is compared with one element from $B$. So the work done on each level is $\Theta(1)$. Since $k$ is reduced by roughly half on each recursive call, the number of levels is asymptotically $\log_2k$. From this intuition, we can guess that the running time of {\sc FindIndex}($k$), $T(k)$ may be $O(\log_2k)$. 
+
+We can use a recurrence to estimate $T(k)$:
+\begin{align*}
+T(1)&=\Theta(1),&
+T(k)&=T\left(\left\lfloor\frac{k}{2}\right\rfloor\right)+\Theta(1),
+\text{ for }k>1.
+\end{align*}
+We want to show that $T(k)=O(\log_2k)$. That is, we want to show that there exist positive constants $C,n_0$ such that $T(k)\leq C\log{k}$ for all $k\geq n_0$. Taking $n_0=2$, we can demonstrate this claim for all $k>2$ by induction on $k$.\\
+
+\noindent\textit{Basis. }Consider $k=2$. Observe
+\begin{align*}
+T(2)&=T\left(\left\lfloor\frac{2}{2}\right\rfloor\right)+\Theta(1)\\
+&=T(1)+\Theta(1)\\
+&=\Theta(1)+\Theta(1)&\textit{asymptotically,}\\
+&=c_1+c_2&\textit{where $c_1,c_2$ are positive constants.}
+\end{align*}
+
+\noindent Since $T(2)=c_1+c_2$, we can choose any $C\geq\frac{c_1+c_2}{\log_2{k}}$ so that $T(2)\leq C\log_2{k}$. The claim holds in the base case.\\
+
+\noindent\textit{Hypothesis. }Consider $2<\ell\leq k$. Assume that $T(\ell)=O(\log_2\ell)$.\\
+
+\noindent\textit{Inductive step. }Consider $k=\ell+1$. Observe
+\begin{align*}
+T(\ell+1)
+&=T\left(\left\lfloor\frac{\ell+1}{2}\right\rfloor\right)+\Theta(1)\\
+&=O\left(\log_2\left\lfloor\frac{\ell+1}{2}\right\rfloor\right)+\Theta(1)&\textit{from the strong inductive hypothesis,}\\
+&\leq C\log_2\left(\left\lfloor\frac{\ell+1}{2}\right\rfloor\right)+\Theta(1)\\
+&\leq C\log_2\left(\left\lfloor\frac{\ell+1}{2}\right\rfloor\right)+\Theta(1)\\
+&\leq C\log_2\ell+\Theta(1)&\textit{for $C>0$ and $\ell\geq 2,$}\\
+&=O(\log_2\ell)+\Theta(1)\\
+&=O(\log_2\ell)&\textit{asymptotically.}
+\end{align*}
+
+\noindent This completes the inductive step.\\
+
+\noindent Hence, by the principle of mathematical induction, we have $n_0=2,C\geq\frac{c_1+c_2}{\log_2k}$ for which $T(k)\leq C\log_2k$.\\
+
+\noindent Therefore, $T(k)=O(\log_2k)=O(\log k)$.$~\square$
 \end{solution}
 \subsection*{Question 2: Permutations (4+2+2+2+2=12 points)}
 
 Define the notation $[n] = \{1, 2, \ldots, n\}$, and let $S_n$ be the set of all possible permutations of $[n]$. The size of $S_n$ is given by $|S_n|=n!=n\cdot (n-1) \cdots 1$. Recall that $n!=O(n^n)$ and $2^n=O(n!)$. 
 Now, each input in $S_n$ can serve as an input for a sorting algorithm. Instead of a perfectly correct sorting algorithm, we will look at a class of algorithms that only produce a sorted result on some of the inputs. More concretely, we say that a sorting algorithm is $\eps$-correct if the algorithm produces the correct result (i.e., produces a sorted array as output) on exactly $\eps$ fraction of the set of inputs in $S_n$. In other words, an $\eps$-correct sorting algorithm is one that produces the correct result on $\eps \cdot (n!)$ possible inputs and produces an incorrect result otherwise.
-
 \begin{enumerate}
     \item Show that for any $0\leq \epsilon\leq 1$, the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon \cdot n!$ leaves. \hint{Recall from the lecture that the output of a comparison-based sorting algorithm is a permutation that prescribes how the input array has to be shuffled to obtain the sorted output. For one of the inputs on which the algorithm is correct, how does the output permutation relate to the input permutation?}
 \begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
