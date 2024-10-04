@@ -108,13 +108,19 @@ T(\ell+1)
 
 \noindent Therefore, $T(k)=O(\log_2k)=O(\log k)$.$~\square$
 \end{solution}
-\subsection*{Question 2: Permutations (4+2+2+2+2=12 points)}
+\subsection*{Question 2: Permutations}
 
 Define the notation $[n] = \{1, 2, \ldots, n\}$, and let $S_n$ be the set of all possible permutations of $[n]$. The size of $S_n$ is given by $|S_n|=n!=n\cdot (n-1) \cdots 1$. Recall that $n!=O(n^n)$ and $2^n=O(n!)$. 
 Now, each input in $S_n$ can serve as an input for a sorting algorithm. Instead of a perfectly correct sorting algorithm, we will look at a class of algorithms that only produce a sorted result on some of the inputs. More concretely, we say that a sorting algorithm is $\eps$-correct if the algorithm produces the correct result (i.e., produces a sorted array as output) on exactly $\eps$ fraction of the set of inputs in $S_n$. In other words, an $\eps$-correct sorting algorithm is one that produces the correct result on $\eps \cdot (n!)$ possible inputs and produces an incorrect result otherwise.
 \begin{enumerate}
-    \item Show that for any $0\leq \epsilon\leq 1$, the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon \cdot n!$ leaves. \hint{Recall from the lecture that the output of a comparison-based sorting algorithm is a permutation that prescribes how the input array has to be shuffled to obtain the sorted output. For one of the inputs on which the algorithm is correct, how does the output permutation relate to the input permutation?}
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+    \item Show that for any $0\leq \epsilon\leq 1$, the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon \cdot n!$ leaves.
+\begin{solution}
+\textit{Claim. }Let $0\leq\epsilon\leq 1$. Then the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon\cdot n!$ leaves.
+
+\textit{Proof. }Assume, for the sake of contradiction, that there exists some $\epsilon$-correct sorting algorithm {\sc HypotheticalSort} for which the number of leaves is less than $\epsilon\cdot n!$. Since {\sc HypotheticalSort} is an $\epsilon$-correct sorting algorithm, it produces correct solutions for $\epsilon\cdot n!$ possible inputs. Every input array $A$ has exactly one correct sorted solution $A_{\rm sorted}$. Since {\sc HypotheticalSort} produces correct results for $\epsilon\cdot n!$ possible inputs, it produces exactly $1\cdot\epsilon\cdot n!=\epsilon\cdot n!$ possible outputs. In a recursive decision tree, each leaf corresponds to a single output. Therefore, the decision tree of {\sc HypotheticalSort} has $\epsilon\cdot n!$ leaves. This contradicts the hypothesis that {\sc HypotheticalSort} has less than $\epsilon\cdot n!$ leaves.
+
+Therefore for all $0\leq\epsilon\leq 1$, the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon\cdot n!$ leaves.$~\square$
+\end{solution}
 \end{enumerate}
 
 \noindent
@@ -122,21 +128,90 @@ In the following, we want to investigate whether lowering $\eps$ can yield a sav
 
 \begin{enumerate}[resume]
     \item Let $\eps=1/2$. Show that for any constant $C\geq 0$, there is no comparison-based $\eps$-correct sorting algorithm that can sort using less than $C \cdot n$ comparisons. This shows that taking $\eps=1/2$ does not help us reduce the number of comparisons to linear. 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{Claim. }Let $\epsilon=\frac{1}{2}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using less than $Cn$ comparisons.
+
+\textit{Proof. }Assume, for the sake of contradiction, that there exists some comparison-based $\epsilon$-correct sorting algorithm {\sc HypotheticalSort} that can sort using less than $Cn$ comparisons for $\epsilon=\frac{1}{2}$. Then the number of leaves in its decision tree is at least $\epsilon\cdot n!=\frac{1}{2}\cdot n!=\frac{n!}{2}$. Thus, the height of this tree $H(n)$ is at least on the order of $\log{\frac{n!}{2}}$. Note
+\begin{align*}
+\frac{n!}{2}\geq\frac{\left(\frac{n}{2}\right)^{\frac{n}{2}}}{2}.\\
+\end{align*}
+Observe
+\begin{align*}
+H(n)&\geq\log\frac{n!}{2}\\
+&\geq\log\frac{\left(\frac{n}{2}\right)^{\frac{n}{2}}}{2}\\
+&\geq\log\left(\frac{n}{2}\right)^{\frac{n}{2}}-\log 2\\
+&\geq\frac{n}{2}\log\frac{n}{2}-\log 2.
+\end{align*}
+
+We have $C_1\left(\frac{n}{2}\log\frac{n}{2}-\log 2\right)\geq n\log n$ for all $n\geq n_0$, taking $C_1>3$ and large enough $n_0$.
+
+Thus, $H(n)=\Omega(n\log n)=\Omega(n)$. Therefore {\sc HypotheticalSort} sorts using greater than or equal to $Cn$ comparisons for some $C=C_1$. This contradicts the hypothesis that {\sc HypotheticalSort} can sort using less than $Cn$ comparisons for all $C\geq 0$.
+
+Therefore, when $\epsilon=\frac{1}{2}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using less than $Cn$ comparisons.$~\square$
+\end{solution}
 
     \item Consider $\eps=1/n$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons? Justify your answer.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{Claim. }Let $\epsilon=\frac{1}{n}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
+
+\textit{Proof. }Assume, for the sake of contradiction, that there exists some comparison-based $\epsilon$-correct sorting algorithm {\sc HypotheticalSort} that can sort using less than or equal to $Cn$ comparisons for $\epsilon=\frac{1}{n}$. Then the number of leaves in its decision tree is at least $\epsilon\cdot n!=\frac{1}{n}\cdot n!=(n-1)!$. Thus, the height of this tree $H(n)$ is at least on the order of $\log((n-1)!)$. Note
+\begin{align*}
+(n-1)!\geq\left(\frac{n-1}{2}\right)^{\frac{n-1}{2}}.\\
+\end{align*}
+Observe
+\begin{align*}
+H(n)&\geq\log((n-1)!)\\
+&\geq\log\left(\frac{n-1}{2}\right)^{\frac{n-1}{2}}\\
+&\geq\frac{n-1}{2}\log\frac{n-1}{2}.
+\end{align*}
+
+We have $C_1\left(\frac{n-1}{2}\log\frac{n-1}{2}\right)>n\log n$ for all $n\geq n_0$, taking $C_1\geq 3$ and large enough $n_0$.
+
+Thus, $H(n)=\omega(n\log n)$. We know that $\omega(n\log n)=\omega(n)$ is strictly greater than $O(n)$ for large enough $n$. Therefore {\sc HypotheticalSort} sorts using greater than $Cn$ comparisons for some $C=C_1$. This contradicts the hypothesis that {\sc HypotheticalSort} can sort using $O(n)$ comparisons.
+
+Therefore, when $\epsilon=\frac{1}{n}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
+\end{solution}
     
     \item Consider $\eps=\frac{1}{2^n}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons? Justify your answer.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{Claim. }Let $\epsilon=\frac{1}{2^n}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
+
+\textit{Proof. }Assume, for the sake of contradiction, that there exists some comparison-based $\epsilon$-correct sorting algorithm {\sc HypotheticalSort} that can sort using less than or equal to $Cn$ comparisons for $\epsilon=\frac{1}{2^n}$. Then the number of leaves in its decision tree is at least $\epsilon\cdot n!=\frac{1}{2^n}\cdot n!=\frac{n!}{2^n}$. Thus, the height of this tree $H(n)$ is at least on the order of $\log\left(\frac{n!}{2^n}\right)$. Note
+\begin{align*}
+\frac{n!}{2^n}\geq\frac{\left(\frac{n}{2}\right)^{\frac{n}{2}}}{2^n}.\\
+\end{align*}
+Observe
+\begin{align*}
+H(n)&\geq\log\left(\frac{n!}{2^n}\right)\\
+&\geq\log\frac{\left(\frac{n}{2}\right)^{\frac{n}{2}}}{2^n}\\
+&\geq\log\left(\frac{n}{2}\right)^{\frac{n}{2}}-\log2^n\\
+&=\frac{n}{2}\log\frac{n}{2}-n\log 2.
+\end{align*}
+
+We have $C_1\left(\frac{n}{2}\log\frac{n}{2}-n\log 2\right)>n\log n$ for all $n\geq n_0$, taking $C_1\geq 10$ and large enough $n_0$.
+
+Thus, $H(n)=\omega(n\log n)$. We know that $\omega(n\log n)=\omega(n)$ is strictly greater than $O(n)$ for large enough $n$. Therefore {\sc HypotheticalSort} sorts using greater than $Cn$ comparisons for some $C=C_1$. This contradicts the hypothesis that {\sc HypotheticalSort} can sort using $O(n)$ comparisons.
+
+Therefore, when $\epsilon=\frac{1}{2^n}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
+\end{solution}
     
     \item Consider $\eps=\frac{2^n}{n!}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons?
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{Claim. }Let $\epsilon=\frac{2^n}{n!}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
+
+\textit{Proof. }Assume, for the sake of contradiction, that there exists some comparison-based $\epsilon$-correct sorting algorithm {\sc HypotheticalSort} that can sort using less than or equal to $Cn$ comparisons for $\epsilon=\frac{2^n}{n!}$. Then the number of leaves in its decision tree is at least $\epsilon\cdot n!=\frac{2^n}{n!}\cdot n!=2^n$. Thus, the height of this tree $H(n)$ is at least on the order of $\log 2^n=n\log 2$. Observe
+\begin{align*}
+H(n)&\geq n\log 2.
+\end{align*}
+We have $n\log{2}\leq C_1n$ for $C\geq\log{2}$ for all $n\geq 0$. Thus, $H(n)=O(n)$, so {\sc HypotheticalSort} can sort using $O(n)$ comparisons.
+
+Therefore, when $\epsilon=\frac{2^n}{n!}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
+\end{solution}
 \end{enumerate}
 
 
 
-\subsection*{Disjointed Arrays (2+5+3=10 points)}
+\subsection*{Question 3: Disjointed arrays}
 Let $A[1,\ldots,m]$ and $B[1,\ldots,n]$ be two sorted
 arrays each containing distinct elements. Let
 $m\leq n$ and $n$ is a multiple of $m$. 
@@ -154,12 +229,13 @@ $\emptyset$.
 	otherwise. Give a count of the number of such possible
 	arrays $D$. Justify your answer. 
 
-\begin{solution}
-For each element $1\leq i\leq m+n$ in $D[1,\dots,m+n]$, the value $D[i]=1$ if $C[i]\in A$, and $0$ otherwise. Since $C=A\cup B$, we know $D[i]=1$ if $C[i]\in A$ or $0$ if $C[i]\in B$.
+\begin{solution}\textit{Claim. }Let $A[1,\dots,n],B[1,\dots,m]$ be sorted arrays containing distinct elements where $m\leq n$ and $n$ is a multiple of $m$. Let $C=A\cup B$ where $C$ is sorted and $D[1,\dots,m+n]$ where $D[i]=1$ if $C[i]\in A$, and $C[i]=0$ otherwise, for $1\leq i\leq m+n$.
 
-There are $m+n$ many elements in $D$, and for each element, it is either in $A$ or not in $A$. It is known that there are $n$ elements in $A$, so $n$ of $m+n$ elements must be chosen to be $1$ and the other $m$ elements must be $0$.
+\textit{Proof. }For each element $1\leq i\leq m+n$ in $D[1,\dots,m+n]$, the value $D[i]=1$ if $C[i]\in A$, and $0$ otherwise. Since $C=A\cup B$, we know $D[i]=1$ if $C[i]\in A$ or $0$ if $C[i]\in B$.
 
-Thus, the number of such possible arrays is $\binom{m+n}{n}=\binom{m+n}{m}$.
+There are $m+n$ many elements in $D$, and for each element, it is either in $A$ or not in $A$. It is known that there are $n$ elements in $A$, so $n$ of $m+n$ elements must be chosen to be $1$ and the remaining $m$ elements must be $0$.
+
+Thus, the number of such possible arrays is $\binom{m+n}{n}=\binom{m+n}{m}$.$~\square$
 
 \end{solution}
 
@@ -177,8 +253,7 @@ Thus, the number of such possible arrays is $\binom{m+n}{n}=\binom{m+n}{m}$.
 	the shortest height possible. The internal 
 	node will be of the form $(i,j)$ which 
 	indicates that you are comparing $A[i]$ and $B[j]$. 
-	Now, each such internal node will have three children - 
-	one corresponding to $A[i]<B[j]$, one corresponding to $A[i]=B[j]$,
+	Now, each such internal node will have three children---one corresponding to $A[i]<B[j]$, one corresponding to $A[i]=B[j]$,
 	and one corresponding to $A[i]>B[j]$. The leaf
 	nodes will contain the values $\True,\False$
 	where $\True$ indicates that $A,B$ are disjoint
@@ -203,5 +278,8 @@ Thus, the number of such possible arrays is $\binom{m+n}{n}=\binom{m+n}{m}$.
 	bound of $\Omega(m\log(1+n/m))$.
 	\hint{Use: ${a\choose b}\geq (a/b)^b$.}
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}\textit{Claim. }Let $A[1,\dots,n],B[1,\dots,m]$ be sorted arrays containing distinct elements where $m\leq n$ and $n$ is a multiple of $m$.
+
+\textit{Proof. }In the worst case, $A$ and $B$ are disjoint, so we must visit every element. That is, the worst case occurs when we cannot conclude that $A\cap B=\emptyset$ until we examine each of the $m+n$ elements.
+\end{solution}
 \end{enumerate}
