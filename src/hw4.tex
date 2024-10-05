@@ -76,7 +76,7 @@ T(1)&=\Theta(1),&
 T(k)&=T\left(\left\lfloor\frac{k}{2}\right\rfloor\right)+\Theta(1),
 \text{ for }k>1.
 \end{align*}
-We want to show that $T(k)=O(\log_2k)$. That is, we want to show that there exist positive constants $C,n_0$ such that $T(k)\leq C\log{k}$ for all $k\geq n_0$. Taking $n_0=2$, we can demonstrate this claim for all $k>2$ by induction on $k$.\\
+We want to show that $T(k)=O(\log_2k)$. That is, we want to show that there exist positive constants $C,n_0$ such that $T(k)\leq C\log{k}$ for all $k\geq n_0$. Taking $k_0=2$, we can demonstrate this claim for all $k>2$ by induction on $k$.\\
 
 \noindent\textit{Basis. }Consider $k=2$. Observe
 \begin{align*}
@@ -198,15 +198,13 @@ Therefore, when $\epsilon=\frac{1}{2^n}$, for all $C\geq 0$, there is no compari
 \newpage 
     \item Consider $\eps=\frac{2^n}{n!}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons?
 \begin{solution}
-\textit{Claim. }Let $\epsilon=\frac{2^n}{n!}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
+\textit{Claim. }Let $\epsilon=\frac{2^n}{n!}$. Then for any $C\geq 0$, there exists a comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
 
-\textit{Proof. }Assume, for the sake of contradiction, that there exists some comparison-based $\epsilon$-correct sorting algorithm {\sc HypotheticalSort} that can sort using less than or equal to $Cn$ comparisons for $\epsilon=\frac{2^n}{n!}$. Then the number of leaves in its decision tree is at least $\epsilon\cdot n!=\frac{2^n}{n!}\cdot n!=2^n$. Thus, the height of this tree $H(n)$ is at least on the order of $\log 2^n=n\log 2$. Observe
+\textit{Proof. }Let {\sc Sort} be a comparison-based $\epsilon$-correct sorting algorithm that can sort using less than or equal to $Cn$ comparisons for $\epsilon=\frac{2^n}{n!}$. Then the number of leaves in its decision tree is at least $\epsilon\cdot n!=\frac{2^n}{n!}\cdot n!=2^n$. Thus, the height of this tree $H(n)$ is at least on the order of $\log 2^n=n\log 2$. Observe
 \begin{align*}
 H(n)&\geq n\log 2.
 \end{align*}
-We have $n\log{2}\leq C_1n$ for $C\geq\log{2}$ for all $n\geq 0$. Thus, $H(n)=O(n)$, so {\sc HypotheticalSort} can sort using $O(n)$ comparisons.
-
-Therefore, when $\epsilon=\frac{2^n}{n!}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
+We have $n\log{2}\leq Cn$ for $C\geq\log{2}$ for all $n\geq 0$. Thus, $H(n)=O(n)$, so {\sc Sort} can sort using $O(n)$ comparisons.$~\square$
 \end{solution}
 \end{enumerate}
 \newpage
@@ -295,7 +293,8 @@ The worst case occurs when $A$ and $B$ are disjoint. Suppose not: Then $A[i]=B[j
 
 When $A$ and $B$ are disjoint, the result is $\True$. There are $\binom{m+n}{m}$ nodes labeled $\True$, so in the worst case all $\log_3\binom{m+n}{n}$ levels must be visited before the last evaluation concludes that $A$ and $B$ are disjoint. Intuitively, this corresponds to the case where the first $m-1$ elements compared between $A$ and $B$ are different, but the last element compared is identical.
 
-Observe
+Observe:
+
 \begin{align*}
 H(n,m)&\geq\log_3\binom{m+n}{m}\\
 &\geq\log_3\left(\frac{m+n}{m}\right)^m&\textit{from Axiom II, since $n\geq m\geq 1$,}\\
@@ -303,6 +302,7 @@ H(n,m)&\geq\log_3\binom{m+n}{m}\\
 &\geq m\log_3\left(1+\frac{n}{m}\right)\\
 &\geq\frac{1}{\log{3}}\cdot m\log\left(1+\frac{n}{m}\right).
 \end{align*}
+
 There exists a constant $\frac{1}{\log{3}}>0$ for which $H(n,m)\geq\frac{1}{\log{3}}\cdot m\log\left(1+\frac{n}{m}\right)$ for large enough $m$ (and, since $n\geq m$, large enough $n$).
 
 Therefore, $H(n,m)=\Omega(m\log(1+n/m))$. Of course, the work done on each level is constant.
