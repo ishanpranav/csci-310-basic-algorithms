@@ -33,7 +33,7 @@ smallest element in $A \cup B$, i.e., of the combination of the two arrays. For 
 \end{itemize}
 \end{itemize}
 
-\noindent\textbf{Proof I.}
+\noindent\textbf{Proposition I.}
 
 \noindent\textit{Claim. }For all sorted lists $A[1,\dots,n],B[1,\dots,m]$ and all $k\leq\min(n,m)$, {\sc FindIndex}($A,B,k$) returns $C[k]$, where $C=~${\sc Merge}($A,B$), the result of the well-known {\sc Merge} algorithm. That is, {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$ (and no other elements). Note $k\geq 1,m\geq 0,n\geq 0$.\\
 
@@ -64,7 +64,7 @@ Hence, by the principle of mathematical induction, the claim holds for all $k\in
 
 \noindent We have shown that for all sorted lists $A[1,\dots,n],B[1\dots,m],n\geq 0,m\geq 0,k\in\mathbb{N}$, if $k\leq\min(n,m)$, then {\sc FindIndex}($A,B,k$) returns the $k$-th element of the sorted list that contains all elements of sorted lists $A$ and $B$.$~\square$\\
 
-\noindent\textbf{Proof II.}
+\noindent\textbf{Proposition II.}
 
 \noindent\textit{Claim. }For all sorted lists $A[1,\dots,n],B[1,\dots,m]$ and all $k\leq\min(n,m)$, the running time of {\sc FindIndex}($A,B,k$) is $T(k)=O(\log{k})$.\\
 
@@ -104,7 +104,7 @@ T(\ell+1)
 
 \noindent This completes the inductive step.\\
 
-\noindent Hence, by the principle of mathematical induction, we have $n_0=2,C\geq\frac{c_1+c_2}{\log_2k}$ for which $T(k)\leq C\log_2k$.\\
+\noindent Hence, by the principle of mathematical induction, we have $k_0=2,C\geq\frac{c_1+c_2}{\log_2k}$ for which $T(k)\leq C\log_2k$ for all $k\geq k_0$.\\
 
 \noindent Therefore, $T(k)=O(\log_2k)=O(\log k)$.$~\square$
 \end{solution}
@@ -122,6 +122,7 @@ Now, each input in $S_n$ can serve as an input for a sorting algorithm. Instead 
 Therefore for all $0\leq\epsilon\leq 1$, the decision tree of an $\epsilon$-correct comparison-based sorting algorithm must have at least $\epsilon\cdot n!$ leaves.$~\square$
 \end{solution}
 \end{enumerate}
+\newpage
 
 \noindent
 In the following, we want to investigate whether lowering $\eps$ can yield a saving in the number of comparisons required by a sorting algorithm. Intuitively if the algorithm only has to be correct on a certain fraction of inputs this should speed up the algorithm. For instance, an algorithm that does not need to be correct at all clearly does not need $\Omega(n \log n)$ comparisons. \hint{Use the number of leaves in the decision tree to derive a lower bound on its height.} 
@@ -149,7 +150,7 @@ Thus, $H(n)=\Omega(n\log n)=\Omega(n)$. Therefore {\sc HypotheticalSort} sorts u
 
 Therefore, when $\epsilon=\frac{1}{2}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using less than $Cn$ comparisons.$~\square$
 \end{solution}
-
+\newpage
     \item Consider $\eps=1/n$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons? Justify your answer.
 \begin{solution}
 \textit{Claim. }Let $\epsilon=\frac{1}{n}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
@@ -171,7 +172,7 @@ Thus, $H(n)=\omega(n\log n)$. We know that $\omega(n\log n)=\omega(n)$ is strict
 
 Therefore, when $\epsilon=\frac{1}{n}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
 \end{solution}
-    
+\newpage
     \item Consider $\eps=\frac{1}{2^n}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons? Justify your answer.
 \begin{solution}
 \textit{Claim. }Let $\epsilon=\frac{1}{2^n}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
@@ -194,7 +195,7 @@ Thus, $H(n)=\omega(n\log n)$. We know that $\omega(n\log n)=\omega(n)$ is strict
 
 Therefore, when $\epsilon=\frac{1}{2^n}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
 \end{solution}
-    
+\newpage 
     \item Consider $\eps=\frac{2^n}{n!}$. In this setting, are we able to achieve a sorting algorithm for $S_n$ with $O(n)$ comparisons?
 \begin{solution}
 \textit{Claim. }Let $\epsilon=\frac{2^n}{n!}$. Then for any $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons---that is, less than or equal to $Cn$ comparisons.
@@ -208,9 +209,7 @@ We have $n\log{2}\leq C_1n$ for $C\geq\log{2}$ for all $n\geq 0$. Thus, $H(n)=O(
 Therefore, when $\epsilon=\frac{2^n}{n!}$, for all $C\geq 0$, there is no comparison-based $\epsilon$-correct sorting algorithm that can sort using $O(n)$ comparisons.$~\square$
 \end{solution}
 \end{enumerate}
-
-
-
+\newpage
 \subsection*{Question 3: Disjointed arrays}
 Let $A[1,\ldots,m]$ and $B[1,\ldots,n]$ be two sorted
 arrays each containing distinct elements. Let
@@ -229,57 +228,85 @@ $\emptyset$.
 	otherwise. Give a count of the number of such possible
 	arrays $D$. Justify your answer. 
 
-\begin{solution}\textit{Claim. }Let $A[1,\dots,n],B[1,\dots,m]$ be sorted arrays containing distinct elements where $m\leq n$ and $n$ is a multiple of $m$. Let $C=A\cup B$ where $C$ is sorted and $D[1,\dots,m+n]$ where $D[i]=1$ if $C[i]\in A$, and $C[i]=0$ otherwise, for $1\leq i\leq m+n$.
+\begin{solution}
+\textbf{Proposition 3.1.}
+\textit{Claim. }Let $A[1,\dots,n],B[1,\dots,m]$ be sorted arrays containing distinct elements where $m\leq n$ and $n$ is a multiple of $m$. Let $C=A\cup B$ where $C$ is sorted and $D[1,\dots,m+n]$ where $D[i]=1$ if $C[i]\in A$, and $C[i]=0$ otherwise, for $1\leq i\leq m+n$.
 
-\textit{Proof. }For each element $1\leq i\leq m+n$ in $D[1,\dots,m+n]$, the value $D[i]=1$ if $C[i]\in A$, and $0$ otherwise. Since $C=A\cup B$, we know $D[i]=1$ if $C[i]\in A$ or $0$ if $C[i]\in B$.
-
-There are $m+n$ many elements in $D$, and for each element, it is either in $A$ or not in $A$. It is known that there are $n$ elements in $A$, so $n$ of $m+n$ elements must be chosen to be $1$ and the remaining $m$ elements must be $0$.
+\textit{Proof. }Since $C=A\cup B$, we know $D[i]=1$ if $C[i]\in A$ or $0$ if $C[i]\in B$. There are $m+n$ many elements in $D$, and for each element, it is either in $A$ or not in $A$. It is known that there are $n$ elements in $A$, so $n$ of $m+n$ elements must be chosen to be $1$ and the remaining $m$ elements must be $0$.
 
 Thus, the number of such possible arrays is $\binom{m+n}{n}=\binom{m+n}{m}$.$~\square$
-
 \end{solution}
+\newpage
+\item We go back to the original problem---we do not know whether $A,B$ are disjoint. Let us assume that $A$ contains 1 element, and $B$ contains 2 elements. 
 
-	\item We go back to the original problem---we do not know whether $A,B$ are disjoint. Let us assume that $A$ contains 1 element, and $B$ contains 2 elements. 
-	
-	\begin{itemize}
-	\item Draw a comparison-based decision tree for this problem.
-	\item You will also present a modification of the above tree
-	where you will change the label of every leaf node marked as $\True$ 
-	with a corresponding array $D$. 
-	\end{itemize}
-	
-	You will ensure that your decision tree makes 
-	the least number of comparisons possible and has
-	the shortest height possible. The internal 
-	node will be of the form $(i,j)$ which 
-	indicates that you are comparing $A[i]$ and $B[j]$. 
-	Now, each such internal node will have three children---one corresponding to $A[i]<B[j]$, one corresponding to $A[i]=B[j]$,
-	and one corresponding to $A[i]>B[j]$. The leaf
-	nodes will contain the values $\True,\False$
-	where $\True$ indicates that $A,B$ are disjoint
-	and $\False$ indicates the opposite. 
-	
+\begin{itemize}
+\item Draw a comparison-based decision tree for this problem.
+\item You will also present a modification of the above tree
+where you will change the label of every leaf node marked as $\True$ 
+with a corresponding array $D$. 
+\end{itemize}
+
+You will ensure that your decision tree makes 
+the least number of comparisons possible and has
+the shortest height possible. The internal 
+node will be of the form $(i,j)$ which 
+indicates that you are comparing $A[i]$ and $B[j]$. 
+Now, each such internal node will have three children---one corresponding to $A[i]<B[j]$, one corresponding to $A[i]=B[j]$,
+and one corresponding to $A[i]>B[j]$. The leaf
+nodes will contain the values $\True,\False$
+where $\True$ indicates that $A,B$ are disjoint
+and $\False$ indicates the opposite.
+\begin{figure}[h]
+\centering
+\includegraphics[width=9.5cm]{images/hw4-3-2.png}
+\caption{\textit{Top: }A comparison-based decision tree for this problem. \textit{Bottom: }A modification of the above tree where the label of every leaf node marked as $\True$ is replaced with a corresponding array $D$.}
+\label{fig:hw4_3_2}
+\end{figure}
 \begin{solution}
-
+Please see Figure~\ref{fig:hw4_3_2}.
 \end{solution}
+\newpage
 
+\item Now we look at the general problem, i.e.,
+for any $m,n$. It can be shown that the decision
+tree for this general problem will have every
+leaf node labeled $\True$ correspond with
+a distinct array $D$, as defined in part (1).
+This is in fact a bijective mapping, i.e., every
+leaf node labeled $\True$ has a corresponding array $D$
+and every array $D$ has a corresponding leaf node
+labeled $\True$
+Now, using this and your answer from part (1),
+show that problem has a worst-case lower
+bound of $\Omega(m\log(1+n/m))$.
+\begin{solution}\textbf{Proposition 3.3. }\textit{Definitions. }Let $A[1,\dots,n],B[1,\dots,m]$ be sorted arrays containing distinct elements where $m\leq n$ and $n$ is a multiple of $m$. Let $C=A\cup B$ where $C$ is sorted. Let $D[1,\dots,m+n]$ be an array where $D[i]=1$ if $C[i]\in A$ and $0$ otherwise.
 
-	\item Now we look at the general problem, i.e.,
-	for any $m,n$. It can be shown that the decision
-	tree for this general problem will have every
-	leaf node labeled $\True$ correspond with
-	a distinct array $D$, as defined in part (a).
-	This is in fact a bijective mapping, i.e., every
-	leaf node labeled $\True$ has a corresponding array $D$
-	and every array $D$ has a corresponding leaf node
-	labeled $\True$
-	Now, using this and your answer from part (a),
-	show that problem has a worst-case lower
-	bound of $\Omega(m\log(1+n/m))$.
-	\hint{Use: ${a\choose b}\geq (a/b)^b$.}
+\textit{Axiom I. }There exists a bijective mapping between nodes labeled $\True$ and possible arrangements of $D$. For each node labeled $\True$, there is exactly one arrangement of $D$. For each arrangement of $D$, there is exactly one node labeled $\True$.
 
-\begin{solution}\textit{Claim. }Let $A[1,\dots,n],B[1,\dots,m]$ be sorted arrays containing distinct elements where $m\leq n$ and $n$ is a multiple of $m$.
+\textit{Axiom II. }$\binom{a}{b}\geq\left(\frac{a}{b}\right)^b$ for $a\geq b\geq 1$. This follows from $b^b\geq b!$ for all $b\geq 1$.
 
-\textit{Proof. }In the worst case, $A$ and $B$ are disjoint, so we must visit every element. That is, the worst case occurs when we cannot conclude that $A\cap B=\emptyset$ until we examine each of the $m+n$ elements.
+\textit{Claim. }The problem has a worst-case lower bound of $\Omega\left(m\log\left(1+\frac{n}{m}\right)\right)$.
+
+\textit{Proof. }Let $H(n,m)$ denote the height of the decision tree in the worst case. Since each internal node has three children---one corresponding to $A[i]<B[j]$, one coprresponding to $A[i]=B[j]$, and one corresponding to $A[i]>B[j]$---this is a ternary tree with height equal to the ternary logarithm of the number of leaves.
+
+From Proposition 3.1, we know there are $\binom{m+n}{m}$ arrangements of $D$. From Axiom I, there are as many arrangements of $D$ as nodes labeled $\True$. Therefore there are $\binom{m+n}{m}$ nodes labeled $\True$.
+
+The worst case occurs when $A$ and $B$ are disjoint. Suppose not: Then $A[i]=B[j]$ for some $i,j$, and the result is $\False$. We can choose different inputs $A,B'$, where $B'[1,\dots,m]=[B[1],\dots,B[j-1],x,B[j+1],\dots B[m]]$ and $x\neq A[i]$. In other words, we can replace $B'[j]$ with some $x$ to make $A$ and $B'$ disjoint and perform the algorithm again on $A$ and $B'$. Now $A[i]\neq B[j]$, so at least one additional comparison is performed. The running time will be as bad, or worse, than when $A$ and $B$ are not disjoint. So the worst case is when $A$ and $B$ are disjoint.
+
+When $A$ and $B$ are disjoint, the result is $\True$. There are $\binom{m+n}{m}$ nodes labeled $\True$, so in the worst case all $\log_3\binom{m+n}{n}$ levels must be visited before the last evaluation concludes that $A$ and $B$ are disjoint. Intuitively, this corresponds to the case where the first $m-1$ elements compared between $A$ and $B$ are different, but the last element compared is identical.
+
+Observe
+\begin{align*}
+H(n,m)&\geq\log_3\binom{m+n}{m}\\
+&\geq\log_3\left(\frac{m+n}{m}\right)^m&\textit{from Axiom II, since $n\geq m\geq 1$,}\\
+&\geq\log_3\left(1+\frac{n}{m}\right)^m\\
+&\geq m\log_3\left(1+\frac{n}{m}\right)\\
+&\geq\frac{1}{\log{3}}\cdot m\log\left(1+\frac{n}{m}\right).
+\end{align*}
+There exists a constant $\frac{1}{\log{3}}>0$ for which $H(n,m)\geq\frac{1}{\log{3}}\cdot m\log\left(1+\frac{n}{m}\right)$ for large enough $m$ (and, since $n\geq m$, large enough $n$).
+
+Therefore, $H(n,m)=\Omega(m\log(1+n/m))$. Of course, the work done on each level is constant.
+
+Ergo the problem has a worst-case lower bound of $\Omega(m\log(1+n/m)).~\square$
 \end{solution}
 \end{enumerate}
