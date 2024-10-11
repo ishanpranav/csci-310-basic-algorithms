@@ -145,6 +145,10 @@ equal length parts (or as equal as possible), each is sorted recursively, and th
 
 Let $f(n)$ represent the worst-case running time of the merge operation with an $n$-element input array, where $f(n)=\Theta(n)$. We can write a recurrence for $T(n)$, the worst-case running time for 3-merge sort with an $n$-element input array:
 
+\[T(1)=1,\]
+
+\[T(2)=1,\]
+
 \[T(n)=3T\left(\frac{n}{3}\right)+f(n).\]
 
 \item Solve this recurrence for $T(n)$. Prove your result formally using the substitution method (i.e., induction). For full credit, you'll need to show matching upper and lower bounds.
