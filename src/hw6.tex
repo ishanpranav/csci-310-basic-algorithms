@@ -1,0 +1,147 @@
+\lhead{\textbf{Basic Algorithms, Fall 2024 \\ CSCI-UA.0310-001}}
+\chead{\Large{\textbf{Homework 6}}}
+\def\lc{\left\lceil}   
+\def\rc{\right\rceil}
+\rhead{\textbf{Instructor: Rotem Oshman \\
+Name: Ishan Pranav}}
+\runningheadrule
+\firstpageheadrule
+\cfoot{}
+\subsection*{References}
+Collaborated with Crystal Huang.
+
+\subsection*{Question 1: Knapsack with repetitions}
+
+In the lecture, you have seen the Knapsack problem: 
+Given $n$ items with non-zero integer weights $w_i \in \mathbb{Z}^+$ and values $v_i \geq 0$, you want to choose a subset that maximizes the total value while the overall weight does not exceed a given bound $W$.
+In the following, we want to consider a related problem where we assume that you are given $m_i$ many copies of each item type. In other words, $w_i$ and $v_i$ describe the weight and value of an item type, and you can choose that item up to $m_i$ times.
+
+Given weights $w[1,\ldots,n]$, values $v[1,\ldots,n]$, inventory $m[1,\ldots,n]$, and an overall weight $W$, we want to maximize the overall value subject to the bound $W$. 
+
+\begin{enumerate}
+    \item Let $K[i,u]$ denote the most valuable solution using items $1,\ldots,i$ and weight bound $u$. Write a recursive formula for $K$, do not forget the base cases.
+
+\begin{solution}
+\textit{Claim. }Given weights $w_1,\dots,w_i$, values $v_1,\dots,v_1$, inventory $m_1,\dots,m_i$, and an overall weight bound $W$. Then
+\begin{align*}
+K[i,u]=\begin{cases}
+0,&i=0,\\
+{\underset{0\leq j\leq\min\left(m_i,\frac{u}{w_i}\right)}{\max}}\left(K[i-1,u-jw_i]+jv_i\right)&i>0.
+\end{cases}
+\end{align*}
+where $K[i,u]$ denote the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$. 
+
+\textit{Proof. }We want to show that $K[i,u]$ denotes the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$. We can demonstrate the claim by induction on $i$.
+
+\textit{Basis. }Consider $i=0$. For all $u\geq 0$, the most valuable solution using the first $0$ items is $0$. Since $K[0,u]=0$ for all $u\geq 0$, the claim holds in the base case.
+
+\textit{Hypothesis. }Consider $i=k$. Assume that $K[k,u]$ denotes the most valuable solution using items $1,\dots,k$ for all weight bounds $u\geq 0$.
+
+\textit{Inductive step. }Consider $i=k+1$. The most valuable solution maximizes the total value by considering each feasible quantity $j$ of item $k+1$.
+
+The minimum quantity of item $k+1$ is $0$. The maximum quantity of item $k+1$ available in the inventory is given by $m_{k+1}$. However, the maximum quantity of item $k+1$ that can fit within a weight constraint of $u$ is $\frac{u}{w_{k+1}}$. Thus, the upper bound for $j$ is the smaller of $m_{k+1}$ (units available in the inventory) and $\frac{u}{w_{k+1}}$ (units satisfying the weight bound), or $\min\left(m_{k+1},\frac{u}{w_{k+1}}\right)$.
+
+For each such quantity $j$, the most valuable solution is the total weight of the $j$-many $(k+1)$-type items used, plus the most valuable solution using all the previous items $1,\dots,k$ under a weight bound that excludes the total weight of the $(k+1)$-type items used. 
+
+From the inductive hypothesis, $K[k,u-jw_{k+1}]$ gives the most valuable solution for items $1,\dots,k$ under a weight bound, $u$, less the total weight of the $j$-many $(k+1)$-type items, $jw_{k+1}$.
+
+Thus, the expression $K[(k+1)-1,u-jw_{k+1}]+jv_{k+1}$ gives the most valable solution with $j$-many $(k+1)$-type items for all $u\geq 0$.
+
+Since $k+1\geq 0$, we know that for all $u\geq 0$, the recurrence $K[k+1,u]$ gives the maximum value considering each feasible quantity of item $k+1$. This corresponds to the most valuable solution, thus completing the inductive step.
+
+Hence, by the principle of mathematical induction, $K[i,u]$ gives the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$.$~\square$
+\end{solution}
+\item Write an algorithm {\sc MaxValue}$(W,n,w,v,m)$ that computes the optimal value using Dynamic Programming. What is the running time of your algorithm?
+
+\begin{solution}
+
+\end{solution}
+\end{enumerate}
+\subsection*{Question 2: Fractional knapsack (2+1+5+3=11 points)}
+
+Now consider a variant of the (original) Knapsack problem where of each item you can take a fractional part $s_i \leq w_i$ and gain value $\frac{s_i}{w_i} \cdot v_i$.
+In the lecture you have seen a \emph{greedy strategy} for this problem:
+\begin{itemize}
+    \item Take as much as you can from the item $i$ that maximizes $\frac{v_i}{w_i}$. In other words, if $W$ is the current weight bound, take $s_i=\min(W,w_i)$ of that item.
+    \item Afterwards, set $W' = W-s_i$, remove the item $i$ from consideration. Repeat until $W=0$ or there are no more items left.
+\end{itemize}
+In the following, we want to prove the correctness of this greedy strategy. That is, we want to prove that it maximizes the value. Assume without loss of generality that the items are sorted by decreasing $\frac{v_i}{w_i}$, i.e., that the greedy chooses the first element.
+
+\begin{enumerate}
+    \item As a warm-up, show that the greedy strategy always outputs a solution that respects the weight bound $W$.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item Argue that if $\sum_{i=1}^n w_i \leq W$, the the greedy strategy selects the optimal outcome.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+
+    \item We call the selection $s = (s_1,\ldots,s_n)$ a strategy and let 
+    $\mathsf{value}(s) = \sum_{i=1}^n \frac{s_i}{w_i} \cdot v_i$ 
+    denote the obtained value. Let $s^*$ denote an optimal strategy (an arbitrary if multiple exist) and $s$ the greedy strategy.
+    Show the following: if $s(1) \neq s^*(1)$, then there exists a valid strategy $s'$ with $\mathsf{value}(s') = \mathsf{value}(s^*)$ and $s'(1) = s(1)$. In other words, there exists an optimal strategy $s'$ that agrees with the greedy one on the first choice.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item Perform an inductive argument to argue that the greedy strategy is optimal overall. Use your solution from the previous part!
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+
+
+
+\subsection*{Question 3: Let's Paint a Fence!}
+
+We want to paint our new fence, which is made up $N$ boards. The
+lengths of the $N$ boards are given in an array
+$L(1,\ldots,N)$. We have hired $K$ painters, and
+each painter takes $1$ hour to paint a $1$ unit of the board. For example,
+if one of the painters paints boards $3$, $4$ and $5$, then they
+complete at time $t_i=L[3]+L[4]+L[5]$. Our goal is to assign each
+painter to some subset of boards, to minimize the time when the fence
+has been completely painted. Since the $K$ painters can work in
+parallel, this corresponds to minimizing $\max(t_1,\ldots,t_K)$, where
+$t_i$ is the time taken by painter $i$ to complete their job. The
+painting task must be accomplished under the following constraints:
+\begin{itemize}
+    \item Each board must be completely painted by exactly one painter;
+      i.e., no board can be painted partially by one painter and partially
+      by another.
+    \item Each painter paints a contiguous collection of boards.  For example, a
+      configuration where painter $1$ paints boards $1$ and $3$ but not
+      $2$ is not a valid solution.
+\end{itemize}
+
+You are given as input the following: the number of painters $K$, and
+an array $L$ with the board lengths.  In the following problems,
+denote by $T[i,j]$ the minimum time to paint the first $i$ boards using
+$j$ painters. Using Dynamic Programming, we want to come up with a procedure 
+to minimize the painting time.
+\begin{enumerate}
+    \item Write a recurrence for $T[i,j]$ in terms of $T[*, j-1]$, i.e., of entries $T[k,j-1]$ for arbitrary $k$. Do not forget base cases! 
+    \hint{Assume the $j$-th person paints the last few of the $i$ boards. How many are optimal?}
+	
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+	
+    \item Write an algorithm {\sc MinTime} that computes the minimal completion time. To this end, complete the following skeleton. Make sure your algorithm uses only the minimal amount of extra storage.
+	
+    \begin{code}
+        1 {\sc MinTime}($N,K$)\\
+        2 \> $T \gets $ new array of length $\ldots\ldots\ldots$ \\
+        3 \> $T[\ldots\ldots] \gets \ldots\ldots$ \\
+        4 \> \For $\ldots\ldots=1$ \To $\ldots\ldots$ \Do \\
+        5 \> \> $T[\ldots\ldots] \gets \ldots\ldots\ldots$ \\
+        6 \> \For $\ldots\ldots=1$ \To $\ldots\ldots\ldots$ \Do \\
+        7 \> \> \For $\ldots\ldots=\ldots\ldots$ \DownTo $1$ \Do \\
+        8 \> \> \>  $T[\ldots\ldots] \gets \text{\sc Calc}(T,L,N,K,i,j)$ \\
+        9 \> \Return $T[\ldots\ldots]$
+    \end{code}
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item Next, write an algorithm $\text{\sc Calc}(T,L,N,K,i,j)$ that calculates $T[i,j]$
+    according to your recursive formula from part~(1). Your algorithm should run in time $O(N)$. (You may get 2 points for $O(N^2)$ solutions.)
+    \hint{Consider using a running sum.}
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+\end{enumerate}
