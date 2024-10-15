@@ -9,9 +9,7 @@ Name: Ishan Pranav}}
 \cfoot{}
 \subsection*{References}
 Collaborated with Crystal Huang.
-
 \subsection*{Question 1: Knapsack with repetitions}
-
 In the lecture, you have seen the Knapsack problem: 
 Given $n$ items with non-zero integer weights $w_i \in \mathbb{Z}^+$ and values $v_i \geq 0$, you want to choose a subset that maximizes the total value while the overall weight does not exceed a given bound $W$.
 In the following, we want to consider a related problem where we assume that you are given $m_i$ many copies of each item type. In other words, $w_i$ and $v_i$ describe the weight and value of an item type, and you can choose that item up to $m_i$ times.
@@ -22,39 +20,68 @@ Given weights $w[1,\ldots,n]$, values $v[1,\ldots,n]$, inventory $m[1,\ldots,n]$
     \item Let $K[i,u]$ denote the most valuable solution using items $1,\ldots,i$ and weight bound $u$. Write a recursive formula for $K$, do not forget the base cases.
 
 \begin{solution}
-\textit{Claim. }Given weights $w_1,\dots,w_i$, values $v_1,\dots,v_1$, inventory $m_1,\dots,m_i$, and an overall weight bound $W$. Then
+\textit{Claim. }Given weights $w_1,\dots,w_i$, values $v_1,\dots,v_1$, and inventory $m_1,\dots,m_i$,
 \begin{align*}
-K[i,u]=\begin{cases}
+K(i,u)=\begin{cases}
 0,&i=0,\\
-{\underset{0\leq j\leq\min\left(m_i,\frac{u}{w_i}\right)}{\max}}\left(K[i-1,u-jw_i]+jv_i\right)&i>0.
+{\underset{0\leq j\leq\min\left(m_i,\frac{u}{w_i}\right)}{\max}}\left(K(i-1,u-jw_i)+jv_i\right)&i>0.
 \end{cases}
 \end{align*}
-where $K[i,u]$ denote the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$. 
+where $K(i,u)$ denotes the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$. 
 
-\textit{Proof. }We want to show that $K[i,u]$ denotes the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$. We can demonstrate the claim by induction on $i$.
+\textit{Proof. }We want to show that $K(i,u)$ denotes the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$. We can demonstrate the claim by induction on $i$.
 
-\textit{Basis. }Consider $i=0$. For all $u\geq 0$, the most valuable solution using the first $0$ items is $0$. Since $K[0,u]=0$ for all $u\geq 0$, the claim holds in the base case.
+\textit{Basis. }Consider $i=0$. For all $u\geq 0$, the most valuable solution using the first $0$ items is $0$. Since $K(0,u)=0$ for all $u\geq 0$, the claim holds in the base case.
 
-\textit{Hypothesis. }Consider $i=k$. Assume that $K[k,u]$ denotes the most valuable solution using items $1,\dots,k$ for all weight bounds $u\geq 0$.
+\textit{Hypothesis. }Consider $i=k$. Assume that $K(k,u)$ denotes the most valuable solution using items $1,\dots,k$ for all weight bounds $u\geq 0$.
 
 \textit{Inductive step. }Consider $i=k+1$. The most valuable solution maximizes the total value by considering each feasible quantity $j$ of item $k+1$.
 
-The minimum quantity of item $k+1$ is $0$. The maximum quantity of item $k+1$ available in the inventory is given by $m_{k+1}$. However, the maximum quantity of item $k+1$ that can fit within a weight constraint of $u$ is $\frac{u}{w_{k+1}}$. Thus, the upper bound for $j$ is the smaller of $m_{k+1}$ (units available in the inventory) and $\frac{u}{w_{k+1}}$ (units satisfying the weight bound), or $\min\left(m_{k+1},\frac{u}{w_{k+1}}\right)$.
+The minimum quantity of item $k+1$ is $0$. The maximum quantity of item $k+1$ available in the inventory is given by $m_{k+1}$. However, the maximum quantity of item $k+1$ that can fit within a weight constraint of $u$ is $\frac{u}{w_{k+1}}$. Thus, the upper bound for $j$ is the smaller of $m_{k+1}$ (maximum units available in the inventory) and $\frac{u}{w_{k+1}}$ (units satisfying the weight bound), or $\min\left(m_{k+1},\frac{u}{w_{k+1}}\right)$.
 
-For each such quantity $j$, the most valuable solution is the total weight of the $j$-many $(k+1)$-type items used, plus the most valuable solution using all the previous items $1,\dots,k$ under a weight bound that excludes the total weight of the $(k+1)$-type items used. 
+For each such quantity $j$, the most valuable solution is the total weight of the $j$-many $(k+1)$-type items used, plus the most valuable solution using all the previous items $1,\dots,k$ under a smaller weight bound that excludes the total weight of the $(k+1)$-type items used. 
 
-From the inductive hypothesis, $K[k,u-jw_{k+1}]$ gives the most valuable solution for items $1,\dots,k$ under a weight bound, $u$, less the total weight of the $j$-many $(k+1)$-type items, $jw_{k+1}$.
+From the inductive hypothesis, $K(k,u-jw_{k+1})$ gives the most valuable solution for items $1,\dots,k$ under a weight bound, $u$, less the total weight of the $j$-many $(k+1)$-type items, $jw_{k+1}$.
 
-Thus, the expression $K[(k+1)-1,u-jw_{k+1}]+jv_{k+1}$ gives the most valable solution with $j$-many $(k+1)$-type items for all $u\geq 0$.
+Thus, the expression $K((k+1)-1,u-jw_{k+1})+jv_{k+1}$ gives the most valable solution with $j$-many $(k+1)$-type items for all $u\geq 0$.
 
-Since $k+1\geq 0$, we know that for all $u\geq 0$, the recurrence $K[k+1,u]$ gives the maximum value considering each feasible quantity of item $k+1$. This corresponds to the most valuable solution, thus completing the inductive step.
+Since $k+1\geq 0$, we know that for all $u\geq 0$, the recurrence $K(k+1,u)$ gives the maximum value considering each feasible quantity of item $k+1$. This corresponds to the most valuable solution, thus completing the inductive step.
 
-Hence, by the principle of mathematical induction, $K[i,u]$ gives the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$.$~\square$
+Hence, by the principle of mathematical induction, $K(i,u)$ gives the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$.$~\square$
 \end{solution}
 \item Write an algorithm {\sc MaxValue}$(W,n,w,v,m)$ that computes the optimal value using Dynamic Programming. What is the running time of your algorithm?
+\begin{solution}\\
 
-\begin{solution}
+\textbf{Algorithm. }{\sc MaxValue}($W,n,w,v,m$) with an overall weight bound $W\in\mathbb{Z}^+$, a number of items $n$, an $n$-element array of weights $w[1,\dots,n]$ such that $w[i]\in\mathbb{Z}^+$ for $1\leq i\leq n$, an array of values $v[1,\dots,n]$, and an array of quantities $m[1,\dots,n]$:
 
+Initialize a two-dimensional array $K[0,\dots,n][0,\dots,W]$ with dimensions $(n+1)\times(W+1)$.
+
+For $u=0$ to $W$, assign $K[0][u]\leftarrow 0$.
+
+For $k=1$ to $n$:
+\begin{itemize}
+\item for $u=0$ to $W$:
+\begin{itemize}
+\item let $a\leftarrow 0$;
+\item for $j=0$ to $\min\left(m[j],\frac{u}{w[k]}\right)$, assign $a\leftarrow\max(a,K[k-1][u-j\cdot w[k]]+j\cdot v[k])$;
+\item assign $K[k]\leftarrow a$.
+\end{itemize}
+\end{itemize}
+Return $K[i,W]$.\\
+
+\textbf{Proposition. }\textit{Claim. }{\sc MaxValue}($W,n,w,v,m$) has running time $O(n\times W\times\max(m^*,W))$, where $m^*$ is the largest element in $m$.
+
+\textit{Proof. }First, the {\sc MaxValue} algorithm initializes $W+1$ elements in $K$ with the value $0$, which is an $O(W+1)=O(W)$ process.
+
+Then, for each of the $n$ values of $k$, for each of the $W+1$ values of $u$, the second loop takes the maximum of $\min\left(m[j],\frac{u}{w[k]}\right)+1$ values. In the worst case, the running time of the innermost loop is
+\begin{align*}
+O\left(\max\left(m[j],\frac{u}{w[k]}\right)+1\right)
+&=O\left(\max\left(m[j],\frac{u}{w[k]}\right)\right)&\textit{asymptotically,}\\
+&=O(\max(m[j],W))&\textit{in the worst case $u=W$ and $w[k]=1$.}\\
+\end{align*}
+Let $m^*$ be the largest element in $m$. Then, the running time of the second loop is $O(n\times W\times\max(m^*,W))$.
+
+Therefore, the running time of {\sc MaxValue}($W,n,w,v,m$) is \[O(W)+O(n\times W\times\max(m^*,W))=O(n\times W\times\max(m^*,W)).~\square\]
 \end{solution}
 \end{enumerate}
 \subsection*{Question 2: Fractional knapsack (2+1+5+3=11 points)}
@@ -71,7 +98,7 @@ In the following, we want to prove the correctness of this greedy strategy. That
     \item As a warm-up, show that the greedy strategy always outputs a solution that respects the weight bound $W$.
 \begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
 
-    \item Argue that if $\sum_{i=1}^n w_i \leq W$, the the greedy strategy selects the optimal outcome.
+    \item Argue that if $\sum_{i=1}^n w_i \leq W$, the greedy strategy selects the optimal outcome.
 \begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
 
 
