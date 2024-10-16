@@ -62,9 +62,10 @@ For $k=1$ to $n$:
 \begin{itemize}
 \item for $u=0$ to $W$:
 \begin{itemize}
-\item let $a\leftarrow 0$;
-\item for $j=0$ to $\min\left(m[j],\frac{u}{w[k]}\right)$, assign $a\leftarrow\max(a,K[k-1][u-j\cdot w[k]]+j\cdot v[k])$;
-\item assign $K[k]\leftarrow a$.
+\item for $j=0$ to $\min\left(m[j],\frac{u}{w[k]}\right)$:
+\begin{itemize}
+\item assign $K[k]\leftarrow\max(K[k],K[k-1][u-j\cdot w[k]]+j\cdot v[k])$.
+\end{itemize}
 \end{itemize}
 \end{itemize}
 Return $K[i,W]$.\\
@@ -84,8 +85,7 @@ Let $m^*$ be the largest element in $m$. Then, the running time of the second lo
 Therefore, the running time of {\sc MaxValue}($W,n,w,v,m$) is \[O(W)+O(n\times W\times\max(m^*,W))=O(n\times W\times\max(m^*,W)).~\square\]
 \end{solution}
 \end{enumerate}
-\subsection*{Question 2: Fractional knapsack (2+1+5+3=11 points)}
-
+\subsection*{Question 2: Fractional knapsack}
 Now consider a variant of the (original) Knapsack problem where of each item you can take a fractional part $s_i \leq w_i$ and gain value $\frac{s_i}{w_i} \cdot v_i$.
 In the lecture you have seen a \emph{greedy strategy} for this problem:
 \begin{itemize}
@@ -93,23 +93,35 @@ In the lecture you have seen a \emph{greedy strategy} for this problem:
     \item Afterwards, set $W' = W-s_i$, remove the item $i$ from consideration. Repeat until $W=0$ or there are no more items left.
 \end{itemize}
 In the following, we want to prove the correctness of this greedy strategy. That is, we want to prove that it maximizes the value. Assume without loss of generality that the items are sorted by decreasing $\frac{v_i}{w_i}$, i.e., that the greedy chooses the first element.
-
 \begin{enumerate}
     \item As a warm-up, show that the greedy strategy always outputs a solution that respects the weight bound $W$.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textbf{Proposition I. }\textit{Claim. }The greedy strategy always outputs a solution that respects the weight bound $W$. Let $S$.
 
-    \item Argue that if $\sum_{i=1}^n w_i \leq W$, the greedy strategy selects the optimal outcome.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Proof. }
 
+\end{solution}
+\item Argue that if $\sum_{i=1}^n w_i \leq W$, the greedy strategy selects the optimal outcome.
+\begin{solution}
+\textbf{Proposition II. }\textit{Claim. }
 
-    \item We call the selection $s = (s_1,\ldots,s_n)$ a strategy and let 
-    $\mathsf{value}(s) = \sum_{i=1}^n \frac{s_i}{w_i} \cdot v_i$ 
-    denote the obtained value. Let $s^*$ denote an optimal strategy (an arbitrary if multiple exist) and $s$ the greedy strategy.
-    Show the following: if $s(1) \neq s^*(1)$, then there exists a valid strategy $s'$ with $\mathsf{value}(s') = \mathsf{value}(s^*)$ and $s'(1) = s(1)$. In other words, there exists an optimal strategy $s'$ that agrees with the greedy one on the first choice.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Proof. }
+\end{solution}
+\item We call the selection $s = (s_1,\ldots,s_n)$ a strategy and let 
+$\mathsf{value}(s) = \sum_{i=1}^n \frac{s_i}{w_i} \cdot v_i$ 
+denote the obtained value. Let $s^*$ denote an optimal strategy (an arbitrary if multiple exist) and $s$ the greedy strategy.
+Show the following: if $s(1) \neq s^*(1)$, then there exists a valid strategy $s'$ with $\mathsf{value}(s') = \mathsf{value}(s^*)$ and $s'(1) = s(1)$. In other words, there exists an optimal strategy $s'$ that agrees with the greedy one on the first choice.
+\begin{solution}
+\textbf{Proposition III. }\textit{Claim. }
 
-    \item Perform an inductive argument to argue that the greedy strategy is optimal overall. Use your solution from the previous part!
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Proof. }
+\end{solution}
+\item Perform an inductive argument to argue that the greedy strategy is optimal overall.
+\begin{solution}
+\textbf{Proposition IV. }\textit{Claim. }
+
+\textit{Proof. }
+\end{solution}
 \end{enumerate}
 
 
