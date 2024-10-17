@@ -52,7 +52,7 @@ Hence, by the principle of mathematical induction, $K(i,u)$ gives the most valua
 \item Write an algorithm {\sc MaxValue}$(W,n,w,v,m)$ that computes the optimal value using Dynamic Programming. What is the running time of your algorithm?
 \begin{solution}\\
 
-\textbf{Algorithm. }{\sc MaxValue}($W,n,w,v,m$) with an overall weight bound $W\in\mathbb{Z}^+$, a number of items $n$, an $n$-element array of weights $w[1,\dots,n]$ such that $w[i]\in\mathbb{Z}^+$ for $1\leq i\leq n$, an array of values $v[1,\dots,n]$, and an array of quantities $m[1,\dots,n]$:
+\textbf{Algorithm. }{\sc MaxValue}($W,n,w,v,m$) with an overall weight bound $W\in\mathbb{Z}^+$, a number of items $n$, an $n$-element array of weights $w[1,\dots,n]$ such that $w[i]\in\mathbb{Z}^+$ for $1\leq i\leq n$, an $n$-element array of values $v[1,\dots,n]$, and an $n$-element array of quantities $m[1,\dots,n]$, returning the optimal knapsack value:
 
 Initialize a two-dimensional array $K[0,\dots,n][0,\dots,W]$ with dimensions $(n+1)\times(W+1)$.
 
@@ -85,6 +85,7 @@ Let $m^*$ be the largest element in $m$. Then, the running time of the second lo
 Therefore, the running time of {\sc MaxValue}($W,n,w,v,m$) is \[O(W)+O(n\times W\times\max(m^*,W))=O(n\times W\times\max(m^*,W)).~\square\]
 \end{solution}
 \end{enumerate}
+\newpage
 \subsection*{Question 2: Fractional knapsack}
 Now consider a variant of the (original) Knapsack problem where of each item you can take a fractional part $s_i \leq w_i$ and gain value $\frac{s_i}{w_i} \cdot v_i$.
 In the lecture you have seen a \emph{greedy strategy} for this problem:
@@ -96,37 +97,127 @@ In the following, we want to prove the correctness of this greedy strategy. That
 \begin{enumerate}
     \item As a warm-up, show that the greedy strategy always outputs a solution that respects the weight bound $W$.
 \begin{solution}
-\textbf{Proposition I. }\textit{Claim. }The greedy strategy always outputs a solution that respects the weight bound $W$. Let $S$.
 
-\textit{Proof. }
+\textbf{Algorithm I. }{\sc GreedyStrategy($W,n,w,v$)} with an overall weight bound $W\in\mathbb{Z}^+$, a number of items $n$, an $n$-element list of weights $(w_1,\dots,w_n)$ such that $w_i\in\mathbb{Z}^+$ for $1\leq i\leq n$, an $n$-element list of values $(v_1,\dots,v_n)$; return an $n$-element list of the fractional parts used, $(s_1,\dots,s_n)$, such that $s_i\in\mathbb{Q}$ and $0\leq s_i\leq w_i$. 
 
+Assume without loss of generality that the items are sorted by decreasing value-to-weight ratio, and that the algorithm chooses the first element.
+
+\textbf{Invariant I. }\textit{Claim. }For a given iteration $i\geq 1$, let ${s_i}_j$ denote the fractional part of item $j$ in the solution $s$, where $s_i$ denotes the solution at the beginning of iteration $i$. Similarly, let $W_i\in\mathbb{Z}^+$ denote the weight bound at the beginning of iteration $i$.
+
+Note for each iteration $i\geq 1$ of the loop in Algorithm I, we consider item $i$. Note also iteration $i=0$ denotes the step before the loop begins. 
+
+For every step of the loop $0\leq i\leq n$, we have \[\sum_{j=1}^i{{s_i}_j}\leq W.\] 
+
+\textit{Proof. }We can prove this invariant by induction on $i$.
+
+\textit{Basis. }Consider $i=0$. Note that we are considering the case that occurs before the first iteration of the loop. Since the loop body has not yet executed, \[\sum_{j=1}^i{{s_i}_j}=0\leq W,\] so the loop invariant holds.
+
+\textit{Hypothesis. }Consider $i=k$ where $k<n$. Assume that \[\sum_{j=1}^k{{s_k}_j}\leq W.\]
+
+\textit{Inductive step. }Consider $i=k+1$. Now $W_{k+1}=W_k-s_k$. Thus $W_{k+1}\leq W$.
+Of course, $W_{k+1}=0$ or $W_{k+1}\neq 0$.
+\begin{itemize}
+\item Suppose $W_{k+1}=0$. Then the loop terminates and the loop body does not execute so \[(s_{k+1})_{k+1}=0.\] And, for all $1\leq j\leq k$, we know $(s_{k+1})_j=(s_k)_j$. From the inductive hypothesis,
+\[\sum_{j=1}^{k+1}{(s_{k+1})_j}=\sum_{j=1}^k{(s_k)_j}+0\leq W.\]
+\item Suppose instead $W_{k+1}\neq 0$. Then, the loop body does execute with \[(s_{k+1})_{k+1}=\min(W_{k+1},w_{k+1}).\] Now $W_{k+1}\leq w_{k+1}$ or $W_{k+1}>w_{k+1}$:
+\begin{itemize}
+    \item Suppose $W_{k+1}\leq w_{k+1}$. Then $(s_{k+1})_{k+1}=W_{k+1}$. So, from the inductive hypothesis, 
+\[\sum_{j=1}^{k+1}{(s_{k+1})_j}=\sum_{j=1}^k{(s_k)_j}+W_{k+1}\leq W.\]
+    \item Suppose instead $W_{k+1}>w_{k+1}$. Then $(s_{k+1})_{k+1}=w_{k+1}$. So, from the inductive hypothesis, \begin{align*}
+    \sum_{j=1}^{k+1}{(s_{k+1})_j}&=\sum_{j=1}^k{(s_k)_j}+w_{k+1}\\&\leq W_{k+1}\\&\leq W.
+    \end{align*}
+\end{itemize}
+\end{itemize}
+
+In all cases of the inductive, the loop invariant holds.
+
+Hence, by the principle of mathematical induction, for every step of the loop $0\leq i\leq n$, we have \[\sum_{j=1}^i{{s_i}_j}\leq W.\] 
+
+\textbf{Proposition I. }\textit{Claim. }{\sc GreedyStrategy}($W,n,w,v$) always respects the weight bound $W$.
+
+\textit{Proof. }Let $s=\textsc{GreedyStrategy}(W,n,w,v)$. We want to show that \[\sum_{i=1}^n{s_i}\leq W.\]
+
+Algorithm I terminates when considering item $i=n$ or when the weight bound is met.
+
+From Invariant I, the claim holds after iteration $i=n$.
+
+From Invariant I, the claim also holds for all iterations $0\leq i\leq n$.
+
+Therefore, regardless of when the loop terminates, the claim holds.$~\square$
 \end{solution}
 \item Argue that if $\sum_{i=1}^n w_i \leq W$, the greedy strategy selects the optimal outcome.
 \begin{solution}
-\textbf{Proposition II. }\textit{Claim. }
+\textbf{Proposition II. }\textit{Claim. }{\sc GreedyStrategy} selects the optimal outcome. Let $s=\textsc{GreedyStrategy}(W,n,w,v)$. Then there does not exist a solution $s'$ where $s'_k>s_k$ for some $1\leq k\leq n$ and
+\[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
 
-\textit{Proof. }
+That is, there is no solution $s'$ with a greater total value constructed only by increasing at least one fractional portion in the solution.
+
+\textit{Proof. }Assume, for the sake of contradiction, that there exists a solution $s'$ where $s'_k>s_k$ for some $1\leq k\leq n$, and $s_i'=s_i$ for all $1\leq(i\neq k)\leq n$, and
+\[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
+
+From Algorithm I, it is given that {\sc GreedyStrategy} chooses the item with the greatest value-to-weight ratio. Algorithm I terminates when the weight bound is exhausted or when all items are considered. Thus, for all $1\leq(i\neq j)\leq n$, if $s_i<s_j$, then $\frac{v_i}{w_i}<\frac{v_j}{w_j}$.
+
+When {\sc GreedyStrategy} terminated and returned $s$, the weight bound was exhausted or all items were considered:
+\begin{itemize}
+    \item Suppose the weight bound was exhausted. Then \[\sum_{i=1}^n{s_i}=W.\] Of course,  \[\sum_{i=1}^n{s'_i}=\sum_{i=1}^n(s_i)-s_k+s_k'>W.\] This contradicts the hypothesis that $s'$ is a solution.
+    \item Suppose all items were considered, but the weight bound was not exhausted. Then \[\sum_{i=1}^n{s_i}<W.\] When the weight bound is sufficient (not a binding constraint), Algorithm I chooses the full amount of each item available. From Algorithm I, since the weight bound was not exhausted, for all $1\leq i\leq n$, we have $s_i=w_i$. Now $s_k'>s_k$. Thus $s_k'>w_k$. This contradicts the hypothesis that $s'$ is a solution.
+\end{itemize}
+
+In all cases, we arrive at a contradiction.
+
+Hence, we reject the hypothesis and conclude that there exists no such solution $s'$. Ergo the {\sc GreedyStrategy} algorithm selects the optimal outcome.$~\square$
 \end{solution}
 \item We call the selection $s = (s_1,\ldots,s_n)$ a strategy and let 
 $\mathsf{value}(s) = \sum_{i=1}^n \frac{s_i}{w_i} \cdot v_i$ 
-denote the obtained value. Let $s^*$ denote an optimal strategy (an arbitrary if multiple exist) and $s$ the greedy strategy.
+denote the obtained value. Let $s^*$ denote an optimal strategy (an arbitrary one if multiple exist) and $s$ the greedy strategy.
 Show the following: if $s(1) \neq s^*(1)$, then there exists a valid strategy $s'$ with $\mathsf{value}(s') = \mathsf{value}(s^*)$ and $s'(1) = s(1)$. In other words, there exists an optimal strategy $s'$ that agrees with the greedy one on the first choice.
 \begin{solution}
-\textbf{Proposition III. }\textit{Claim. }
+\textbf{Proposition III. }\textit{Claim. }Let $s=\textsc{GreedyStrategy}(W,n,w,v)$ and $s^*$ denote an optimal solution.  If $s_1\neq s^*_1$, then there exists a solution $s'$ where $s_1'=s_1$ and
+\[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i=\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i.\]
 
 \textit{Proof. }
+
 \end{solution}
 \item Perform an inductive argument to argue that the greedy strategy is optimal overall.
 \begin{solution}
-\textbf{Proposition IV. }\textit{Claim. }
+\textbf{Proposition IV. }\textit{Claim. }{\sc GreedyStrategy} is optimal overall.
 
-\textit{Proof. }
+Let $s=\textsc{GreedyStrategy}(W,n,w,v)$ and $s^*$ denote the overall optimal solution. Then $s$ is the overall optimal solution.
+
+\textit{Proof. }We can demonstrate the claim by induction on $n$.
+
+\textit{Basis. }Consider $n=1$. Then $s=(s_1)$ and $s^*=(s_1^*)$. Observe
+\begin{align*}
+\sum_{i=1}^1\frac{s_i}{w_i}\cdot v_i&=\frac{s_1}{w_1}\cdot v_1.\\\\
+\sum_{i=1}^1\frac{s^*}{w_i}\cdot v_i
+&=\frac{s_1^*}{w_1}\cdot v_1\\
+&\geq\frac{s_1}{w_1}\cdot v_1&\textit{since $s^*$ is the overall optimal solution,}\\
+&\geq\frac{\min(w_1,W)}{w_1}\cdot v_1&\textit{from Algorithm I, since $s_1=\min(w_1,W)$.}\\\\
+s_1^*&\geq\min(w_1,W).\\\\
+s_1^*&=\min(w_1,W)&\textit{if $s_1^*>w_1$ or $s_1^*>W$, then $s^*$ is not a solution,}\\
+&=s_1&\textit{from Algorithm I.}
+\end{align*}
+Thus $s=s^*$, so $s$ is optimal overall, and the claim holds in the base case.
+
+\textit{Hypothesis. }Consider $n=k$. Then $s=(s_1,\dots,s_k)$ and $s^*=(s_1^*,\dots,s_k^*)$. Assume that $s$ is optimal overall.
+
+\textit{Inductive step. }Consider $n=k+1$. Then $s=(s_1,\dots,s_{k+1})$ and $s^*=(s_1^*,\dots,s_{k+1}^*)$. 
+
+Now $s_1=s_1^*$ or $s_1\neq s_1^*$:
+\begin{itemize}
+    \item Suppose $s_1=s_1^*$. Then $s=(s_1^*,s_2,\dots,s_{k+1})$ and $s^*=(s_1^*,\dots,s_{k+1}^*)$. Since $s_1=s_1^*$, the solution for item $1$ is known to be optimal overall. 
+     \item Suppose instead $s_1\neq s_1^*$. 
+     From Proposition III, we can construct a solution $s'$ where $s'_1=s_1$ and \[\sum_{i=1}^{k+1}\frac{s_i'}{w_i}\cdot v_i=\sum_{i=1}^{k+1}\frac{s_i^*}{w_i}\cdot v_i.\] Note $s'=(s_1',\dots,s_{k+1}')=(s_1,s_2',\dots,s_{k+1}')$ and $s'$ is optimal overall. Since $s_1=s_1'$, the solution for item $1$ is known to be optimal overall.
+\end{itemize}
+In all cases, the solution for item $1$ is known to be optimal overall.
+
+We can consider the solution for items $2,\dots,k+1$. Note $(s_2,\dots,s_{k+1})$ is a $k$-element solution that is equivalent to the {\sc GreedyStrategy} solution for items $2,\dots,k+1$, so, by the inductive hypothesis, it is optimal overall. 
+
+The solution for item $1$ is optimal overall, and the solution for items $2,\dots,k+1$ is optimal overall, so the solution for items $1,\dots,k+1$ (denoted $s$) is optimal overall.
+
+Hence, by the principle of mathematical induction, $s$ is optimal overall.$~\square$
 \end{solution}
 \end{enumerate}
-
-
-
-
 \subsection*{Question 3: Let's Paint a Fence!}
 
 We want to paint our new fence, which is made up $N$ boards. The
