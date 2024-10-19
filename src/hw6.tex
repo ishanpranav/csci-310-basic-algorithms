@@ -17,7 +17,7 @@ In the following, we want to consider a related problem where we assume that you
 Given weights $w[1,\ldots,n]$, values $v[1,\ldots,n]$, inventory $m[1,\ldots,n]$, and an overall weight $W$, we want to maximize the overall value subject to the bound $W$. 
 
 \begin{enumerate}
-    \item Let $K[i,u]$ denote the most valuable solution using items $1,\ldots,i$ and weight bound $u$. Write a recursive formula for $K$, do not forget the base cases.
+    \item Let $K(i,u)$ denote the most valuable solution using items $1,\ldots,i$ and weight bound $u$. Write a recursive formula for $K$, do not forget the base cases.
 
 \begin{solution}
 \textit{Claim. }Given weights $w_1,\dots,w_i$, values $v_1,\dots,v_1$, and inventory $m_1,\dots,m_i$,
@@ -49,6 +49,7 @@ Since $k+1\geq 0$, we know that for all $u\geq 0$, the recurrence $K(k+1,u)$ giv
 
 Hence, by the principle of mathematical induction, $K(i,u)$ gives the most valuable solution using items $1,\dots,i$ and weight bound $u\geq 0$.$~\square$
 \end{solution}
+\newpage
 \item Write an algorithm {\sc MaxValue}$(W,n,w,v,m)$ that computes the optimal value using Dynamic Programming. What is the running time of your algorithm?
 \begin{solution}\\
 
@@ -58,31 +59,32 @@ Initialize a two-dimensional array $K[0,\dots,n][0,\dots,W]$ with dimensions $(n
 
 For $u=0$ to $W$, assign $K[0][u]\leftarrow 0$.
 
-For $k=1$ to $n$:
+For $i=1$ to $n$:
 \begin{itemize}
-\item for $u=0$ to $W$:
+\item for $u=1$ to $W$:
 \begin{itemize}
-\item for $j=0$ to $\min\left(m[j],\frac{u}{w[k]}\right)$:
+\item let $a\leftarrow 0$;
+\item for $j=0$ to $\min\left(m[i],\frac{u}{w[i]}\right)$:
 \begin{itemize}
-\item assign $K[k]\leftarrow\max(K[k],K[k-1][u-j\cdot w[k]]+j\cdot v[k])$.
+\item assign $a\leftarrow\max(a,K[i-1][u-j\cdot w[i]]+j\cdot v[i])$.
+\end{itemize}
+\item assign $K[i][u]\leftarrow a$.
 \end{itemize}
 \end{itemize}
-\end{itemize}
-Return $K[i,W]$.\\
+Return $K[N][W]$.\\
 
-\textbf{Proposition. }\textit{Claim. }{\sc MaxValue}($W,n,w,v,m$) has running time $O(n\times W\times\max(m^*,W))$, where $m^*$ is the largest element in $m$.
+\textbf{Proposition. }\textit{Claim. }{\sc MaxValue}($W,n,w,v,m$) has running time \[O\left(n\times W\times\max\left(\underset{1\leq i\leq n}{\max}(m_i),W\right)\right).\]
 
 \textit{Proof. }First, the {\sc MaxValue} algorithm initializes $W+1$ elements in $K$ with the value $0$, which is an $O(W+1)=O(W)$ process.
 
-Then, for each of the $n$ values of $k$, for each of the $W+1$ values of $u$, the second loop takes the maximum of $\min\left(m[j],\frac{u}{w[k]}\right)+1$ values. In the worst case, the running time of the innermost loop is
+Then, for each of the $n$ values of $i$, for each of the $W+1$ values of $u$, the second loop takes the maximum of $\min\left(m[i],\frac{u}{w[i]}\right)+1$ values. In the worst case, the running time of the innermost loop is
 \begin{align*}
-O\left(\max\left(m[j],\frac{u}{w[k]}\right)+1\right)
-&=O\left(\max\left(m[j],\frac{u}{w[k]}\right)\right)&\textit{asymptotically,}\\
-&=O(\max(m[j],W))&\textit{in the worst case $u=W$ and $w[k]=1$.}\\
+O\left(\max\left(m[i],\frac{u}{w[i]}\right)+1\right)
+&=O\left(\max\left(m[i],\frac{u}{w[i]}\right)\right)&\textit{asymptotically,}\\
+&=O(\max(m[i],W))&\textit{in the worst case $u=W$ and $w[i]=1$.}\\
 \end{align*}
-Let $m^*$ be the largest element in $m$. Then, the running time of the second loop is $O(n\times W\times\max(m^*,W))$.
-
-Therefore, the running time of {\sc MaxValue}($W,n,w,v,m$) is \[O(W)+O(n\times W\times\max(m^*,W))=O(n\times W\times\max(m^*,W)).~\square\]
+Then, the running time of the second loop is \[O\left(n\times W\times\max\left(\underset{1\leq i\leq n}{\max}(m_i),W\right)\right).\]
+This is the dominant term in the running time of {\sc MaxValue}, and therefore the asymptotic running time of {\sc MaxValue}.$~\square$
 \end{solution}
 \end{enumerate}
 \newpage
@@ -102,71 +104,101 @@ In the following, we want to prove the correctness of this greedy strategy. That
 
 Assume without loss of generality that the items are sorted by decreasing value-to-weight ratio, and that the algorithm chooses the first element.
 
-\textbf{Invariant I. }\textit{Claim. }For a given iteration $i\geq 1$, let ${s_i}_j$ denote the fractional part of item $j$ in the solution $s$, where $s_i$ denotes the solution at the beginning of iteration $i$. Similarly, let $W_i\in\mathbb{Z}^+$ denote the weight bound at the beginning of iteration $i$.
+Let $1\leq j\leq(n+1)$ where $j=1$ denotes the iteration before the loop begins, $j=i$ denotes the iteration before considering item $i$, and $j=n+1$ denotes the step immediately after the loop terminates.
 
-Note for each iteration $i\geq 1$ of the loop in Algorithm I, we consider item $i$. Note also iteration $i=0$ denotes the step before the loop begins. 
+Let $W_j$ denote the remaining weight bound at the beginning of iteration $j$. 
 
-For every step of the loop $0\leq i\leq n$, we have \[\sum_{j=1}^i{{s_i}_j}\leq W.\] 
+\textbf{Invariant I. }\textit{Claim. }
+For every step of the loop $1\leq j\leq(n+1)$, we claim that \[W_j=W-\sum_{i=1}^{j-1}{s_i}.\] 
 
-\textit{Proof. }We can prove this invariant by induction on $i$.
+\textit{Proof. }We can prove this invariant by induction on $j$.
 
-\textit{Basis. }Consider $i=0$. Note that we are considering the case that occurs before the first iteration of the loop. Since the loop body has not yet executed, \[\sum_{j=1}^i{{s_i}_j}=0\leq W,\] so the loop invariant holds.
+\textit{Basis. }Consider $j=1$. Note that we are considering the case that occurs before the first iteration of the loop. 
 
-\textit{Hypothesis. }Consider $i=k$ where $0<k<n$. Assume that \[\sum_{j=1}^k{{s_k}_j}\leq W.\]
+From Algorithm I, before the loop begins, $W$ has never been reduced and no value within $s$ has been modified; that is, $W_1=W$ and $s_i=0$ for all $1\leq i\leq n$.
 
-\textit{Inductive step. }Consider $i=k+1$. Now $W_{k+1}=W_k-s_k$. Thus $W_{k+1}\leq W$.
-Of course, $W_{k+1}=0$ or $W_{k+1}\neq 0$.
-\begin{itemize}
-\item Suppose $W_{k+1}=0$. Then the loop terminates and the loop body does not execute so \[(s_{k+1})_{k+1}=0.\] And, for all $1\leq j\leq k$, we know $(s_{k+1})_j=(s_k)_j$. From the inductive hypothesis,
-\[\sum_{j=1}^{k+1}{(s_{k+1})_j}=\sum_{j=1}^k{(s_k)_j}+0\leq W.\]
-\item Suppose instead $W_{k+1}\neq 0$. Then, the loop body does execute with \[(s_{k+1})_{k+1}=\min(W_{k+1},w_{k+1}).\] Now $W_{k+1}\leq w_{k+1}$ or $W_{k+1}>w_{k+1}$:
-\begin{itemize}
-    \item Suppose $W_{k+1}\leq w_{k+1}$. Then $(s_{k+1})_{k+1}=W_{k+1}$. So, from the inductive hypothesis, 
-\[\sum_{j=1}^{k+1}{(s_{k+1})_j}=\sum_{j=1}^k{(s_k)_j}+W_{k+1}\leq W.\]
-    \item Suppose instead $W_{k+1}>w_{k+1}$. Then $(s_{k+1})_{k+1}=w_{k+1}$. So, from the inductive hypothesis, \begin{align*}
-    \sum_{j=1}^{k+1}{(s_{k+1})_j}&=\sum_{j=1}^k{(s_k)_j}+w_{k+1}\\&\leq W_{k+1}\\&\leq W.
-    \end{align*}
-\end{itemize}
-\end{itemize}
+Since the loop body has not yet executed:
+\begin{align*}
+W-\sum_{i=1}^{1-1}{s_i}&=W-0\\
+&=W\\
+&=W_1.
+\end{align*}
+Thus the loop invariant holds at initialization.
 
-In all cases of the inductive step, the loop invariant holds.
+\textit{Hypothesis. }Consider $j=k$ where $0<k\leq n$. Assume that at the beginning of iteration $k$, we have \[W_k=W-\sum_{i=1}^{k-1}s_i.\]
 
-Hence, by the principle of mathematical induction, for every step of the loop $0\leq i\leq n$, we have \[\sum_{j=1}^i{{s_i}_j}\leq W.\] 
+\textit{Inductive step. }Consider $j=k+1$. Note that this is the iteration immediately after considering item $k$ and before considering item $k+1$. 
+
+Observe
+\begin{align*}
+W_{k+1}&=W_k-s_k&\textit{from Algorithm I,}\\
+&=\left(W-\sum_{i=1}^{k-1}(s_i)\right)-s_k&\textit{from the inductive hypothesis,}\\
+&=W-\left(\sum_{i=1}^{k-1}(s_i)+s_k\right)\\
+&=W-\sum_{i=1}^{k}(s_i)\\
+&=W-\sum_{i=1}^{(k+1)-1}(s_i)&\textit{thus completing the inductive step.}\\
+\end{align*}
+Hence, by the principle of mathematical induction, we have for all iterations $1\leq j\leq(n+1)$, \[W_j=W-\sum_{i=1}^{j-1}{s_i}.\] 
+
+From this result, we know that when $j=n+1$, the invariant holds at termination.
 
 \textbf{Proposition I. }\textit{Claim. }{\sc GreedyStrategy}($W,n,w,v$) always respects the weight bound $W$.
 
 \textit{Proof. }Let $s=\textsc{GreedyStrategy}(W,n,w,v)$. We want to show that \[\sum_{i=1}^n{s_i}\leq W.\]
 
-Algorithm I terminates when considering item $i=n$ or when the weight bound is met.
-
-From Invariant I, the claim holds after iteration $i=n$.
-
-From Invariant I, the claim also holds for all iterations $0\leq i\leq n$.
-
-Therefore, regardless of when the loop terminates, the claim holds.$~\square$
-\end{solution}
-\item Argue that if $\sum_{i=1}^n w_i \leq W$, the greedy strategy selects the optimal outcome.
-\begin{solution}
-\textbf{Proposition II. }\textit{Claim. }{\sc GreedyStrategy} selects the optimal outcome. Let $s=\textsc{GreedyStrategy}(W,n,w,v)$. Then there does not exist a solution $s'$ where $s'_k>s_k$ for some $1\leq k\leq n$ and
-\[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
-
-That is, there is no solution $s'$ with a greater total value constructed only by increasing at least one fractional portion in the solution.
-
-\textit{Proof. }Assume, for the sake of contradiction, that there exists a solution $s'$ where $s'_k>s_k$ for some $1\leq k\leq n$, and $s_i'=s_i$ for all $1\leq i\leq n$ where $i\neq k$, and
-\[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
-
-From Algorithm I, it is given that {\sc GreedyStrategy} chooses the item with the greatest value-to-weight ratio. Algorithm I terminates when the weight bound is exhausted or when all items are considered. Thus, for all $1\leq i,j\leq n$ where $i\neq j$, if $s_i<s_j$, then $\frac{v_i}{w_i}<\frac{v_j}{w_j}$.
-
-When {\sc GreedyStrategy} terminated and returned $s$, the weight bound was exhausted or all items were considered:
+Algorithm I terminates when its loop terminates; that is, it terminates when $W_j=0$, or when $W_j>0$ and $j=n+1$:
 \begin{itemize}
-    \item Suppose the weight bound was exhausted. Then \[\sum_{i=1}^n{s_i}=W.\] Of course,  \[\sum_{i=1}^n{s'_i}=\sum_{i=1}^n(s_i)-s_k+s_k'>W.\] This contradicts the hypothesis that $s'$ is a solution.
-    \item Suppose all items were considered, but the weight bound was not exhausted. Then \[\sum_{i=1}^n{s_i}<W.\] When the weight bound is sufficient (not a binding constraint), Algorithm I chooses the full amount of each item available. From Algorithm I, since the weight bound was not exhausted, for all $1\leq i\leq n$, we have $s_i=w_i$. Now $s_k'>s_k$. Thus $s_k'>w_k$. This contradicts the hypothesis that $s'$ is a solution.
+    \item Suppose $W_j=0$. At the beginning of iteration $j$, the weight bound was exhausted, so the algorithm terminates on iteration $j$ and therefore $s_i=0$ for all $j\leq i\leq n$. Observe
+    \begin{align*}
+    W_j&=W-\sum_{i=1}^{j-1}{s_i}&\textit{from Invariant I,}\\
+    0&=W-\sum_{i=1}^{j-1}{s_i}&\textit{in this case,}\\
+    W&=\sum_{i=1}^{j-1}{s_i}\\
+    W&=\sum_{i=1}^n{s_i}&\textit{since $s_i=0$ for all $j\leq i\leq n$,}\\
+    \sum_{i=1}^n{s_i}&=W\leq W&\textit{so the claim holds in this case.}
+    \end{align*}
+    \item Suppose instead $W_j>0$ and $j=n+1$. At the beginning of iteration $j$, all items were considered, so the Algorithm terminates on iteration $j$.
+    \begin{align*}
+    W_j&=W_{n+1}&\textit{in this case,}\\
+    W_j&=W-\sum_{i=1}^{(n+1)-1}{s_i}&\textit{from Invariant I,}\\
+    W_j&>0&\textit{in this case,}\\
+    W-\sum_{i=1}^{n}{s_i}&>0\\
+    \sum_{i=1}^{n}{s_i}&<W\leq W&\textit{so the claim holds in this case.}
+    \end{align*}
 \end{itemize}
 
-In all cases, we arrive at a contradiction.
+In all cases, the claim holds.
 
-Hence, we reject the hypothesis and conclude that there exists no such solution $s'$. Ergo the {\sc GreedyStrategy} algorithm selects the optimal outcome.$~\square$
+Therefore, regardless of when {\sc GreedyStrategy} terminates, the algorithm respects the weight bound $W.~\square$
 \end{solution}
+\newpage
+\item Argue that if $\sum_{i=1}^n w_i \leq W$, the greedy strategy selects the optimal outcome.
+\begin{solution}
+\textbf{Proposition II. }\textit{Claim. }If 
+\[\sum_{i=1}^n{w_i}\leq W,\]
+
+then {\sc GreedyStrategy} selects the optimal outcome.
+
+Let $s=\textsc{GreedyStrategy}(W,n,w,v)$. Then there does not exist a solution $s^*$ where
+\[\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
+
+\textit{Proof. }Suppose that \[\sum_{i=1}^n{w_i}\leq W.\] Assume, for the sake of contradiction, that there exists a solution $s^*$ where
+\[\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
+
+Note that since \[\sum_{i=1}^n{w_i}\leq W,\]
+
+the overall weight bound $W$ is not a binding constraint for any $s_i$ for $1\leq i\leq n$. From Algorithm I, {\sc GreedyStrategy} chooses $s_j=\min(W_j,w_j)$ on each iteration $j$. Since $W$ is not a binding constraint, $s_j=w_j$. We can take the maximal amount of each item, knowing that the sum of these weights will not exceed the overall weight bound.
+
+We conclude that $s=w$. However,
+\begin{align*}
+\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i&>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i&\textit{our hypothesis,}\\
+&>\sum_{i=1}^n\frac{w_i}{w_i}\cdot v_i&\textit{since $s=w$.}\\\\
+s_i^*&\geq w_i&\textit{for some $1\leq i\leq n$.}
+\end{align*}
+
+This contradicts our hypothesis that $s^*$ is a solution.
+
+Hence, we reject the hypothesis and conclude that there exists no such solution $s^*$ with greater value than $s$. Ergo the {\sc GreedyStrategy} algorithm selects the optimal outcome.$~\square$
+\end{solution}
+\newpage
 \item We call the selection $s = (s_1,\ldots,s_n)$ a strategy and let 
 $\mathsf{value}(s) = \sum_{i=1}^n \frac{s_i}{w_i} \cdot v_i$ 
 denote the obtained value. Let $s^*$ denote an optimal strategy (an arbitrary one if multiple exist) and $s$ the greedy strategy.
@@ -175,47 +207,78 @@ Show the following: if $s(1) \neq s^*(1)$, then there exists a valid strategy $s
 \textbf{Proposition III. }\textit{Claim. }Let $s=\textsc{GreedyStrategy}(W,n,w,v)$ and $s^*$ denote an optimal solution.  If $s_1\neq s^*_1$, then there exists a solution $s'$ where $s_1'=s_1$ and
 \[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i=\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i.\]
 
-\textit{Proof. }
+\textit{Proof. }Let $s=\textsc{GreedyStrategy}(W,n,w,v)$. Suppose $s^*$ is an optimal solution where $s_1\neq s^*_1$. 
 
+From Algorithm I, we assume without loss of generality that the items are sorted by decreasing value-to-weight ratio, and that {\sc GreedyStrategy} chooses the first element. Thus item $1$ is the item with the maximum value-to-weight ratio: $\frac{v_1}{w_1}\geq\frac{v_i}{v_1}$ for all $1\leq i\leq n$.
+
+From Algorithm I, we know that {\sc GreedyStrategy} chooses $s_1=\min(w_1,W_1)$. Likewise from Algorithm I, for iteration $1$, we know that $W=W_1$. 
+
+There are two cases: either $w_1\leq W$ or $w_1>W$.
+\begin{itemize}
+    \item Suppose $w_1\leq W$. Then $s_1=w_1$. Since $s_1^*\leq w_1$, we have $s_1^*\leq s_1$.
+    \item Suppose $w_1>W$. Then $s_1=W$. Of course, $s^*$ is a solution, so \[\sum_{i=1}^n{s^*_i}\leq W.\] Thus $s_1^*\leq W$, and therefore, $s_1^*\leq s_1$. 
+\end{itemize}
+In all cases, $s_1^*\leq s_1$. However, we supposed that $s_1^*\neq s_1$, so $s_1^*<s_1$.
+
+We want to construct a solution $s'$ with $s_1'=s_1$.
+
+Note $(s_1'-s_1^*)=(s_1-s_1^*)$ denotes the additional fractional amount allocated to $s_1'$ compared to $s_1^*$. Of course $s_1^*<s_1$ implies $(s_1-s_1^*)>0$.
+
+We can construct $s'=(s_1,s_2'\dots,s_n')$ with total value
+\[\frac{s_1}{w_1}\cdot v_1+\sum_{i=2}^n{\frac{s_i'}{w_i}\cdot v_i}\]
+where for all $2\leq i\leq n$, we assign $s_i'=s_i^*-d_i$, choosing $0\leq d_i\leq s_i^*$ such that
+\[\sum_{i=1}^n\frac{s_i'}{w_i}\cdot v_i=\left[\frac{s_1}{w_1}\cdot v_1+\sum_{i=2}^n\frac{(s_i^*-d_i)}{w_i}\cdot v_i\right]=\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i.\]
+
+We know that
+\[\sum_{i=2}^n{d_i}\geq (s_1-s_1^*).\]
+
+This is because item $1$ has the maximum value-to-weight ratio: $\frac{v_1}{w_1}\geq\frac{v_i}{w_i}$ for all $1\leq i\leq n$. We need to subtract at least as much \textit{weight} from the other items collectively as we added to item 1 in order to offset the \textit{value} contributed by the amount of item $1$. Otherwise, the total value for $s^*$ is not equal to the total value for $s'$, contradicting the construction of $d_i$ for some $2\leq i\leq n$.
+
+This implies that in $s'$, relative to $s^*$, there is no net addition in terms of weight, so the overall weight bound $W$ is respected. 
+
+Similarly, for each $2\leq i\leq n$, we take $s_i'=(s_i^*-d_i)$. We know $s_i^*\leq w_i$, therefore $s_i'\leq w_i$ because $d_i\geq 0$. Of course, $s_1\leq w_1$ as well, so the per-item weight bounds are met for all items in $s'$.
+
+Thus, if there is an optimal solution $s^*$,  it is possible to construct a valid optimal solution $s'$ whose solution agrees with {\sc GreedyStrategy} for the fractional portion of the first item.$~\square$
 \end{solution}
+\newpage
 \item Perform an inductive argument to argue that the greedy strategy is optimal overall.
 \begin{solution}
 \textbf{Proposition IV. }\textit{Claim. }{\sc GreedyStrategy} is optimal overall.
 
-Let $s=\textsc{GreedyStrategy}(W,n,w,v)$ and $s^*$ denote the overall optimal solution. Then $s$ is the overall optimal solution.
+Let $s=\textsc{GreedyStrategy}(W,n,w,v)$ and $s^*$ be an overall optimal solution. Then $s$ is optimal overall.
 
-\textit{Proof. }We can demonstrate the claim by induction on $n$.
+\textit{Proof. }Assume, for the sake of contradiction, that $s=\textsc{GreedyStrategy}(W,n,w,v)$ is not optimal. That is, assume $s^*$ has total value greater than that of $s$:\[\sum_{i=1}^n\frac{s_i^*}{w_i}\cdot v_i>\sum_{i=1}^n\frac{s_i}{w_i}\cdot v_i.\]
 
-\textit{Basis. }Consider $n=1$. Then $s=(s_1)$ and $s^*=(s_1^*)$. Observe
-\begin{align*}
-\sum_{i=1}^1\frac{s_i}{w_i}\cdot v_i&=\frac{s_1}{w_1}\cdot v_1.\\\\
-\sum_{i=1}^1\frac{s^*}{w_i}\cdot v_i
-&=\frac{s_1^*}{w_1}\cdot v_1\\
-&\geq\frac{s_1}{w_1}\cdot v_1&\textit{since $s^*$ is the overall optimal solution,}\\
-&\geq\frac{\min(w_1,W)}{w_1}\cdot v_1&\textit{from Algorithm I, since $s_1=\min(w_1,W)$.}\\\\
-s_1^*&\geq\min(w_1,W).\\\\
-s_1^*&=\min(w_1,W)&\textit{if $s_1^*>w_1$ or $s_1^*>W$, then $s^*$ is not a solution,}\\
-&=s_1&\textit{from Algorithm I.}
-\end{align*}
-Thus $s=s^*$, so $s$ is optimal overall, and the claim holds in the base case.
+We want to show that we can construct an optimal solution $s'$ where
+for all $1\leq i\leq n$, we have $s_i=s_i'$. We can demonstrate the claim by induction on $i$.
 
-\textit{Hypothesis. }Consider $n=k$ where $k>1$. Then $s=(s_1,\dots,s_k)$ and $s^*=(s_1^*,\dots,s_k^*)$. Assume that $s$ is optimal overall.
+\textit{Basis. }Consider $i=1$. From Proposition III, we know that we can construct an optimal solution $s'$ for which $s_1=s'_1$. Therefore, the claim holds in the base case.
 
-\textit{Inductive step. }Consider $n=k+1$. Then $s=(s_1,\dots,s_{k+1})$ and $s^*=(s_1^*,\dots,s_{k+1}^*)$. 
+\textit{Hypothesis. }Consider $1<i<k\leq n$. Assume that we can construct an optimal solution $s'$ for which $s_j=s_j'$ for $1\leq j\leq k$.
 
-Now $s_1=s_1^*$ or $s_1\neq s_1^*$:
+\textit{Inductive step. }Consider $i=k$. Then $s=(s_1,\dots,s_n)$ and $s^*=(s_1^*,\dots,s_n^*)$. 
+
+Consider the subproblems $(s_k,\dots,s_n)$ and $(s_k^*,\dots,s_n^*)$. In these cases, item $k$ is the item with the greatest value-to-weight ratio because $s$ and $s^*$ are sorted by value-to-weight, descending.
+
+Now $s_k=s_k^*$ or $s_k\neq s_k^*$:
 \begin{itemize}
-    \item Suppose $s_1=s_1^*$. Then $s=(s_1^*,s_2,\dots,s_{k+1})$ and $s^*=(s_1^*,\dots,s_{k+1}^*)$. Since $s_1=s_1^*$, the solution for item $1$ is known to be optimal overall. 
+    \item Suppose $s_k=s_k^*$. Then we can take $s_k'=s_k^*$. It is possible to construct an optimal solution $s'$ with this constraint because we know that the optimal solution $s^*$ exists such that $s_k'=s_k^*$. 
      \item Suppose instead $s_1\neq s_1^*$. 
-     From Proposition III, we can construct a solution $s'$ where $s'_1=s_1$ and \[\sum_{i=1}^{k+1}\frac{s_i'}{w_i}\cdot v_i=\sum_{i=1}^{k+1}\frac{s_i^*}{w_i}\cdot v_i.\] Note $s'=(s_1',\dots,s_{k+1}')=(s_1,s_2',\dots,s_{k+1}')$ and $s'$ is optimal overall. Since $s_1=s_1'$, the solution for item $1$ is known to be optimal overall.
+     From Proposition III, the existence and optimality of solution $s^*$ implies that we can construct an optimal solution $s'$ where $s'_1=s_1$ and \[\sum_{i=1}^{k+1}\frac{s_i'}{w_i}\cdot v_i=\sum_{i=1}^{k+1}\frac{s_i^*}{w_i}\cdot v_i.\] 
 \end{itemize}
-In all cases, the solution for item $1$ is known to be optimal overall.
+In all cases, assigning $s_k'=s_k$ does not compromise our ability to construct a solution for the subproblem $(s_k,\dots,s_n)$ using the remaining items.
 
-We can consider the solution for items $2,\dots,k+1$. Note $(s_2,\dots,s_{k+1})$ is a $k$-element solution that is equivalent to the {\sc GreedyStrategy} solution for items $2,\dots,k+1$, so, by the inductive hypothesis, it is optimal overall. 
+From the inductive hypothesis, we know that we have not compromised our ability to construct an optimal solution using the first $(k-1)$ elements $(s_1',\dots,s_{k-1}')$ such that $s_j'=s_j$ for all $j\leq k$. That is, we can use the first $(k-1)$ elements of $s$ to construct an optimal solution.
+
+Thus, we conclude that we have not compromised our ability to construct an optimal solution using the first $k$ elements $(1,\dots,k)$.
 
 The solution for item $1$ is optimal overall, and the solution for items $2,\dots,k+1$ is optimal overall, so the solution for items $1,\dots,k+1$ (denoted $s$) is optimal overall.
 
-Hence, by the principle of mathematical induction, $s$ is optimal overall.$~\square$
+Hence, by the principle of mathematical induction, we can construct an optimal solution $s'$ whose value is equal to that of $s^*$ such that $s'=s$. We showed that we can use all $n$ elements of $s$ to construct an optimal solution whose value is that of $s'$. 
+
+However, since $s'$ is optimal, the value of $s'$ is that of $s^*$, which contradicts the hypothesis that $s^*$ has a greater total value than $s$.
+
+Ergo, $s$ is optimal.$~\square$
 \end{solution}
 \end{enumerate}
 \newpage
@@ -253,7 +316,7 @@ T(i,j)=\begin{dcases}
 0,&i=0,\\
 +\infty,&i>0\text{ and }j=0,\\
 \sum_{k=1}^iL(k),&i>0\text{ and }j=1,\\
-\min_{0\leq k\leq i}(\max(T(i-k,j-1),T(k,1))),&i>0\text{ and }j>1.
+\min_{0\leq k\leq i}\left(\max\left(T(i-k,j-1),\sum_{m=i-k}^i{L(m)}\right)\right),&i>0\text{ and }j>1.
 \end{dcases}
 \end{align*}
 denotes the minimum time required to paint the first $i$ boards using $1\leq j\leq K$ painters. 
@@ -281,14 +344,15 @@ The minimum value of $k$ is $0$, since if $j>i$, a single painter may be assigne
 
 For each such quantity of boards $k$, the minimum time required to paint the first $k$ boards is the larger of the minimum time required for the single painter $(\ell+1)$ to paint the last $k$-many boards, and of the minimum time required for the remaining $\ell$ painters to paint the first $(i-k)$ boards.
 
-From the inductive hypothesis, $T(i-k,(\ell+1)-1)$ gives the minimum time required for $\ell$-many painters to paint $(i-k)$-many boards and $T(k,1)$ gives the minimum time required for $1$ painter to paint $k$-many boards.
+From the inductive hypothesis, $T(i-k,(\ell+1)-1)$ gives the minimum time required for $\ell$-many painters to paint $(i-k)$-many boards and \[\sum_{m=i-k}^i{L(m)}\] gives the minimum time required for $1$ painter to paint the last $k$-many boards.
 
-Thus, the expression $\max(T(i-k,(\ell+1)-1),T(k,1))$ gives the optimal solution where painter $(\ell+1)$ paints $k$-many boards.
+Thus, the expression \[\max\left(T(i-k,j-1),\sum_{m=i-k}^i{L(m)}\right)\] gives the optimal solution where painter $(\ell+1)$ paints the last $k$-many boards.
 
 Since $\ell+1\geq 1$, we know that for all $0\leq i\leq N$, the recurrence $T(i,\ell+1)$ gives the minimum value considering each feasible number of boards $k$. This corresponds to the optimal solution, thus completing the inductive step.
 
 Hence, by the principle of mathematical induction, $T(i,j)$ gives the minimum time required to paint the first $0\leq i\leq N$ boards using $1\leq j\leq K$ painters.$~\square$
-\end{solution}	
+\end{solution}
+\newpage
     \item Write an algorithm {\sc MinTime} that computes the minimal completion time. To this end, complete the following skeleton. Make sure your algorithm uses only the minimal amount of extra storage.
 	
     \begin{code}
@@ -311,39 +375,61 @@ Initialize a two-dimensional array $T[0,\dots,N][0,\dots,K]$ with dimensions $(N
 
 Assign $T[0][0]\leftarrow 0$.
 
-For $j=1$ to $K$, assign $T[0][j]\leftarrow 0$.
+Let $s\leftarrow 0$.
 
 For $i=1$ to $N$:
 \begin{itemize}
+    \item assign $s\leftarrow s+L[i]$;
     \item assign $T[i][0]\leftarrow+\infty$;
-    \item assign \[T[i][1]\leftarrow\sum_{k=1}^i{L[k]}.\]
+    \item assign $T[i][1]\leftarrow s$.
 \end{itemize}
 
-For $i=1$ to $N$:
+For $j=1$ to $K$:
 \begin{itemize}
-    \item for $j=2$ to $K$, assign $T[i][j]\leftarrow\textsc{Calc}(T,L,N,K,i,j)$.
+\item assign $T[0,j]\leftarrow 0;$
+\item assign $T[1,j]\leftarrow L[1]$.
+\end{itemize}
+
+For $j=2$ to $K$:
+\begin{itemize}
+    \item for $i=2$ to $N$, assign $T[i][j]\leftarrow\textsc{Calc}(T,L,N,K,i,j)$.
 \end{itemize}
 Return $T[N][K]$.
 
 \textbf{Proposition 1. }\textit{Claim. }{\sc MinTime} uses the minimal amount of extra storage.
 
-\textit{Proof. }
+\textit{Proof. }{\sc MinTime} uses a constant amount of extra space for its local variables as well as $(N+1)\times(K+1)$ elements for $T$. Asymptotically, the space complexity of {\sc MinTime} is \[O(1)+O((N+1)\times(K+1))=O(N\times K).\]
+For each of the $K$ painters where $K>1$, {\sc MinTime} depends upon a prior solution for $K-1$ painters. Therefore, in a bottom-up approach, for each unique number of boards, it is not possible to allocate space for fewer than $K$ subproblems.
+
+Similarly, for each of the $N$ possible numbers of boards where $N>1$, {\sc MinTime} depends on a prior solution for fewer than $N$ boards. Therefore, in a bottom-up approach, for each unique number of painters, it is not possible to allocate space for fewer than $N$ subproblems.
+
+Using this approach, the minimal amount of extra storage for this problem is $O(N\times K)$. 
+
+Therefore, {\sc MinTime} uses the minimal amount of extra storage.$~\square$
 \end{solution}
+\newpage
 \item Next, write an algorithm $\text{\sc Calc}(T,L,N,K,i,j)$ that calculates $T[i,j]$
 according to your recursive formula from part~(1). Your algorithm should run in time $O(N)$.
 \begin{solution}
 
-\textbf{Algorithm 2. }{\sc Calc}($T,L,N,K,i,j$) given a two-dimensional array\\ $T[0,\dots,N][0,\dots,K]$ with dimensions  $(N+1)\times (K+1)$, an $N$-element array $L[1,\dots,N]$, where $L[\ell]$ denotes the length of board $1\leq\ell\leq N$, the subproblem number of boards\\ $1\leq i\leq N$, and the subproblem number of painters $1\leq j\leq K$:
+\textbf{Algorithm 2. }{\sc Calc}($T,L,N,K,i,j$) given a two-dimensional array $T[0,\dots,N][0,\dots,K]$ with dimensions  $(N+1)\times (K+1)$, an $N$-element array $L[1,\dots,N]$, where $L[\ell]$ denotes the length of board $1\leq\ell\leq N$, the subproblem number of boards $1\leq i\leq N$, and the subproblem number of painters $1\leq j\leq K$; returns the minimum time required for $j$ painters to paint $i$ boards:
 
-Assign $T[i,j]\leftarrow+\infty$.
+Assign $a\leftarrow T[i,j-1]$.
 
-For $k=0$ to $i$, assign $T[i,j]\leftarrow\min(T[i,j],\max(T[i-k,j-1],T[k,1])$.
+Let $s\leftarrow 0$.
+
+For $k=1$ to $i-1$:
+\begin{itemize}
+\item assign $s\leftarrow s+L[i-k]$;
+\item assign $a\leftarrow\min(a,\max(T[i-k,j-1],s))$.
+\end{itemize}
+Return $a$.
 
 \textbf{Proposition 2. }\textit{Claim. }{\sc Calc}($T,L,N,K,i,j$) has running time $O(N)$.
 
-\textit{Proof. }First, the algorithm assigns $+\infty$ to $T[i,j]$, which is an $O(1)$ process.
+\textit{Proof. }First, the algorithm assigns $+\infty$ to $a$ and $0$ to $s$, which are $O(1)$ processes.
 
-Then, for each of the $i+1$ indices from $k=0$ to $k=i$, the algorithm assigns a computed value to $T[i,j]$. The inner loop body computation is an $O(1)$ process. The maximum value for $i$ is $N$. Thus, the worst-case running time of the loop is $O(1\cdot N)=O(N)$.
+Then, for each of the $i-1$ indices from $k=1$ to $k=i-1$, the algorithm assigns computed values to $a$ and $s$. The inner loop body computation is an $O(1)$ process. The maximum value for $i$ is $N$. Thus, the worst-case running time of the loop is $O(1\cdot(N-1))=O(N)$.
 
 Therefore, the running time of {\sc Calc}($T,L,N,K,i,j$) is $O(1)+O(N)=O(N).~\square$
 \end{solution}
