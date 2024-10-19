@@ -270,9 +270,7 @@ In all cases, assigning $s_k'=s_k$ does not compromise our ability to construct 
 
 From the inductive hypothesis, we know that we have not compromised our ability to construct an optimal solution using the first $(k-1)$ elements $(s_1',\dots,s_{k-1}')$ such that $s_j'=s_j$ for all $j\leq k$. That is, we can use the first $(k-1)$ elements of $s$ to construct an optimal solution.
 
-Thus, we conclude that we have not compromised our ability to construct an optimal solution using the first $k$ elements $(1,\dots,k)$.
-
-The solution for item $1$ is optimal overall, and the solution for items $2,\dots,k+1$ is optimal overall, so the solution for items $1,\dots,k+1$ (denoted $s$) is optimal overall.
+Thus, we conclude that we have not compromised our ability to construct an optimal solution using the first $k$ elements $(s_1,\dots,s_k)$.
 
 Hence, by the principle of mathematical induction, we can construct an optimal solution $s'$ whose value is equal to that of $s^*$ such that $s'=s$. We showed that we can use all $n$ elements of $s$ to construct an optimal solution whose value is that of $s'$. 
 
@@ -346,7 +344,7 @@ For each such quantity of boards $k$, the minimum time required to paint the fir
 
 From the inductive hypothesis, $T(i-k,(\ell+1)-1)$ gives the minimum time required for $\ell$-many painters to paint $(i-k)$-many boards and \[\sum_{m=i-k}^i{L(m)}\] gives the minimum time required for $1$ painter to paint the last $k$-many boards.
 
-Thus, the expression \[\max\left(T(i-k,j-1),\sum_{m=i-k}^i{L(m)}\right)\] gives the optimal solution where painter $(\ell+1)$ paints the last $k$-many boards.
+Thus, the expression \[\max\left(T(i-k,\ell),\sum_{m=i-k}^i{L(m)}\right)\] gives the optimal solution where painter $(\ell+1)$ paints the last $k$-many boards.
 
 Since $\ell+1\geq 1$, we know that for all $0\leq i\leq N$, the recurrence $T(i,\ell+1)$ gives the minimum value considering each feasible number of boards $k$. This corresponds to the optimal solution, thus completing the inductive step.
 
