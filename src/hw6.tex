@@ -369,57 +369,51 @@ Hence, by the principle of mathematical induction, $T(i,j)$ gives the minimum ti
 
 \textbf{Algorithm 1. }{\sc MinTime}($L,N,K$) with an $N$-element array $L[1,\dots,N]$, where $L[i]$ denotes the length of board $1\leq i\leq N$, and a number of painters $K\in\mathbb{N}$; return the minimum time required to paint $N$ boards with $K$ painters:
 
-Initialize a two-dimensional array $T[0,\dots,N][0,\dots,K]$ with dimensions $(N+1)\times(K+1)$.
+If $i=0$, then return $0$.
 
-Assign $T[0][0]\leftarrow 0$.
+Otherwise, if $j=0$, then return $+\infty$.
 
-Let $s\leftarrow 0$.
+Initialize two $N$-element arrays $T_0[1,\dots,N]$ and $T_1[1,\dots,N]$.
 
-For $i=1$ to $N$:
-\begin{itemize}
-    \item assign $s\leftarrow s+L[i]$;
-    \item assign $T[i][0]\leftarrow+\infty$;
-    \item assign $T[i][1]\leftarrow s$.
-\end{itemize}
+Assign $T_0[0]\leftarrow 0$.
+
+For $i=1$ to $N$, assign $T_0[i]\leftarrow T_0[i-1]+L[i]$.
 
 For $j=1$ to $K$:
 \begin{itemize}
-\item assign $T[0,j]\leftarrow 0;$
-\item assign $T[1,j]\leftarrow L[1]$.
+    \item for $i=0$ to $N$, assign $T_1[i]\leftarrow\textsc{Calc}(T_0,L,N,K,i,j)$;
+    \item swap the references $T_0$ and $T_1$.
 \end{itemize}
-
-For $j=2$ to $K$:
-\begin{itemize}
-    \item for $i=2$ to $N$, assign $T[i][j]\leftarrow\textsc{Calc}(T,L,N,K,i,j)$.
-\end{itemize}
-Return $T[N][K]$.
+Return $T_0[N]$.
 
 \textbf{Proposition 1. }\textit{Claim. }{\sc MinTime} uses the minimal amount of extra storage.
 
-\textit{Proof. }{\sc MinTime} uses a constant amount of extra space for its local variables as well as $(N+1)\times(K+1)$ elements for $T$. Asymptotically, the space complexity of {\sc MinTime} is \[O(1)+O((N+1)\times(K+1))=O(N\times K).\]
-For each of the $K$ painters where $K>1$, {\sc MinTime} depends upon a prior solution for $K-1$ painters. Therefore, in a bottom-up approach, for each unique number of boards, it is not possible to allocate space for fewer than $K$ subproblems.
+\textit{Proof. }{\sc MinTime} uses a constant amount of extra space for its non-array local variables as well as $N$ elements for $T_0$ and $N$ elements for $T_1$. 
 
-Similarly, for each of the $N$ possible numbers of boards where $N>1$, {\sc MinTime} depends on a prior solution for fewer than $N$ boards. Therefore, in a bottom-up approach, for each unique number of painters, it is not possible to allocate space for fewer than $N$ subproblems.
+Asymptotically, the space complexity of {\sc MinTime} is \[O(1)+2\cdot O(N)=O(N).\]
+For each of the $K$ painters where $K>1$, the optimal solution depends upon a prior solution for $K-1$ painters. Therefore, in a bottom-up approach, for each unique number of boards $N$, we only need to allocate space for one subproblem.
 
-Using this approach, the minimal amount of extra storage for this problem is $O(N\times K)$. 
+However, for each of the $N$ possible numbers of boards, the optimal solution depends on a prior solution for some number of boards $0\leq i\leq N$. Therefore, in a bottom-up approach, for each unique number of painters, it is not possible to allocate space for fewer than $N$ subproblems.
 
-Therefore, {\sc MinTime} uses the minimal amount of extra storage.$~\square$
+Using this approach, the minimal amount of extra storage for this problem is $O(N\times 1)=O(N)$. 
+
+Since the space complexity of {\sc MinTime} is $O(N)$, we conclude that {\sc MinTime} uses the minimal amount of extra storage.$~\square$
 \end{solution}
 \newpage
 \item Next, write an algorithm $\text{\sc Calc}(T,L,N,K,i,j)$ that calculates $T[i,j]$
 according to your recursive formula from part~(1). Your algorithm should run in time $O(N)$.
 \begin{solution}
 
-\textbf{Algorithm 2. }{\sc Calc}($T,L,N,K,i,j$) given a two-dimensional array $T[0,\dots,N][0,\dots,K]$ with dimensions  $(N+1)\times (K+1)$, an $N$-element array $L[1,\dots,N]$, where $L[\ell]$ denotes the length of board $1\leq\ell\leq N$, the subproblem number of boards $1\leq i\leq N$, and the subproblem number of painters $1\leq j\leq K$; returns the minimum time required for $j$ painters to paint $i$ boards:
-
-Assign $a\leftarrow T[i,j-1]$.
+\textbf{Algorithm 2. }{\sc Calc}($T,L,N,K,i,j$) given an $N$-element array $T[1,\dots,N]$, an $N$-element array $L[1,\dots,N]$, where $L[\ell]$ denotes the length of board $1\leq\ell\leq N$, the subproblem number of boards $1\leq i\leq N$, and the subproblem number of painters $1\leq j\leq K$; returns the minimum time required for $j$ painters to paint $i$ boards:
 
 Let $s\leftarrow 0$.
 
-For $k=1$ to $i-1$:
+Let $a\leftarrow+\infty$.
+
+For $k=0$ to $i-1$:
 \begin{itemize}
 \item assign $s\leftarrow s+L[i-k]$;
-\item assign $a\leftarrow\min(a,\max(T[i-k,j-1],s))$.
+\item assign $a\leftarrow\min(a,\max(T[i-k],s))$.
 \end{itemize}
 Return $a$.
 
@@ -427,7 +421,7 @@ Return $a$.
 
 \textit{Proof. }First, the algorithm assigns $+\infty$ to $a$ and $0$ to $s$, which are $O(1)$ processes.
 
-Then, for each of the $i-1$ indices from $k=1$ to $k=i-1$, the algorithm assigns computed values to $a$ and $s$. The inner loop body computation is an $O(1)$ process. The maximum value for $i$ is $N$. Thus, the worst-case running time of the loop is $O(1\cdot(N-1))=O(N)$.
+Then, for each of the $i$ indices from $k=0$ to $k=i-1$, the algorithm assigns computed values to $a$ and $s$. The inner loop body computation is an $O(1)$ process. The maximum value for $i$ is $N$. Thus, the worst-case running time of the loop is $O(N)$.
 
 Therefore, the running time of {\sc Calc}($T,L,N,K,i,j$) is $O(1)+O(N)=O(N).~\square$
 \end{solution}
