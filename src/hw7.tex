@@ -87,15 +87,18 @@ We have shown that with the same list of symbols and frequencies, Huffman's algo
 \newpage
 \subsection{Minimizing number of colors}
 Let $X$ be a set of $n$ intervals $[s_i, f_i)$ on the real line. A {\em proper coloring} of $X$ assigns a color to each interval so that overlapping intervals are always assigned different colors.  In this problem, we want to find a proper coloring of $X$ using a minimum possible number of colors. Let us call this (unknown) number $c^*$.
-
 \begin{enumerate}
+\item Given a problem instance $\{[s_i,f_i)\}$ and any point on the real line $t$, let $n_t$ denote the number of sets that contain $t$. Also, let $c = \max_t n_t$ (easy to see the maximum is well defined). Argue that $c^*\ge c$.
+\begin{solution}
+\textit{Claim. }Let $X$ be a set of $n$ intervals $[s_i,f_i)$ for $1\leq i\leq n$. For all $t\in\mathbb{R}$, let $n_t$ denote the number of intervals in $X$ that contain $t$. Let $c=\underset{t\in\mathbb{R}}{\max}(n_t)$. Let $c^*$ be the minimum number of colors required to produce a proper of coloring of $X$. Then $c^*\geq c$.
 
-    \item Given a problem instance $\{[s_i,f_i)\}$ and any point on the real line $t$, let $n_t$ denote the number of sets that contain $t$. Also, let $c = \max_t n_t$ (easy to see the maximum is well defined). Argue that $c^*\ge c$.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Proof. }Since there exists $c=\underset{t\in\mathbb{R}}{\max}(n_t)$, there exists $t^*\in\mathbb{R}$ where $c=n_{t^*}$.
 
+By definition, there are $n_{t^*}$ intervals that contain the point $t^*$. So, $n_{t^*}$ intervals overlap at the point $t^*$. In a proper coloring of $X$, each of these $n_{t^*}$ overlapping intervals is assigned a unique color. This implies that there are at least $n_{t^*}$ colors in a proper coloring of $X$. Since $c^*$ is the minimum number of colors required to produce a proper coloring of $X$, we know $c^*\geq n_{t^*}$.
 
-    \item Consider the following greedy algorithm for solving this problem.
-
+Of course, $c=n_{t^*}$. Ergo $c^*\geq c.~\square$
+\end{solution}
+\item Consider the following greedy algorithm for solving this problem.
     \vspace*{-1ex}
     \begin{code}
     \> Sort the intervals according to $s_i$. \\
@@ -108,15 +111,11 @@ Let $X$ be a set of $n$ intervals $[s_i, f_i)$ on the real line. A {\em proper c
     $j\in \{1, \ldots, z\}$  \\
     \end{code}
 
-    Argue that the greedy algorithm above computes a valid coloring, and yet {\em never uses more than $c$ colors}, where $c$ is the quantity from part (a). \hint{Assume the intervals to be sorted according to $s_i$ and prove the statement using induction.}
+Argue that the greedy algorithm above computes a valid coloring, and yet {\em never uses more than $c$ colors}, where $c$ is the quantity from part (a).%\hint{Assume the intervals to be sorted according to $s_i$ and prove the statement using induction.}
+\begin{solution}
 
-
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-
-
-    \item What is the running time of this algorithm as a function of $n$ and $c^*$?
-
-
+\end{solution}
+\item What is the running time of this algorithm as a function of $n$ and $c^*$?
 \begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
 
 
