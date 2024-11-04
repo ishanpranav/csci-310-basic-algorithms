@@ -7,7 +7,7 @@
 \firstpageheadrule
 \cfoot{}
 \subsection*{References}
-Collaborated with Crystal Huang.
+Peer-reviewed with Crystal Huang.
 \stepcounter{subsection}
 \subsection{Huffman codes}
 \begin{enumerate}
@@ -56,7 +56,7 @@ Letter&Encoding\\
 A&0000\\
 B&0001\\
 C&100\\
-D&111\\
+D&101\\
 E&001\\
 F&11\\
 G&01\\
@@ -75,11 +75,11 @@ Furthermore, we can show that Huffman codes are not unique even with a consisten
 
 Without loss of generality, assume that for every parent vertex, we always let its left child represent the $0$ bit and the right child represent the $1$ bit.
 
-Consider four A, B, and C, with frequencies $f_{\rm A}=f_{\rm B}=f_{\rm C}=0.\overline{3}$. We want to construct an optimal prefix code using Huffman's algorithm. On the first recursive level, we may choose any of A and B, B and C, or C and A to be the two lowest-frequency symbols. Consider two of these cases:
+Consider three symbols A, B, and C, with frequencies $f_{\rm A}=f_{\rm B}=f_{\rm C}=0.\overline{3}$. We want to construct an optimal prefix code using Huffman's algorithm. On the first recursive level, we may choose any of A and B, B and C, or C and A to be the two lowest-frequency symbols. Consider two of these cases:
 \begin{itemize}
 \item Suppose we take A and B to be the two lowest-frequency symbols. Then we replace them with parent AB with frequency $f_{\rm AB}=0.\overline{6}$, with A as the left child and B as the right. Now AB and C are joined to a parent to construct the tree, with AB as the left child and C as the right.
 
-In our optimal Huffman code, we represent A with $01$, B with $00$, and C with $1$.
+In our optimal Huffman code, we represent A with $00$, B with $01$, and C with $1$.
 
 \item Suppose instead we take B and C to be the two lowest-frequency symbols. Then we replace them with parent BC with frequency $f_{\rm BC}=0.\overline{6}$, with C as the left child and b as the right. Now A and BC are joined to a parent to construct the tree, with A as the left child and C as the right.
 
@@ -123,37 +123,55 @@ Argue that the greedy algorithm above computes a valid coloring, and yet {\em ne
 
 For all $t\in\mathbb{R}$, let $n_t$ denote the number of intervals $x\in X$ where $t\in x$. Let $c=\underset{t\in\mathbb{R}}{\max}(n_t)$. 
 
-Assume without loss of generality that the intervals are sorted in ascending order with respect to their starting value. That is, for all $1\leq p<q\leq n$, we have $[s_p,f_p)\in X$ and $[s_q,f_q)\in X$ such that $s_p\leq s_q$.
-
 Let $1\leq j\leq(n+1)$ where $j=1$ denotes the iteration before the loop begins, $j=i$ denotes the iteration before considering interval $[s_i,f_i)\in X$ for $i\leq n$, and $j=n+1$ denotes the step immediately after the loop terminates.
 
 Let $z_j$ denote the number of unique colors used at the beginning of iteration $j$.
 
 \textbf{Invariant I. }\textit{Claim. }For every step of the loop $1\leq j\leq(n+1)$, we claim that
 \begin{itemize}
-\item there exist no $p$, $q$, and $t$ where $1\leq (p\neq q)<j\leq n$ such that $t\in[s_p,f_p)$ and $t\in[s_q,f_q)$, but $[s_p,f_p)$ and $[s_q,f_q)$ have the same color; and,
-\item$z_j\leq\underset{t\in\mathbb{R}}{\max}({n_j}_t)$ where ${n_j}_t$ denotes the number of intervals $[s_i,f_i)\in X$ where $i<j$.
+\item there exist no $1\leq (p\neq q)<j\leq n$ where $[s_p,f_p),[s_q,f_q)\in X$ are overlapping intervals with the same color;
+\item$z_j\leq c_j$ where $c_j=\underset{t\in\mathbb{R}}{\max}({n_j}_t)$ and ${n_j}_t$ denotes the number of intervals $[s_i,f_i)\in X$ with $i<j$; and,
+\item$z_j\geq z_i$ for all $i<j$.
 \end{itemize}
 \textit{Proof. }We can prove this invariant by induction on $j$.
 
 \textit{Basis. }Consider $j=1$. Note that we are considering the case before the first iteration of the loop.
 
-Since $j=1$, there are no intervals $[s_i,f_i)\in X$ where $i<1$, as no intervals have yet been considered.
+Since $j=1$, there are no intervals $[s_i,f_i)\in X$ where $i<1$, as no interval has been considered.
 
-It follows that ${n_1}_t=0$ for all $t\in\mathbb{R}$. From Algorithm I, before the loop begins, $z_1=0$. So $z_1\leq\underset{t\in\mathbb{R}}{\max}({n_1}_t)$.
+It follows that ${n_1}_t=0$ for all $t\in\mathbb{R}$, so $c_1=0$. From Algorithm I, before the loop begins, $z_1=0$. So $z_1\leq c_1$.
 
 Thus the loop invariant holds at initialization.
 
 \textit{Hypothesis. }Consider $j=k$ where $1\leq k\leq n$. Assume that at the beginning of iteration $k$,
 \begin{itemize}
-\item there exist no $1\leq (p\neq q)<k\leq n$ where $[s_p,f_p)\in X$ and $[s_q,f_q)\in X$ are overlapping intervals with the same color; and,
-\item$z_k\leq\underset{t\in\mathbb{R}}{\max}({n_k}_t).$
+\item there exist no $1\leq (p\neq q)<k$ where $[s_p,f_p),[s_q,f_q)\in X$ are overlapping intervals with the same color;
+\item$z_k\leq c_k$; and,
+\item$z_k\geq z_i$ for all $i<k$. 
 \end{itemize}
 \textit{Inductive step. }Consider $j=k+1$. Note that this is the iteration immediately after considering interval $k$ and before considering interval $k+1$. There are two cases.
 \begin{itemize}
-\item Suppose $[s_k,f_k)$ cannot be legally colored with any color $1\leq y\leq z$.
-\item Suppose instead $[s_k,f_k)$ can be legally colored with some color $1\leq y\leq z$.
+\item Suppose $[s_k,f_k)$ cannot be legally colored with any color $1\leq y\leq z_k$. This implies that for all $1\leq y\leq z_k$, there exists an interval with color $y$ that overlaps with $[s_k,f_k)$. That is, there exists some $t^*\in[s_k,f_k)$ where for all $1\leq y\leq z_k$, there is an $x\in X$ with color $y$ and $t^*\in x$. 
+
+In this case, Algorithm I assigns $[s_k,f_k)$ the incremented color $z_{k+1}=z_k+1$.
+
+Since $t^*$ exists in at least one interval for each color $1\leq y\leq z_k$, we know that $t^*$ is in at least $z_k$-many intervals. Also, $t^*\in[s_k,f_k)$. Therefore $t^*$ is in at least $z_k+1=z_{k+1}$ intervals; that is, ${n_{k+1}}_{t^*}=z_{k+1}$.
+
+From the second statement of the inductive hypothesis, $z_k\leq c_k$. Note that if ${n_{k+1}}_{t^*}>c_k$, then $c_{k+1}={n_{k+1}}_{t^*}$. Otherwise, $c_{k+1}=c_k$. Regardless, $z_{k+1}\leq c_{k+1}$.
+
+From the third statement of the inductive hypothesis, $z_k\geq z_i$ for all $i<k$. Since $z_{k+1}=z_k+1$, we know $z_{k+1}>z_k\geq z_i$ for all $i<k$, maintaining this property.
+
+The color $z_{k+1}$ assigned to $[s_k,f_k)$ is strictly greater than, and thus different from, all other colors used thus far. There is no previously-visited interval overlapping with $[s_k,f_k)$ with the same color $z_{k+1}$.
+\item Suppose instead $[s_k,f_k)$ can be legally colored with some color $1\leq y\leq z_k$.
+
+Since $[s_k,f_k)$ can be legally colored with $y$, Algorithm I assigns the color $y$ to this interval, respecting the first statement of the claim.
+
+In this case, Algorithm I does not increment the color. We know $z_{k+1}=z_k$, so the second and third statements of inductive hypothesis guarantee that these two properties of $z_k$ are maintained for $z_{k+1}$.
 \end{itemize}
+In all cases, all three statements of the loop invariant hold.
+
+Hence, by the principle of mathematical induction, the loop invariant holds for all iterations $1\leq j\leq(n+1)$. The loop invariant holds at initialization, maintenance, and termination.
+
 \textbf{Proposition II. }
 \textit{Claim. }Algorithm I produces a proper coloring using no more than $c$ colors.
 
@@ -161,10 +179,11 @@ Thus the loop invariant holds at initialization.
 
 From Invariant I, at termination there is no pair of distinct overlapping intervals with the same color. Therefore, Algorithm I computes a proper coloring of $X$.
 
-At termination, the number of colors used is $z=z_{n+1}$. From Invariant I, $z_{n+1}\leq c$. Therefore, Algorithm I uses $z\leq c$ unique colors.
+At termination, the number of colors used is $z=z_{n+1}$, and $c=c_{n+1}$. From Invariant I, $z_{n+1}\leq c_{n+1}$. Therefore, Algorithm I uses $z\leq c$ unique colors.
 
-Ergo, {\sc GreedyAlgorithm}($X$) produces a proper coloring of $X$ using $z\leq c$ unique colors.
+Ergo, {\sc GreedyAlgorithm}($X$) produces a proper coloring of $X$ using $z\leq c$ unique colors.$~\square$
 \end{solution}
+\newpage
 \item What is the running time of this algorithm as a function of $n$ and $c^*$?
 \begin{solution}
 \textbf{Proposition III. }\textit{Claim. } Let $c^*$ be the minimum number of colors required to produce a proper of coloring of $X$. Then {\sc GreedyAlgorithm}($X$) has running time $O(n\log n+nc^*)$.
