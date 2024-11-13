@@ -20,7 +20,7 @@ the sum of the degrees of all the vertices is an even number. Recall that the de
     \label{fig:box}
 \end{figure}
 \begin{solution}
-\textit{Claim. }Let $G=(V,E)$ be an undirected graph. Then there exists $k\in\mathbb{Z}$ such that \[\sum_{v\in V}{d_G(v)}=2k,\] where $d(v)$ denotes the degree of vertex $v\in V$ in graph $G$.\\
+\textit{Claim. }Let $G$ be an undirected graph. Then there exists $k\in\mathbb{Z}$ such that \[\sum_{v\in V}{d_G(v)}=2k,\] where $d(v)$ denotes the degree of vertex $v\in V$ in graph $G$.\\
 
 \noindent\textit{Proof. }We can demonstrate the claim by structural induction on $G$.\\
 
@@ -43,11 +43,11 @@ so the claim holds in the base case.\\
 \noindent Hence, by structural induction, the sum of the degrees of all vertices in an undirected graph is even.$~\square$
 \end{solution}
 \newpage
-\subsection{DFS (5+5+5=15 points)}
+\subsection{Depth-first search}
 
 \begin{enumerate}
 \item 
-Consider the graph in Figure~\ref{fig:box2}. Say we begin a DFS traversal starting at node $A$. List the discovery (i.e., when we mark a node ``gray'') and finishing times (i.e., when we mark a node ``black'') of all the vertices (you may assume each successive step in the traversal takes time 1). Assume that the adjacency lists in the representation of the input graph are in alphabetical order.
+Consider the graph in Figure~\ref{fig:box2}. Say we begin a DFS traversal starting at node $A$. List the discovery time (i.e., when we mark a node ``gray'') and finishing time (i.e., when we mark a node ``black'') of each vertex (you may assume each successive step in the traversal takes time 1). Assume that the adjacency lists in the representation of the input graph are in alphabetical order.
 \begin{figure}[h!]
 \centering
     \begin{tikzpicture}[node distance={20mm}, thick,main/.style={circle, thick,draw,font=\sffamily\bfseries}, ar/.style={-{Stealth[scale=1.2]}}]
@@ -75,50 +75,80 @@ Consider the graph in Figure~\ref{fig:box2}. Say we begin a DFS traversal starti
           \draw[ar] (7) -- (6);
           
     \end{tikzpicture}
-    \caption{Graph for Question 4.1}
+    \caption{Graph for Question 2.1}
           \label{fig:box2}
 \centering
 \end{figure}
-
     \begin{center}
     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
     \hline
          Node & A & B & C & D & E & F & G & H & I\\
          \hline 
-         $d$-time &  &  &  &  &  &  &  &  & \\
+         $d$-time & 1 & 2 & 6 & 5 & 3 & 7 & 4 & 9 & 8 \\
          \hline
-         $f$-time &  &  &  &  &  &  &  &  &  \\
+         $f$-time & 18 & 17 & 13 & 14 & 16 & 12 & 15 & 10 & 11 \\
          \hline
     \end{tabular}
     \end{center}
-
-
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+We can step through the depth-first search algorithm, collecting the times of discovery and finishing for each vertex visited. Visiting adjacent vertices in alphabetical order, we obtain the table above.
+\end{solution}
 \end{enumerate}    
-
+\newpage
 \noindent
-As in the previous question, for any vertex $a$ in directed graph $G$, we denote by $a.\mathsf{d} $ the time at which DFS on $G$ discovers (i.e., marks as ``gray'') the vertex $a$. Similarly, denote by $a.\mathsf{f} $ the time at which DFS fully explores (i.e., marks as ``black'') the vertex $a$. Give counterexamples to the following statements:
+As in the previous question, for any vertex $a$ in a directed graph $G$, we denote by $a.\mathsf{d} $ the time at which DFS on $G$ discovers (i.e., marks as ``gray'') the vertex $a$. Similarly, denote by $a.\mathsf{f} $ the time at which DFS fully explores (i.e., marks as ``black'') the vertex $a$. Give counterexamples to the following statements:
 \begin{enumerate}[start=2]
     \item If a directed graph $G$ contains a path
     from $a$ to $b$, and if $a.\mathsf{d} < b.\mathsf{d}$ in a depth-first search of $G$, then $b$ is a descendant
     of $a$ in the depth-first forest produced.
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-    \item If a directed graph $G$ contains a path
-    from $a$ to $b$, then any depth-first search must result in $b.\mathsf{d} < a.\mathsf{f}$.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{False claim. }Let $G=(V,E)$ be a directed graph such that for $a,b\in V$, there exist a path $(a,\dots,b)$. If $a.\mathsf{d}<b.\mathsf{d}$ in a depth-first search of $G$, then $b$ is a descendant of $a$ in the depth-first forest produced. We assume, without loss of generality, that adjacency lists are sorted in alphabetical order.
+
+\textit{Counterexample. }Suppose $G=(\{{\rm X},{\rm Y},{\rm Z}\},\{({\rm X},{\rm Y}),({\rm X},{\rm Z}),({\rm Y},{\rm X})\})$.
+
+Note there exists a path $({\rm Y},{\rm X},{\rm Z})$ from vertex Y to vertex Z. First, we visit X, so ${\rm X}.\mathsf{d}=1$. Then, based on our assumption, we visit ${\rm Y}$, so ${\rm Y}.\mathsf{d}=2$. Upon completing ${\rm Y}$, we have ${\rm Y}.\mathsf{f}=3$. Then, we visit ${\rm Z}$, so ${\rm Z}.\mathsf{d}=4$. Upon completing ${\rm Z}$, we have ${\rm Z}.\mathsf{f}=5$. Finally, we complete ${\rm X}$, giving ${\rm X}.\mathsf{f}=6$. Thus, ${\rm Y}.\mathsf{d}<{\rm Z}.\mathsf{d}$.
+
+However, Y is not a descendant of Z. Hence disproven.$~\square$
+\end{solution}
+\item If a directed graph $G$ contains a path from $a$ to $b$, then any depth-first search must result in $b.\mathsf{d} < a.\mathsf{f}$.
+\begin{solution}
+\textit{False claim. }Let $G=(V,E)$ be a directed graph such that for $a,b\in V$, there exist a path $(a,\dots,b)$. Then $b.\mathsf{d}<a.\mathsf{f}$ in a depth-first search of $G$. We assume, without loss of generality, that adjacency lists are sorted in alphabetical order.
+
+\textit{Counterexample. }Suppose $G=(\{{\rm X},{\rm Y},{\rm Z}\},\{({\rm X},{\rm Y}),({\rm X},{\rm Z}),({\rm Y},{\rm X})\})$.
+
+There exists a path $({\rm Y},{\rm X},{\rm Z})$ from vertex Y to vertex Z.
+
+First, we visit X, so ${\rm X}.\mathsf{d}=1$. Then, based on our assumption, we visit ${\rm Y}$, so ${\rm Y}.\mathsf{d}=2$. Upon completing ${\rm Y}$, we have ${\rm Y}.\mathsf{f}=3$. Then, we visit ${\rm Z}$, so ${\rm Z}.\mathsf{d}=4$. Upon completing ${\rm Z}$, we have ${\rm Z}.\mathsf{f}=5$. Finally, we complete ${\rm X}$, giving ${\rm X}.\mathsf{f}=6$. 
+
+Of course, ${\rm Z}.\mathsf{d}\nless{\rm Y}.\mathsf{d}$. Hence disproven.$~\square$
+\end{solution}
 \end{enumerate}
-
-
-\subsection{2-Colorings (5+6+5=16 points)}
-A \emph{2-coloring} of an undirected graph $G = (V,E)$ assigns each node $v \in V$ a color $v.color \in \{red,green\}$ such that $u.color \neq v.color$ for all $(u,v) \in E$. We say the graph $G$ is 
-2-colorable if such a 2-coloring exists. (A simple example where no 2-coloring exists is a ``triangle'' graph, i.e., the fully connected graph with 3 vertices.)
+\newpage
+\subsection{2-Colorings}
+A \emph{2-coloring} of an undirected graph $G = (V,E)$ assigns each node $v \in V$ a color $v.color \in \{red,green\}$ such that $u.color \neq v.color$ for all $\{u,v\}\in E$. We say the graph $G$ is 2-colorable if such a 2-coloring exists.
 
 \begin{enumerate}
     \item 
     Show that if $G$ is a tree (i.e., connected and acyclic), then there always exists a 2-coloring. How many different 2-colors exist for such a graph?
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textit{Claim. }Let $G$ be an undirected graph. If $G$ is a tree, then there exists a 2-coloring of $G$.
+
+\textit{Proof. }Suppose $G$ is a tree. We can demonstrate the claim by structural induction on $G$.
+
+\textit{Basis. }Consider $G=(\emptyset,E)$. Of course, since there are no vertices, $E=\emptyset$. There are no vertices and no edges, so the claim holds vacuously.
+
+Consider $G=(\{v_0\},E)$. Since $G$ is a tree, $G$ is acyclic, and thus $E=\emptyset$. We may color $v_0$ red or green to produce a 2-coloring of graph $G$.
+
+The claim holds in the base cases.
+
+\textit{Hypothesis. }Consider $G=(V,E)$ where $|V|>1$. Assume that there exists a 2-coloring of graph $H$.
+
+\textit{Inductive step. }Consider $G=(V\cup\{v\},E)$ where $v\notin V$. Since $G$ is a tree, $G$ is connected. Since $|V|>1$, there exists $u\in V$ where $\{u,v\}\in E$. Since $G$ is a tree, there is only one such $u$.
+
+From the inductive hypothesis, there exists a 2-coloring of $H$. In this coloring, either $u$ 
+\end{solution}
 
 
 	\item 
