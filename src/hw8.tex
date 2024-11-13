@@ -108,7 +108,7 @@ However, if we step through the modified breadth-first search algorithm (a hybri
 
 \textit{Sixth. }We pop B, noting edge $\{{\rm B},{\rm E}\}$. We skip E.
 
-The algorithm incorrectly assigns a distance of $3$ to E, although the shortest distance from A to E is $2$. We conclude that, in the modified algorithm, the distance assigned to $v$ is not necsssarily the shortest distance from $s$ to $v$.
+The algorithm incorrectly assigns a distance of $3$ to E, although the shortest distance from A to E is $2$. We conclude that, in the modified algorithm, the distance assigned to $v$ is not necessarily the shortest distance from $s$ to $v$.
 \end{solution}
 \newpage
 \item Consider graphs for which edges have assigned weights. Assume we modify line 11 of BFS to add the weight of the edge from $u$ to $v$ instead of adding $1$. Does the modified algorithm compute the shortest weighted distance correctly? If so, prove the correctness; otherwise, provide a counterexample for which the algorithm fails.
