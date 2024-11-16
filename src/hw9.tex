@@ -103,7 +103,7 @@ As in the previous question, for any vertex $a$ in a directed graph $G$, we deno
     of $a$ in the depth-first forest produced.
 
 \begin{solution}
-\textit{False claim. }Let $G=(V,E)$ be a directed graph such that for $a,b\in V$, there exist a path $(a,\dots,b)$. If $a.\mathsf{d}<b.\mathsf{d}$ in a depth-first search of $G$, then $b$ is a descendant of $a$ in the depth-first forest produced. We assume, without loss of generality, that adjacency lists are sorted in alphabetical order.
+\textit{False claim. }Let $G=(V,E)$ be a directed graph such that for $a,b\in V$, there exists a path $(a,\dots,b)$. If $a.\mathsf{d}<b.\mathsf{d}$ in a depth-first search of $G$, then $b$ is a descendant of $a$ in the depth-first forest produced. We assume, without loss of generality, that adjacency lists are sorted in alphabetical order.
 
 \textit{Counterexample. }Suppose $G=(\{{\rm X},{\rm Y},{\rm Z}\},\{({\rm X},{\rm Y}),({\rm X},{\rm Z}),({\rm Y},{\rm X})\})$.
 
@@ -113,7 +113,7 @@ However, Y is not a descendant of Z. Hence disproven.$~\square$
 \end{solution}
 \item If a directed graph $G$ contains a path from $a$ to $b$, then any depth-first search must result in $b.\mathsf{d} < a.\mathsf{f}$.
 \begin{solution}
-\textit{False claim. }Let $G=(V,E)$ be a directed graph such that for $a,b\in V$, there exist a path $(a,\dots,b)$. Then $b.\mathsf{d}<a.\mathsf{f}$ in a depth-first search of $G$. We assume, without loss of generality, that adjacency lists are sorted in alphabetical order.
+\textit{False claim. }Let $G=(V,E)$ be a directed graph such that for $a,b\in V$, there exists a path $(a,\dots,b)$. Then $b.\mathsf{d}<a.\mathsf{f}$ in a depth-first search of $G$. We assume, without loss of generality, that adjacency lists are sorted in alphabetical order.
 
 \textit{Counterexample. }Suppose $G=(\{{\rm X},{\rm Y},{\rm Z}\},\{({\rm X},{\rm Y}),({\rm X},{\rm Z}),({\rm Y},{\rm X})\})$.
 
@@ -133,25 +133,36 @@ A \emph{2-coloring} of an undirected graph $G = (V,E)$ assigns each node $v \in 
     Show that if $G$ is a tree (i.e., connected and acyclic), then there always exists a 2-coloring. How many different 2-colors exist for such a graph?
 
 \begin{solution}
-\textit{Claim. }Let $G$ be an undirected graph. If $G$ is a tree, then there exists a 2-coloring of $G$.
 
-\textit{Proof. }Suppose $G$ is a tree. We can demonstrate the claim by structural induction on $G$.
+\textbf{Proposition I. }\textit{Claim. }Let $G$ be an undirected graph. If $G$ is a tree, then $G$ is 2-colorable.
 
-\textit{Basis. }Consider $G=(\emptyset,E)$. Of course, since there are no vertices, $E=\emptyset$. There are no vertices and no edges, so the claim holds vacuously.
+\textit{Proof. }Suppose $G$ is a tree. The claim holds vacuously for the trivial graph $G=(\emptyset,\emptyset)$. We can demonstrate the claim for graphs with at least one vertex by structural induction on $G$.
 
-Consider $G=(\{v_0\},E)$. Since $G$ is a tree, $G$ is acyclic, and thus $E=\emptyset$. We may color $v_0$ red or green to produce a 2-coloring of graph $G$.
+\textit{Basis. }Consider $G=(\{v_0\},E_0)$. Since $G$ is a tree, $G$ is acyclic, and thus $E_0=\emptyset$. Assume, without of loss of generality, that we color the root vertex $v_0$ red. Then $G$ is 2-colorable.
 
-The claim holds in the base cases.
+\textit{Hypothesis. }Consider $G=(V,E)$ where $|V|>1$. Assume that $(V,E)$ is 2-colorable.
 
-\textit{Hypothesis. }Consider $G=(V,E)$ where $|V|>1$. Assume that there exists a 2-coloring of graph $H$.
+\textit{Inductive step. }Consider $G=(V',E')$ where $|V'|=|V|+1$. Since $G$ is a non-trivial tree, there exits a leaf $v\in V'$. Separating $v$ from $G$ produces two induced subtrees of $G$: one tree $H$ with $|V|$ vertices, and another with one vertex, $v$.
 
-\textit{Inductive step. }Consider $G=(V\cup\{v\},E)$ where $v\notin V$. Since $G$ is a tree, $G$ is connected. Since $|V|>1$, there exists $u\in V$ where $\{u,v\}\in E$. Since $G$ is a tree, there is only one such $u$.
+Since $G$ is a tree, and thus connected, and since $G$ has at least 2 vertices, there exists a single edge $\{u,v\}\in E'$ connecting leaf $v$ to some other vertex $u\in V'$.
 
-From the inductive hypothesis, there exists a 2-coloring of $H$. In this coloring, either $u$ 
+Of course, $H$ is the subgraph induced by removing $v$ from $G$, so $H=(V'\setminus\{v\},E'\setminus\{\{u,v\}\})$.
+
+There exists a 2-coloring of $H$ by the inductive hypothesis. In this coloring for $H$, $u$ is either red or green:
+\begin{itemize}
+\item Suppose $u$ is red. For $G$, we color $v$ green and color each other vertex to match its coloring for $H$.
+\item Suppose instead $u$ is green. For $G$, we color $v$ red and color each other vertex to match its coloring for $H$.
+\end{itemize}
+In both cases, the inductive hypothesis guarantees that the 2-coloring is valid for all vertices $w\in V$ and edges $e\in E$, and it is also valid for edge $\{u,v\}$ (since $u.\mathsf{color}\neq v.\mathsf{color}$), so the 2-coloring is valid for all vertices $w\in V'$ and edges $e\in E'$.
+
+Hence, by structural induction, $G$ is 2-colorable.$~\square$
+
+\textbf{Proposition II. }\textit{Claim. }Let $G$ be a tree. Then there exist two 2-colorings for $G$.
+
+\textit{Proof. }The base case of Proposition I assumes, without loss of generality, that, for all trees $G$, we color the root vertex red. We may instead color the root vertex green to produce a distinct, but equally valid, 2-coloring of $G$. Ergo, there exist two 2-colorings for each tree $G.~\square$
 \end{solution}
-
-
-	\item 
+\newpage
+\item 
 	Describe how to modify the algorithm for Depth First Search so that it assigns a valid 2-coloring, or returns an error in case none exists. To this end, write a function {\sc TwoColoring-Visit}$(G,u,c)$ that takes a graph $G$, a vertex $u$, and a color $c \in \{red,green\}$ such that the following driver function either assigns a valid 2-coloring and returns $success$, or returns $error$ in case no 2-coloring exists. Your algorithm should assume $G$ to be represented as an adjacency list and run in $O(|V| + |E|)$. 
 	
 	\begin{code}
@@ -163,11 +174,47 @@ From the inductive hypothesis, there exists a 2-coloring of $H$. In this colorin
 		\> \> \> $\text{\sc TwoColoring-Visit}(G,u,red)$ \\
 		\> \Return $success$ \\
 	\end{code}
+\begin{solution}
+{\sc TwoColoring--Visit}($G,u,c$) with graph $G=(V,E)$, vertex $u\in V$, and color $c\in\{\mathsf{red},\mathsf{green}\}$:
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+Assign property $u.\mathsf{color}\leftarrow c$.
 
-    \item Prove the correctness of your algorithm. More concretely, show (a) that the assigned coloring is always a valid 2-coloring, and (b) if a 2-coloring exists then the algorithm does assign one.
-    \hint{Consider the DFS tree and the edge classification. You may reuse ideas from the first subproblem.}
+For each $v\in V$ where $\{u,v\}\in E$, via adjacency list:
+\begin{itemize}
+\item if $v.\mathsf{color}=\text{white}$, then:
+\begin{itemize}
+    \item $c'\leftarrow\mathsf{red}$ if $c=\mathsf{green}$; otherwise, $\mathsf{green}$;
+    \item perform {\sc TwoColoring--Visit}($G,v,c'$);
+\end{itemize}
+\item otherwise, if $v.\mathsf{color}=u.\mathsf{color}$, then
+\begin{itemize}
+    \item throw an exception that cascades up to the parent algorithm, so that {\sc TwoColoring} returns the error condition.
+\end{itemize}
+\end{itemize}
+\textbf{Proposition III. }\textit{Claim. }{\sc TwoColoring} has running time $O(|V|+|E|)$.
+
+\textit{Proof. }{\sc TwoColoring} is a variant of the well-known depth-first search algorithm, which has running time $O(|V|+E|)$. Intuitively, {\sc TwoColoring} visits each vertex, and for each vertex, recursively visits the members of its adjacency list. Each vertex is visited at most once, since once a vertex is no longer colored $\mathsf{white}$, it is no longer considered. The total number of adjacency list entries across all vertices is $2|E|$. Thus the running time is $O(|V|+2|E|)=O(|V|+|E|).~\square$
+\end{solution}
+\newpage
+\item Prove the correctness of your algorithm. More concretely, show (a) that the assigned coloring is always a valid 2-coloring, and (b) if a 2-coloring exists then the algorithm does assign one.
+\begin{solution}
+\textbf{Proposition IV. }\textit{Claim. }{\sc TwoColoring} always assigns a valid 2-coloring, and, if a 2 coloring exists, {\sc TwoColoring} does assign one.
+
+\textit{Proof. }{\sc TwoColoring} is a variant of the well-known depth-first search algorithm: We can thus produce a ``depth-first search forest'' $F=(V,E)$ by tracing the steps of the algorithm.
+
+Since {\sc TwoColoring} operates on undirected graphs only, for all $\{u,v\}\in E$, either $\{u,v\}$ is a tree edge or a back edge:
+\begin{itemize}
+    \item Suppose $\{u,v\}$ is a tree edge. From Proposition I, there exists a 2-coloring for any tree. If $\{u,v\}$ is a tree edge, then $v.\mathsf{color}=\mathsf{white}$. By assigning the color of each vertex to be different from its parent's color, {\sc TwoColoring--Visit} preserves the validity of the 2-coloring, as done in the inductive step of Proposition I.
+    \item Suppose instead $\{u,v\}$ is a back edge. Recall that a back-edge implies an edge from vertex $u$ to its ancestor vertex $v$. That is, $v.\mathsf{color}\neq\mathsf{white}$.
     
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+    Note that the ``2-colorable'' property is synonymous with ``bipartite.'' We know that a graph with an odd-length cycle is not bipartite: If there exists an odd-length cycle---for example, $(x,y,x)$---it is impossible to color vertices $x$ and $y$ to satisfy the 2-colorable property.
+    
+    A back edge $\{u,v\}$ implies a cycle $(v,\dots,u,v)$.
+    
+    If $u.\mathsf{color}=v.\mathsf{color}$ (where $u.\mathsf{color}\neq\mathsf{white}$ and $v.\mathsf{color}\neq\mathsf{white}$), then, based on the implementation of {\sc TwoColoring--Visit}, there exists an even-length path $(v,\dots,u)$. This implies that the cycle $(v,\dots,u,v)$ is an odd-length cycle, and thus, the graph is not 2-colorable. In this case, the algorithm correctly raises the error condition.
+
+    Otherwise, there is no evidence that the graph is not bipartite, so we continue coloring the unvisited vertices.
+\end{itemize}
+If a graph is bipartite, then it is 2-colorable. A graph $G$ is bipartite if and only if there exist no odd-length cycles in $G$. The above analysis of the depth-first search forest $F$ indicates that the algorithm produces a correct 2-coloring if one exists, and raises the error condition if there exists an odd-length cycle in $G$. This demonstrates the correctness of the {\sc TwoColoring} algorithm.$~\square$
+\end{solution}
 \end{enumerate}
