@@ -1,0 +1,216 @@
+\lhead{\textbf{Basic Algorithms, Fall 2024 \\ CSCI-UA.0310-001}}
+\chead{\Large{\textbf{Homework 10}}}
+\def\lc{\left\lceil}   
+\def\rc{\right\rceil}
+\newtheorem{claim}{Claim}
+\newtheorem{property}{Property}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ENTER NAME BELOW!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\rhead{\textbf{Instructor: Rotem Oshman \\}}%\\ Name: STUDENT NAME}}
+\runningheadrule
+\firstpageheadrule
+\cfoot{}
+
+\section*{Due November 22 (11:59 p.m.)}
+\stepcounter{subsection}
+\intro
+
+\vspace*{-1em}
+...LIST COLLABORATORS HERE...
+
+
+
+
+
+
+\subsection{Tours (5+5+5=15 points)}
+Suppose the New York Botanical Gardens are trying to drum up interest for their tree and shrub collections by offering tours through the arboretum, and you are tasked with reviewing their proposed routes. There are a set $V$ of trees they want some tour to stop at, and a set $E$ of routes from tree to tree their proposed tours would make. In order to make sure all the trees are visited, they want the following property:
+\begin{property} 
+For all pairs $v, u\in V$, we must have a path from $u$ to $v$ or a path from $v$ to $u$ (or both). 
+\end{property}
+\noindent They provide you with many proposed plans and a strict deadline for your feedback, and so you want to develop an efficient algorithm to automate this task. 
+
+\begin{enumerate}
+\item Suppose $G = (V, E)$ is a directed acyclic graph. Design a simple $O(|V|+|E|)$ time algorithm to determine whether or not the given graph $G$ satisfies the desired property. For example, in Figure~\ref{fig:q1-1}, the first example satisfies the property while the second does not (as there is no path from $A$ to $C$ nor from $C$ to $A$).
+Argue the correctness of your algorithm.
+
+\hint{Base your algorithm on topological sort.} 
+
+\hint{\noindent
+\begin{minipage}[t]{0.95\linewidth}
+If we change the examples to
+$A \leftarrow B \rightarrow C \rightarrow D$ and 
+$B \rightarrow A \rightarrow C \rightarrow D$, then $(B,A,C,D)$ is a valid topological sort of both, but one of the graphs satisfies the property while the other one does not. Draw the edges of each graph on the vertices in topological order. What is the difference?
+\end{minipage}}
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[node distance={20mm}, thick,main/.style={circle, thick,draw,font=\sffamily\bfseries}, ar/.style={-{Stealth[scale=1.2]}}]
+      \node[main] (1) {$A$}; 
+      \node[main] (2) [right of=1]{$B$};
+      \node[main] (3) [right of=2]{$C$};
+      \node[main] (4) [below of=1]{$A$};
+      \node[main] (5) [right of=4]{$B$};
+      \node[main] (6) [right of=5]{$C$};
+      
+      \draw[ar] (1) -- (2);
+      \draw[ar] (2) -- (3);
+      \draw[ar] (5) -- (4);
+      \draw[ar] (5) -- (6);
+    \end{tikzpicture}
+    \caption{Illustrations for Question 1-1.}
+    \label{fig:q1-1}
+\end{figure}
+
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+\item Suppose now that $G = (V, E)$ is an arbitrary directed graph. Design a $O(|V|+|E|)$ time algorithm to determine whether or not the given graph $G$ satisfies the desired property. 
+
+\hint{Recall that any directed graph $G$ can be decomposed into a DAG of strongly connected components. Can you reuse some ideas of your prior approach?}
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+
+\item Prove that your algorithm in $(2)$ is correct and that it runs in the required time.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+
+\subsection{Topological Sort (5+5=10 points)}
+\begin{enumerate}
+    \item How many valid topological sorts does the directed graph $G$ in Figure \ref{fig:topo-sort} below have? List all the valid topological sorts in the following table. One of them has been listed as an example, where node $A$ has the last finish time and $D$ has the first.
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[node distance={20mm}, thick,main/.style={circle, thick,draw,font=\sffamily\bfseries}, ar/.style={-{Stealth[scale=1.2]}}]
+          \node[main] (1) {$A$}; 
+          \node[main] (2) [above right of=1]{$B$};
+          \node[main] (3) [right of=2]{$C$};
+          \node[main] (4) [below right of=3]{$D$};
+          \node[main] (5) [below right of=1]{$F$};
+          \node[main] (6) [right of=5]{$E$};
+          
+          \draw[ar] (1) -- (2);
+          \draw[ar] (1) -- (5);
+          \draw[ar] (2) -- (3);
+          \draw[ar] (2) -- (4);
+          \draw[ar] (2) -- (5);
+          \draw[ar] (3) -- (4);
+          \draw[ar] (3) -- (5);
+          \draw[ar] (6) -- (4);
+        \end{tikzpicture}
+        \caption{Directed $G$ for topological sort.}
+        \label{fig:topo-sort}
+    \end{figure}
+    
+     \begin{center}
+    \begin{tabular}{c c c c c c c}
+    \hline
+     1. & A & B & C & F & E & D\\
+     2. &  &  &  &  &  & \\
+    \hline
+    \end{tabular}
+    \label{table:q3}
+    \end{center}
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+    
+
+    \item 
+    Give an example of a graph showing that the topological sort algorithm does not work if we output vertices in order of their discovery time, instead of reverse finish time.
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+
+
+
+\subsection{Spanning Tree (4+4+4=12 points)}
+
+Recall that for an undirected graph $G = (V,E)$ as a spanning tree $T$ is a subgraph containing all vertices $V$ such that $T$ is connected and acyclic. 
+
+In the following, let $e = (u,v) \in E$ be an edge that is \emph{not} part of $T$.
+Prove the following properties:
+
+\begin{enumerate}
+    \item Assume we add $e$ to $T$, i.e., consider the graph $T'$ over the vertices $V$ that contains all edges from $T$ and $e$. Show that this graph is no longer acyclic.
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item Now let $e'$ be an arbitrary edge on the cycle created by adding $e$ to $T'$ in part (1). Let $T''$ be the graph obtained by removing $e'$, i.e., the graph obtained by replacing $e'$ with $e$ in the original spanning tree $T$. Show that $T''$ is connected.
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+    \item Now complete the proof of $T''$ being a spanning tree by also showing that $T''$ is acyclic.
+
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\end{enumerate}
+
+
+
+
+
+\subsection*{Honors Question}
+
+We present the following (false) claim:
+
+\begin{claim}
+If a directed graph $G$ contains cycles (i.e., is not acyclic), then topological sort produces a vertex ordering that minimizes the number of ``bad'' edges
+that are inconsistent with the ordering produced. More precisely, a bad edge is one going from a vertex later in the ordering to an earlier vertex.
+\end{claim}
+\noindent Disprove this claim by providing a counterexample. Briefly justify why your graph fails the claim.
+\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+
+
+
+
+
+
+
+\newpage
+\section*{Reference: Topological Sort and SCC}
+\paragraph{Strongly connected components.} Strong connectedness is an equivalence relation on the set of vertices. It's 1) symmetric ($u \sim v$ implies $v \sim u$) and 2) transitive (if $u \sim v$ and and $v \sim w$, then $u \sim w$). Hence, SCC partitions the vertex set $V(G)$.
+
+\begin{claim}
+The component graph is a DAG.
+\end{claim}
+\begin{proof}
+If there's a cycle, then all the component (i.e., mega nodes) in the cycle are strongly connected, which is a contradiction.
+\end{proof}
+
+\begin{code}
+        DFS-Visit$(G,u)$:\\
+        Explore node $u$ on graph $G$.\\
+        1 \> time += $1$\\
+        2 \> $u.\mathrm{d} =$ time \\ 
+        3 \> $u.\mathrm{color}=\mathrm{GRAY}$ \\
+        4 \> \For $v \in \mathrm{Adj}[u]$:\\
+        5 \> \> \If $v.\mathrm{color}=\mathrm{WHITE}$ \Then\\
+        6 \> \> \> $v.\mathrm{parent}= u$ \\
+        7 \> \> \> DFS-Visit($G,v$) \\
+        8 \> $u.\mathrm{color}=\mathrm{BLACK}$ \\
+        9 \> time += $1$ \\
+        10 \> $u.\mathrm{f} =$ time
+\end{code}
+\begin{code}
+    DFS$(G)$:\\
+    Explore node $u$ on graph $G$.\\
+    1 \> time = $0$\\
+    2 \> \For $u \in V(G)$:\\
+    3 \> \> $u.\mathrm{color}=\mathrm{WHITE}$ \\
+    4 \> \> $u.\mathrm{parent}=\mathrm{NULL}$ \\
+    5 \> \For $u \in V(G)$:\\
+    6 \> \> \If $u.\mathrm{color}=\mathrm{WHITE}$ \Then\\
+    7 \> \> \> DFS-Visit($G,u$)
+\end{code}
+\begin{code}
+    TopologicalSort$(G)$:\\
+    1 \> run DFS($G$).\\
+    2 \> output vertices in decreasing order of finish time.
+\end{code}
+\begin{code}
+    SCC$(G)$:\\
+    1 \> run DFS($G$) to compute $u.\mathrm{f}$ for each $u \in V(G)$.\\
+    2 \> run DFS($G^{\text{Rev}}$), where in the main outer loop consider vertices in decreasing order of $u.\mathrm{f}$.\\
+    3 \> output the vertices of each tree as a separate SCC.
+\end{code}
