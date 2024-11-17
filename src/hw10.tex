@@ -12,16 +12,15 @@
 \subsection*{References}
 Peer-reviewed with Crystal Huang.
 \subsection{Tours}
-Suppose the New York Botanical Gardens are trying to drum up interest for their tree and shrub collections by offering tours through the arboretum, and you are tasked with reviewing their proposed routes. There are a set $V$ of trees they want some tour to stop at, and a set $E$ of routes from tree to tree their proposed tours would make. In order to make sure all the trees are visited, they want the following property:
+Suppose the New York Botanical Gardens are trying to drum up interest for their tree and shrub collections by offering tours through the arboretum, and you are tasked with reviewing their proposed routes. There is a set $V$ of trees they want some tour to stop at, and a set $E$ of routes from tree to tree their proposed tours would make. To make sure all the trees are visited, they want the following property:
 \begin{property} 
 For all pairs $v, u\in V$, we must have a path from $u$ to $v$ or a path from $v$ to $u$ (or both). 
 \end{property}
-\noindent They provide you with many proposed plans and a strict deadline for your feedback, and so you want to develop an efficient algorithm to automate this task. 
+\noindent They provide you with many proposed plans and a strict deadline for your feedback, so you want to develop an efficient algorithm to automate this task. 
 
 \begin{enumerate}
 \item Suppose $G = (V, E)$ is a directed acyclic graph. Design a simple $O(|V|+|E|)$ time algorithm to determine whether or not the given graph $G$ satisfies the desired property. For example, in Figure~\ref{fig:q1-1}, the first example satisfies the property while the second does not (as there is no path from $A$ to $C$ nor from $C$ to $A$).
 Argue the correctness of your algorithm.
-
 \hint{Base your algorithm on topological sort.} 
 
 \hint{\noindent
@@ -30,7 +29,6 @@ If we change the examples to
 $A \leftarrow B \rightarrow C \rightarrow D$ and 
 $B \rightarrow A \rightarrow C \rightarrow D$, then $(B,A,C,D)$ is a valid topological sort of both, but one of the graphs satisfies the property while the other one does not. Draw the edges of each graph on the vertices in topological order. What is the difference?
 \end{minipage}}
-
 \begin{figure}[htb]
     \centering
     \begin{tikzpicture}[node distance={20mm}, thick,main/.style={circle, thick,draw,font=\sffamily\bfseries}, ar/.style={-{Stealth[scale=1.2]}}]
@@ -49,9 +47,36 @@ $B \rightarrow A \rightarrow C \rightarrow D$, then $(B,A,C,D)$ is a valid topol
     \caption{Illustrations for Question 1-1.}
     \label{fig:q1-1}
 \end{figure}
+\begin{solution}
 
+\textbf{Axiom I. }For $v\in V$, define property $v.\mathsf{reachable}\in\{\verb|true|,\verb|false|\}$.
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textbf{Algorithm I. }{\sc Tours}($G$) with graph $G=(V,E)$; returns $1$ if $G$ satisfies Property \verb|true|; otherwise, \verb|false|:
+
+Assign a $|V|$-element array $T[1,\dots,|V|]\leftarrow\textsc{TopologicalSort}(G)$. Here {\sc TopologicalSort} is the well-known topological sort algorithm that returns an array containing the vertices of $G$ in topological order. Note {\sc TopologicalSort} has running time $O(|V|+|E|)$.
+
+For $v\in V$, assign property $v.\mathsf{reachable}\leftarrow\verb|false|$.
+
+For $i=1$ to $|V|-1$:
+\begin{itemize}
+    \item assign $u\leftarrow T[i]$;
+    \item assign $v\leftarrow T[i+1]$;
+    \item if $u.\mathsf{reachable}=\verb|false|$ and $v.\mathsf{reachable}=\verb|false|$, then return \verb|false|;
+    \item for each $w\in V$ where $(u,w)\in E$, via adjacency list:
+    \begin{itemize}
+    \item assign property $w.\mathsf{reachable}\leftarrow \verb|true|$.
+    \end{itemize}
+\end{itemize}
+Return \verb|true|.
+
+\textbf{Proposition I. }\textit{Claim. }{\sc Tours}($G$) has running time $O(|V|+|E|)$ for graph $G=(V,E)$.
+
+\textit{Proof. }
+
+\textbf{Proposition II. }\textit{Claim. }{\sc Tours} correctly verifies Property 1.
+
+\textit{Proof. }Note that Property 1 is synonymous with ``strongly connected.''
+\end{solution}
 
 \item Suppose now that $G = (V, E)$ is an arbitrary directed graph. Design a $O(|V|+|E|)$ time algorithm to determine whether or not the given graph $G$ satisfies the desired property. 
 
@@ -62,9 +87,8 @@ $B \rightarrow A \rightarrow C \rightarrow D$, then $(B,A,C,D)$ is a valid topol
 \item Prove that your algorithm in $(2)$ is correct and that it runs in the required time.
 \begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
 \end{enumerate}
-
-
-\subsection{Topological Sort (5+5=10 points)}
+\newpage
+\subsection{Topological sort}
 \begin{enumerate}
     \item How many valid topological sorts does the directed graph $G$ in Figure \ref{fig:topo-sort} below have? List all the valid topological sorts in the following table. One of them has been listed as an example, where node $A$ has the last finish time and $D$ has the first.
 
@@ -108,21 +132,22 @@ $B \rightarrow A \rightarrow C \rightarrow D$, then $(B,A,C,D)$ is a valid topol
 
 \begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
 \end{enumerate}
+\newpage
+\subsection{Spanning tree}
 
+Recall that for an undirected graph $G = (V,E)$, a spanning tree $T$ is a subgraph containing all vertices $V$ such that $T$ is connected and acyclic. 
 
-
-
-\subsection{Spanning Tree (4+4+4=12 points)}
-
-Recall that for an undirected graph $G = (V,E)$ as a spanning tree $T$ is a subgraph containing all vertices $V$ such that $T$ is connected and acyclic. 
-
-In the following, let $e = (u,v) \in E$ be an edge that is \emph{not} part of $T$.
+In the following, let $e=\{u,v\}\in E$ be an edge that is \emph{not} part of $T$.
 Prove the following properties:
 
 \begin{enumerate}
     \item Assume we add $e$ to $T$, i.e., consider the graph $T'$ over the vertices $V$ that contains all edges from $T$ and $e$. Show that this graph is no longer acyclic.
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\begin{solution}
+\textbf{Proposition I. }\textit{Claim. }Let $T=(V,E_T)$ be a spanning tree of undirected graph $G=(V,E_G)$. Let $e\in E_G$ be an edge where $e\notin E_T$. Then the graph $T'=(V,E_T\cup\{e\})$ is not acyclic.
+
+\textit{Proof. }Note $e=\{u,v\}$ for $u,v\in V$. Since $T$ is a spanning tree, $T$ is connected and contains $u$ and $v$. Thus, there exists a path $(u,\dots,v)$ in $T$. Of course $e=\{u,v\}\notin E_T$, so there exists a path $(u,w,\dots,v)$ or $(u,\dots,w,v)$ in $T$ via some other vertex $w\in V$. Assume, without loss of generality, that this path is $(u,w,\dots,v)$ in $T$. Since $T'$ includes edge $e=\{u,v\}$, there exists a cycle $(u,w,\dots,v,u)$ in $T'$. Ergo $T'$ is not acyclic.$~\square$
+\end{solution}
 
     \item Now let $e'$ be an arbitrary edge on the cycle created by adding $e$ to $T'$ in part (1). Let $T''$ be the graph obtained by removing $e'$, i.e., the graph obtained by replacing $e'$ with $e$ in the original spanning tree $T$. Show that $T''$ is connected.
 
