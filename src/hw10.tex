@@ -10,7 +10,7 @@
 \cfoot{}
 \stepcounter{subsection}
 \subsection*{References}
-Peer-reviewed with Crystal Huang.
+Collaborated with Crystal Huang.
 \subsection{Tours}
 Suppose the New York Botanical Gardens are trying to drum up interest for their tree and shrub collections by offering tours through the arboretum, and you are tasked with reviewing their proposed routes. There is a set $V$ of trees they want some tour to stop at, and a set $E$ of routes from tree to tree their proposed tours would make. To make sure all the trees are visited, they want the following property:
 \begin{property} 
@@ -49,9 +49,9 @@ $B \rightarrow A \rightarrow C \rightarrow D$, then $(B,A,C,D)$ is a valid topol
 \end{figure}
 \begin{solution}
 
-\textbf{Axiom I. }For $v\in V$, define property $v.\mathsf{reachable}\in\{\verb|true|,\verb|false|\}$.
+\textbf{Axiom 1. }For $v\in V$, define property $v.\mathsf{reachable}\in\{\verb|true|,\verb|false|\}$.
 
-\textbf{Algorithm I. }{\sc Tours}($G$) with graph $G=(V,E)$; returns $1$ if $G$ satisfies Property \verb|true|; otherwise, \verb|false|:
+\textbf{Algorithm 1. }{\sc Tours}($G$) with graph $G=(V,E)$; returns $1$ if $G$ satisfies Property \verb|true|; otherwise, \verb|false|:
 
 Assign a $|V|$-element array $T[1,\dots,|V|]\leftarrow\textsc{TopologicalSort}(G)$. Here {\sc TopologicalSort} is the well-known topological sort algorithm that returns an array containing the vertices of $G$ in topological order. Note {\sc TopologicalSort} has running time $O(|V|+|E|)$.
 
@@ -69,11 +69,11 @@ For $i=1$ to $|V|-1$:
 \end{itemize}
 Return \verb|true|.
 
-\textbf{Proposition I. }\textit{Claim. }{\sc Tours}($G$) has running time $O(|V|+|E|)$ for graph $G=(V,E)$.
+\textbf{Proposition 1. }\textit{Claim. }{\sc Tours}($G$) has running time $O(|V|+|E|)$ for graph $G=(V,E)$.
 
 \textit{Proof. }
 
-\textbf{Proposition II. }\textit{Claim. }{\sc Tours} correctly verifies Property 1.
+\textbf{Proposition 2. }\textit{Claim. }{\sc Tours} correctly verifies Property 1.
 
 \textit{Proof. }Note that Property 1 is synonymous with ``strongly connected.''
 \end{solution}
@@ -141,19 +141,56 @@ In the following, let $e=\{u,v\}\in E$ be an edge that is \emph{not} part of $T$
 Prove the following properties:
 
 \begin{enumerate}
-    \item Assume we add $e$ to $T$, i.e., consider the graph $T'$ over the vertices $V$ that contains all edges from $T$ and $e$. Show that this graph is no longer acyclic.
-
+\item Assume we add $e$ to $T$, i.e., consider the graph $T'$ over the vertices $V$ that contains all edges from $T$ and $e$. Show that this graph is no longer acyclic.
 \begin{solution}
-\textbf{Proposition I. }\textit{Claim. }Let $T=(V,E_T)$ be a spanning tree of undirected graph $G=(V,E_G)$. Let $e\in E_G$ be an edge where $e\notin E_T$. Then the graph $T'=(V,E_T\cup\{e\})$ is not acyclic.
+
+\textbf{Definitions. }Let $G=(V,E)$ be an undirected graph. Let $T=(V,E_T)$ be a spanning tree of $G$, with $e\in E$ but $e\notin E_T$. Let graph $T'=(V,E_T\cup\{e\})$. 
+
+\textbf{Proposition I. }
+
+\textit{Claim. }$T'$ is not acyclic.
 
 \textit{Proof. }Note $e=\{u,v\}$ for $u,v\in V$. Since $T$ is a spanning tree, $T$ is connected and contains $u$ and $v$. Thus, there exists a path $(u,\dots,v)$ in $T$. Of course $e=\{u,v\}\notin E_T$, so there exists a path $(u,w,\dots,v)$ or $(u,\dots,w,v)$ in $T$ via some other vertex $w\in V$. Assume, without loss of generality, that this path is $(u,w,\dots,v)$ in $T$. Since $T'$ includes edge $e=\{u,v\}$, there exists a cycle $(u,w,\dots,v,u)$ in $T'$. Ergo $T'$ is not acyclic.$~\square$
 \end{solution}
+\item Now let $e'$ be an arbitrary edge on the cycle created by adding $e$ to $T'$ in part (1). Let $T''$ be the graph obtained by removing $e'$, i.e., the graph obtained by replacing $e'$ with $e$ in the original spanning tree $T$. Show that $T''$ is connected.
+\begin{solution}
 
-    \item Now let $e'$ be an arbitrary edge on the cycle created by adding $e$ to $T'$ in part (1). Let $T''$ be the graph obtained by removing $e'$, i.e., the graph obtained by replacing $e'$ with $e$ in the original spanning tree $T$. Show that $T''$ is connected.
+\textbf{Proposition II. }
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Claim. }From Proposition I, there exists a cycle $C$ in $T'$. Let $e'\in(E_T\cup\{e\})$ be an edge on $C$.
 
-    \item Now complete the proof of $T''$ being a spanning tree by also showing that $T''$ is acyclic.
+Let graph $T''=(V,(E_T\cup\{e\})\setminus\{e'\})$. Then $T''$ is connected.
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\textit{Proof. }Since $T$ is a tree, $T$ is connected. Since $T'$ is induced by adding an edge to $T$, $T'$ is connected. Either $e=e'$ or $e\neq e'$.
+\begin{itemize}
+\item Suppose $e=e'$. Then $T''=(V,E_T)=T$. So $T''$ is connected.
+\item Suppose instead $e\neq e'$. Note $e=\{u,v\}$ and $e'=\{x,y\}$ for distinct $u,v,x,y\in V$. Now $T$ is a tree, and thus acyclic; but, $T'$ contains cycle $C$, so $e$ must be on $C$. By definition, $e'$ is on $C$. Therefore, $C=(u,\dots,x,y,\dots,v,u)$ or $C=(v,\dots,x,y,\dots,u,v)$. Assume, without loss of generality, that $C=(u,\dots,x,y,\dots,v,u)$ in $T'$. Although edge $\{x,y\}$ is not in $T''$, severing that edge from $C$ implies that paths $(x,\dots,u)$ and $(v,\dots,y)$ do exist in $T''$. Since edge $e=\{u,v\}$ does exist in $T''$, there exists a path $(x,\dots,u,v,\dots,y)$ in $T''$. All other vertices in $T''$ are connected because $T'$ is connected. So $T''$ is connected.
+\end{itemize}
+Ergo $T''$ is connected.$~\square$
+\end{solution}
+\newpage
+\item Now complete the proof of $T''$ being a spanning tree by also showing that $T''$ is acyclic.
+\begin{solution}
+
+\textbf{Proposition III. }
+
+\textit{Claim. }From Proposition I, there exists a cycle $C$ in $T'$. Let $e'\in(E_T\cup\{e\})$ be an edge on $C$.
+
+Let graph $T''=(V,(E_T\cup\{e\})\setminus\{e'\})$. Then $T''$ is acyclic.
+
+\textit{Proof. }Either $e=e'$ or $e\neq e'$.
+\begin{itemize}
+    \item Suppose $e=e'$. Then $T''=(V,E_T)=T$. Since $T$ is a tree, $T$ is acyclic. So $T''$ is acyclic.
+    \item Suppose instead $e\neq e'$. Note $e=\{u,v\}$ and $e'=\{x,y\}$ for distinct $u,v,x,y\in V$. Now $T$ is a tree, and thus acyclic; but, $T'$ contains cycle $C$, so $e$ must be on $C$. By definition, $e'$ is on $C$. Therefore, $C=(u,\dots,x,y,\dots,v,u)$ or $C=(v,\dots,x,y,\dots,u,v)$. Assume, without loss of generality, that $C=(u,\dots,x,y,\dots,v,u)$ in $T'$. Since edge $\{x,y\}$ is not in $T''$, we know $C$ does not exist in $T''$. There is no other cycle in $T'$ because $T$ is acyclic. Since $C$ is not in $T''$, we know $T''$ is acyclic.
+\end{itemize}
+Ergo $T''$ is acyclic.$~\square$
+
+\textbf{Proposition IV. }
+
+\textit{Claim. }From Proposition I, there exists a cycle $C$ in $T'$. Let $e'\in(E_T\cup\{e\})$ be an edge on $C$.
+
+Let graph $T''=(V,(E_T\cup\{e\})\setminus\{e'\})$. Then $T''$ is a spanning tree.
+
+\textit{Proof. }From Proposition II, $T''$ is connected. From Proposition III, $T''$ is acyclic. Therefore, $T''$ is a tree. By construction, $T''$ is an induced subgraph of $G$ containing all vertices $v\in V$. Ergo $T''$ is a spanning tree of $G.~\square$
+\end{solution}
 \end{enumerate}
