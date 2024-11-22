@@ -119,18 +119,33 @@ Return \verb|true|.
     \begin{tabular}{c c c c c c c}
     \hline
      1. & A & B & C & F & E & D\\
-     2. &  &  &  &  &  & \\
+     2. & A & B & C & E & F & D\\
+     3. & A & B & C & E & D & F\\
+     4. & A & B & E & C & D & F\\
+     5. & A & B & E & C & F & D\\
+     6. & A & E & B & C & D & F\\
+     7. & A & E & B & C & F & D\\
+     8. & E & A & B & C & D & F\\
+     9. & E & A & B & C & F & D\\
     \hline
     \end{tabular}
     \label{table:q3}
     \end{center}
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-    
+\begin{solution}
+The solutions above are obtained by stepping through the topological sort algorithm in nine different ways.
+\end{solution}
+\item 
+Give an example of a graph showing that the topological sort algorithm does not work if we output vertices in order of their discovery time, instead of reverse finish time.
+\begin{solution}
+\textit{False claim. }A topological sort algorithm is still correct if vertices are returned in order of discovery time.
 
-    \item 
-    Give an example of a graph showing that the topological sort algorithm does not work if we output vertices in order of their discovery time, instead of reverse finish time.
+\textit{Counterexample. }
+Consider directed acyclic graph $G=(\{{\rm A},{\rm B},{\rm C}\},\{({\rm B},{\rm A}),({\rm C},{\rm A})\})$.
 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+In a topological sort of $G$, B and C must precede A.
+
+However, this modified algorithm returns B, then A, then C, which is not a valid topological sort. It could also return C, then A, then B, which is also incorrect. Hence disproven.$~\square$
+\end{solution}
 \end{enumerate}
 \newpage
 \subsection{Spanning tree}
