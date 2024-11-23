@@ -67,7 +67,7 @@ Return $\verb|true|$.
 
 \textit{Inductive step. }Consider $j=k+1$. From the inductive hypothesis, there exists a path from $T[1]$ to $T[k]$. There are two cases:
 \begin{itemize}
-    \item Suppose $(T[k],T[k+1])\in E$. Then there exists a path from $T[1]$ to $T[k+1]$, noting $T[1]$ precedes $T[k]$ and $T[k]$ precedes $T[k+1]$ in the topological sort. Thus, Property 1 holds for the induced subgraph containing only the vertices in $T[1,\dots,k]$.
+    \item Suppose $(T[k],T[k+1])\in E$. Then there exists a path from $T[1]$ to $T[k+1]$, noting $T[1]$ precedes $T[k]$ and $T[k]$ precedes $T[k+1]$ in the topological sort. Thus, Property 1 holds for the induced subgraph containing only the vertices in $T[1,\dots,k+1]$.
     \item Suppose instead $(T[k],T[k+1])\notin E$. Then Property 1 does not hold, and the Algorithm correctly returns $\verb|false|$.
 \end{itemize}
 In all cases of the inductive step, the invariant holds.
@@ -84,10 +84,14 @@ Assign an $n$-element array $S[1,\dots,n]\leftarrow\textsc{StronglyConnectedComp
 
 For $i=2$ to $n$:
 \begin{itemize}
-    \item if, for all $u\in S[i]$, for all $(u,v)\in E$, via adjacency list, we have $v\notin S[i-1]$, then:
+    \item for $u\in S[i-1]$:
     \begin{itemize}
-        \item return $\verb|false|$.
+        \item for $(u,v)\in E$, via adjacency list:
+        \begin{itemize}
+            \item if $v\in S[i]$, continue to next $i$;
+        \end{itemize}
     \end{itemize}
+    \item return $\verb|false|$;
 \end{itemize}
 Return $\verb|true|$.
 \end{solution}
@@ -114,16 +118,18 @@ This invariant relies on the observation that the {\sc StronglyConnectedComponen
 
 \textit{Hypothesis. }Consider $j=k$ where $2\leq k\leq n$. Assume that, at the beginning of iteration $k$, there exists a path in $G$ containing every vertex in \[\bigcup_{i=1}^kS[i].\]
 
-\textit{Inductive step. }Consider $j=k+1$. From the inductive hypothesis, there exists a path $(y_1,\dots,y_q)$ connecting every vertex in \[\bigcup_{i=1}^kS[i].\] There are two cases:
+\textit{Inductive step. }Consider $j=k+1$. From the inductive hypothesis, there exists a path $(x_1,\dots,x_p)$ connecting every vertex in \[\bigcup_{i=1}^kS[i].\] There are two cases:
 
 \begin{itemize}
-\item Suppose there exists $u\in S[k+1],v\in S[k]$ where $(u,v)\in E$. Since $S[k+1]$ is strongly connected by definition, there exists a path $(x_1,\dots,x_p,u)$ containing $u$ and all other vertices $x_1,\dots,x_p\in S[k+1]$. Since $(u,v)\in E$, there exists a path $(x_1,\dots,x_p,u,v)$. Since $S[k]$ is strongly connected by definition, there exists a path $(v,y_1,\dots,y_q)$ containing $v$  Therefore, there exists a path $(x_1,\dots,x_p,u,v,y_1,\dots,y_q)$ connecting every vertex in
+\item Suppose there exists an edge $(u,v)\in E$ for $u\in S[k],v\in S[k+1]$. Since $S[k+1]$ is strongly connected by definition, there exists a path $(v,y_1,\dots,y_q)$ containing $v$ and all other vertices $y_1,\dots,y_q\in S[k+1]$. Since $(u,v)\in E$, there exists a path $(u,v,y_1,\dots,y_q)$.
+
+Since $S[k]$ is strongly connected by definition, there exists a path $(x_1,\dots,x_p,u)$. Therefore, there exists a path $(x_1,\dots,x_p,u,v,y_1,\dots,y_q)$ connecting every vertex in
 \[\bigcup_{i=1}^{k+1}S[i].\]
-\item Suppose instead there exists no such edge in $E$. Then, by construction of $S[k+1]$ and $S[k]$, there is no path connecting these components. We correctly conclude that $G$ does not satisfy Property 1, and return $\verb|false|$. 
+\item Suppose instead there exists no such edge in $E$. Then, by construction of $S[k]$ and $S[k+1]$, there is no path connecting these components. We correctly conclude that $G$ does not satisfy Property 1, and return $\verb|false|$. 
 \end{itemize}
 In all cases of the inductive step, the invariant holds.
 
-If, at termination, $j=n$, then Algorithm 2 returns $\verb|false|$, which is correct by the principle of mathematical induction.
+If, at termination, $j=n$, then Algorithm 2 returns $\verb|true|$, which is correct by the principle of mathematical induction.
 
 The invariant holds at initialization, maintenance, and termination. Algorithm 2 is correct.$~\square$
 \end{solution}
@@ -220,7 +226,7 @@ Let graph $T''=(V,(E_T\cup\{e\})\setminus\{e'\})$. Then $T''$ is connected.
 \textit{Proof. }Since $T$ is a tree, $T$ is connected. Since $T'$ is induced by adding an edge to $T$, $T'$ is connected. Either $e=e'$ or $e\neq e'$.
 \begin{itemize}
 \item Suppose $e=e'$. Then $T''=(V,E_T)=T$. So $T''$ is connected.
-\item Suppose instead $e\neq e'$. Note $e=\{u,v\}$ and $e'=\{x,y\}$ for distinct $u,v,x,y\in V$. Now $T$ is a tree, and thus acyclic; but, $T'$ contains cycle $C$, so $e$ must be on $C$. By definition, $e'$ is on $C$. Therefore, $C=(u,\dots,x,y,\dots,v,u)$ or $C=(v,\dots,x,y,\dots,u,v)$. Assume, without loss of generality, that $C=(u,\dots,x,y,\dots,v,u)$ in $T'$. Although edge $\{x,y\}$ is not in $T''$, severing that edge from $C$ implies that paths $(x,\dots,u)$ and $(v,\dots,y)$ do exist in $T''$. Since edge $e=\{u,v\}$ does exist in $T''$, there exists a path $(x,\dots,u,v,\dots,y)$ in $T''$. All other vertices in $T''$ are connected because $T'$ is connected. So $T''$ is connected.
+\item Suppose instead $e\neq e'$. Note $e=\{u,v\}$ and $e'=\{x,y\}$ for $u,v,x,y\in V$. Now $T$ is a tree, and thus acyclic; but, $T'$ contains cycle $C$, so $e$ must be on $C$. By definition, $e'$ is on $C$. Therefore, $C=(u,\dots,x,y,\dots,v,u)$ or $C=(v,\dots,x,y,\dots,u,v)$. Assume, without loss of generality, that $C=(u,\dots,x,y,\dots,v,u)$ in $T'$. Although edge $\{x,y\}$ is not in $T''$, severing that edge from $C$ implies that paths $(x,\dots,u)$ and $(v,\dots,y)$ do exist in $T''$. Since edge $e=\{u,v\}$ does exist in $T''$, there exists a path $(x,\dots,u,v,\dots,y)$ in $T''$. All other vertices in $T''$ are connected because $T'$ is connected. So $T''$ is connected.
 \end{itemize}
 Ergo $T''$ is connected.$~\square$
 \end{solution}
@@ -237,7 +243,7 @@ Let graph $T''=(V,(E_T\cup\{e\})\setminus\{e'\})$. Then $T''$ is acyclic.
 \textit{Proof. }Either $e=e'$ or $e\neq e'$.
 \begin{itemize}
     \item Suppose $e=e'$. Then $T''=(V,E_T)=T$. Since $T$ is a tree, $T$ is acyclic. So $T''$ is acyclic.
-    \item Suppose instead $e\neq e'$. Note $e=\{u,v\}$ and $e'=\{x,y\}$ for distinct $u,v,x,y\in V$. Now $T$ is a tree, and thus acyclic; but, $T'$ contains cycle $C$, so $e$ must be on $C$. By definition, $e'$ is on $C$. Therefore, $C=(u,\dots,x,y,\dots,v,u)$ or $C=(v,\dots,x,y,\dots,u,v)$. Assume, without loss of generality, that $C=(u,\dots,x,y,\dots,v,u)$ in $T'$. Since edge $\{x,y\}$ is not in $T''$, we know $C$ does not exist in $T''$. There is no other cycle in $T'$ because $T$ is acyclic. Since $C$ is not in $T''$, we know $T''$ is acyclic.
+    \item Suppose instead $e\neq e'$. Note $e=\{u,v\}$ and $e'=\{x,y\}$ for $u,v,x,y\in V$. Now $T$ is a tree, and thus acyclic; but, $T'$ contains cycle $C$, so $e$ must be on $C$. By definition, $e'$ is on $C$. Therefore, $C=(u,\dots,x,y,\dots,v,u)$ or $C=(v,\dots,x,y,\dots,u,v)$. Assume, without loss of generality, that $C=(u,\dots,x,y,\dots,v,u)$ in $T'$. Since edge $\{x,y\}$ is not in $T''$, we know $C$ does not exist in $T''$. There is no other cycle in $T'$ because $T$ is acyclic. Since $C$ is not in $T''$, we know $T''$ is acyclic.
 \end{itemize}
 Ergo $T''$ is acyclic.$~\square$
 
