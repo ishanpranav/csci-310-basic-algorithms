@@ -262,7 +262,7 @@ Again, Sam can use Dijkstra's algorithm to compute the shortest distance from $h
 
 \textbf{Algorithm II. }{\sc FromSupermarkets}($G,B,h$) requires graph $G=(V,E)$, supermarket vertices $B\subseteq V$, and target vertex $h\in V$.
 
-$(D[1,\dots,|V|],P[1,\dots,|V|])\leftarrow $ invoke {\sc Dijkstra}($G,h$) for graph $G=(V,E)$ and source vertex $h$; for all $v\in V$, the value at $D[v]$ represents the shortest distance from $h$ to $v$, and $P[v]$ represents the shortest path from $h$ to $v$. Since $G$ is undirected, $D[v]$ also represents the distance from $v$ to $h$, and $P[v]$ also represents the shortest distance from $v$ to $h$.
+$(D[1,\dots,|V|],P[1,\dots,|V|])\leftarrow $ invoke {\sc Dijkstra}($G,h$) for graph $G=(V,E)$ and source vertex $h$; for all $v\in V$, the value at $D[v]$ represents the shortest distance from $h$ to $v$, and $P[v]$ represents the shortest path from $h$ to $v$. Since $G$ is undirected, $D[v]$ also represents the distance from $v$ to $h$, and $P[v]$ also represents the shortest path from $v$ to $h$.
 
 Return $(D,P)$, noting that for all $b\in B$, the value at $D[b]$ represents the shortest distance from $b$ to $h$ and $P[b]$ represents the shortest path from $b$ to $h$.
 \end{solution}
