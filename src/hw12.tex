@@ -144,8 +144,8 @@ Step & \begin{tabular}[c]{@{}c@{}}Vertex Removed\\ from Q\end{tabular} & $A.d$ &
 4    & $B$ & $0$ & $9$ & $\infty$ & $\infty$ & $\infty$ & $14$ & $5$ & $3$ \\ \hline
 5    & $F$ & $0$ & $9$ & $15$ & $23$ & $25$ & $14$ & $5$ & $3$ \\ \hline
 6    & $C$ & $0$ & $9$ & $15$ & $22$ & $25$ & $14$ & $5$ & $3$ \\ \hline
-7    &                                                                 &     &     &     &     &     &     &     &     \\ \hline
-8    &                                                                 &     &     &     &     &     &     &     &     \\ \hline
+7    & $D$ & $0$ & $9$ & $15$ & $22$ & $23$ & $14$ & $5$ & $3$ \\ \hline
+8    & $E$ & $0$ & $9$ & $15$ & $22$ & $23$ & $14$ & $5$ & $3$ \\ \hline
 \end{tabular}
     \caption{Execution trace of Dijkstra on $G$.}
     \label{tab:dijkstra}
@@ -174,6 +174,7 @@ $H$ & & & & & & & & \\ \hline
     \caption{Shortest distance when only using first $i$ vertices as intermediates.}
 \end{table}
 \begin{solution}
+Stepping through the first four iterations of the outer loop of the Floyd--Warshall algorithm gives the results below.
 \begin{table}[H]
     \centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
@@ -185,10 +186,10 @@ $C$    & $\infty$ & $12$ & $0$ & $7$ & $\infty$ & $\infty$ & $\infty$ & $\infty$
 $D$    & $\infty$ & $\infty$ & $\infty$ & $0$ & $1$ & $\infty$ & $\infty$ & $\infty$ \\ \hline
 $E$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $0$ & $\infty$ & $\infty$ & $\infty$ \\ \hline
 $F$    & $\infty$ & $\infty$ & $1$ & $9$ & $11$ & $0$ & $0$ & $\infty$ \\ \hline
-$G$    & $20$ & $4$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $0$ & $\infty$ \\ \hline
+$G$    & $20$ & $4$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $0$ & $23$ \\ \hline
 $H$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $2$ & $0$ \\ \hline
 \end{tabular}
-\caption{Shortest distance when only using first $1$ vertices as intermediates.}
+\caption{Shortest distance when only using first $1$ vertex as an intermediate.}
 \end{table}
 \begin{table}[H]
     \centering
@@ -213,14 +214,14 @@ $H$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $2$ &
  & $A$ & $B$ & $C$ & $D$ & $E$ & $F$ & $G$ & $H$ \\ \hline
 $A$ & $0$ & $10$ & $\infty$ & $\infty$ & $\infty$ & $15$ & $\infty$ & $3$ \\ \hline
 $B$    & $\infty$ & $0$ & $\infty$ & $\infty$ & $\infty$ & $5$ & $\infty$ & $\infty$ \\ \hline
-$C$    & $\infty$ & $12$ & $0$ & $7$ & $5$ & $17$ & $\infty$ & $\infty$ \\ \hline
+$C$    & $\infty$ & $12$ & $0$ & $7$ & $\infty$ & $17$ & $\infty$ & $\infty$ \\ \hline
 $D$    & $\infty$ & $\infty$ & $\infty$ & $0$ & $1$ & $\infty$ & $\infty$ & $\infty$ \\ \hline
 $E$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $0$ & $\infty$ & $\infty$ & $\infty$ \\ \hline
-$F$    & $\infty$ & $13$ & $1$ & $8$ & $10$ & $0$ & $0$ & $\infty$ \\ \hline
+$F$    & $\infty$ & $13$ & $1$ & $8$ & $11$ & $0$ & $0$ & $\infty$ \\ \hline
 $G$    & $20$ & $4$ & $\infty$ & $\infty$ & $\infty$ & $9$ & $0$ & $23$ \\ \hline
 $H$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $2$ & $0$ \\ \hline
 \end{tabular}
-\caption{Shortest distance when only using first $2$ vertices as intermediates.}
+\caption{Shortest distance when only using first $3$ vertices as intermediates.}
 \end{table}
 \begin{table}[H]
     \centering
@@ -229,14 +230,14 @@ $H$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $2$ &
  & $A$ & $B$ & $C$ & $D$ & $E$ & $F$ & $G$ & $H$ \\ \hline
 $A$ & $0$ & $10$ & $\infty$ & $\infty$ & $\infty$ & $15$ & $\infty$ & $3$ \\ \hline
 $B$    & $\infty$ & $0$ & $\infty$ & $\infty$ & $\infty$ & $5$ & $\infty$ & $\infty$ \\ \hline
-$C$    & $\infty$ & $12$ & $0$ & $7$ & $5$ & $17$ & $\infty$ & $\infty$ \\ \hline
+$C$    & $\infty$ & $12$ & $0$ & $7$ & $8$ & $17$ & $\infty$ & $\infty$ \\ \hline
 $D$    & $\infty$ & $\infty$ & $\infty$ & $0$ & $1$ & $\infty$ & $\infty$ & $\infty$ \\ \hline
 $E$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $0$ & $\infty$ & $\infty$ & $\infty$ \\ \hline
-$F$    & $\infty$ & $13$ & $1$ & $8$ & $10$ & $0$ & $0$ & $\infty$ \\ \hline
+$F$    & $\infty$ & $13$ & $1$ & $8$ & $11$ & $0$ & $0$ & $\infty$ \\ \hline
 $G$    & $20$ & $4$ & $\infty$ & $\infty$ & $\infty$ & $9$ & $0$ & $23$ \\ \hline
 $H$    & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $2$ & $0$ \\ \hline
 \end{tabular}
-\caption{Shortest distance when only using first $2$ vertices as intermediates.}
+\caption{Shortest distance when only using first $4$ vertices as intermediates.}
 \end{table}
 \end{solution}
 \newpage
@@ -247,12 +248,52 @@ Sam, who lives in a node $s$ of a weighted \emph{undirected} graph $G = (V, E)$ 
 \begin{enumerate}
 \item Compute the shortest distance from $s$ to all supermarkets $b \in B$.
 \begin{solution}
+Sam can use Dijkstra's algorithm (denoted {\sc Dijkstra}($G,s$)) to compute the shortest distance from $s$ to all supermarkets $b\in B$.
 
+\textbf{Algorithm I. }{\sc ToSupermarkets}($G,s,B$) requires graph $G=(V,E)$, source vertex $s\in V$, and supermarket vertices $B\subseteq V$.
+
+$(D[1,\dots,|V|],P[1,\dots,|V|])\leftarrow$ invoke {\sc Dijkstra}($G,s$) for graph $G=(V,E)$ and source vertex $s$; for all $v\in V$, the value at $D[v]$ represents the shortest distance from $s$ to $v$ and $P[v]$ represents the shortest path from $s$ to $v$.
+
+Return $(D,P)$, noting that for all $b\in B$, the value at $D[b]$ represents the shortest distance from $s$ to $b$ and $P[b]$ represents the shortest path from $s$ to $b$.
 \end{solution}
-\item Compute the shortest distance from every supermarket $b \in B$ to $h$. Note that this is the dual of the single-source shortest path where we are now asking for the shortest path from every node to a particular destination. 
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
-    \item Combine part 1 and 2 to solve the full problem.
-\begin{solution}   INSERT YOUR SOLUTION HERE   \end{solution}
+\item Compute the shortest distance from every supermarket $b \in B$ to $h$. Note that this is the dual of the single-source shortest path where we are now asking for the shortest path from every node to a particular destination.
+\begin{solution}
+Again, Sam can use Dijkstra's algorithm to compute the shortest distance from $h$ to all supermarkets $b\in B$, leveraging the fact that $G$ is an undirected graph to reverse the direction of the search without impacting the results.
+
+\textbf{Algorithm II. }{\sc FromSupermarkets}($G,B,h$) requires graph $G=(V,E)$, supermarket vertices $B\subseteq V$, and target vertex $h\in V$.
+
+$(D[1,\dots,|V|],P[1,\dots,|V|])\leftarrow $ invoke {\sc Dijkstra}($G,h$) for graph $G=(V,E)$ and source vertex $h$; for all $v\in V$, the value at $D[v]$ represents the shortest distance from $h$ to $v$, and $P[v]$ represents the shortest path from $h$ to $v$. Since $G$ is undirected, $D[v]$ also represents the distance from $v$ to $h$, and $P[v]$ also represents the shortest distance from $v$ to $h$.
+
+Return $(D,P)$, noting that for all $b\in B$, the value at $D[b]$ represents the shortest distance from $b$ to $h$ and $P[b]$ represents the shortest path from $b$ to $h$.
+\end{solution}
+\newpage
+\item Combine parts 1 and 2 to solve the full problem.
+\begin{solution}
+Sam should take the shortest overall path; that is, Sam should choose the supermarket $b\in B$ which minimizes the sum of the distance from $s$ to $b$ and $b$ to $h$.
+
+\textbf{Algorithm III. }{\sc ToBirthdayParty}($G,s,B,h$) requires graph $G=(V,E)$, source vertex $s\in V$, supermarket vertices $B\subseteq V$, and target vertex $h\in V$:
+
+Let $b^*\leftarrow\mathsf{nil}$.
+
+Let $d^*\leftarrow+\infty$.
+
+Let $p^*\leftarrow\mathsf{nil}$.
+
+Assign $(D_s[1,\dots,|V|],P_s[1,\dots,|V|])\leftarrow $ invoke {\sc ToSupermarkets}($G,s,B$).
+
+Assign $(D_h[1,\dots,|V|],P_h[1,\dots,|V|])\leftarrow $ invoke {\sc FromSupermarkets}($G,B,h$).
+
+For $b\in B$:
+\begin{itemize}
+\item if $D_s[b]+D_h[b]<d^*$, then:
+\begin{itemize}
+\item assign $b^*\leftarrow b$;
+\item assign $d^*\leftarrow D_s[b]+D_h[b]$;
+\item assign $p^*\leftarrow $ concatenation of $P_s[b]$ and $P_h[b]$.
+\end{itemize}
+\end{itemize}
+Return $p^*$, the shortest path from $s$ to $h$ via some $b\in B$.
+\end{solution}
 \end{enumerate}
 \newpage
 \subsection{Detecting negative cycles}
@@ -273,8 +314,9 @@ Return $\mathrm{false}$.\\
 
 \textbf{Proposition 1. }\textit{Claim. }Algorithm 1 is correct.
 
-\textit{Proof. }The {\sc Floyd--Warshall} algorithm initializes all vertices' self-weights to $0$. Of course, the shortest path from a vertex $v$ to itself is $(v)$. If, after the algorithm terminates, the self-weight of any vertex is less than $0$, then the algorithm discovered a path $P=(v,\dots,v)$ with total cost less than $0$. Of course, $P$ is a negative-weight cycle. Ergo, a self--weight less than $0$ implies the existence of a negative cycle. $\textsc{ContainsNegativeCycle}$ checks all vertices' self-weights and returns $\mathrm{true}$ if any is less than $0$, and $\mathrm{false}$ otherwise. Therefore, Algorithm 1 is correct.$~\square$
+\textit{Proof. }The {\sc Floyd--Warshall} algorithm initializes all vertices' self-weights to $0$. Of course, the shortest path from a vertex $v$ to itself is $(v)$. If, after the algorithm terminates, the self-weight of any vertex is less than $0$, then the algorithm discovered a path $P=(v,\dots,v)$ with a total cost less than $0$. Of course, $P$ is a negative-weight cycle. Ergo, a self-weight less than $0$ implies the existence of a negative cycle. $\textsc{ContainsNegativeCycle}$ checks all vertices' self-weights and returns $\mathrm{true}$ if any is less than $0$, and $\mathrm{false}$ otherwise. Therefore, Algorithm 1 is correct.$~\square$
 \end{solution}
+\newpage
 \subsection{Modified Floyd--Warshall}
 Consider the following (simplified) pseudocode of the Floyd-Warshall algorithm. $W[i,j]$ is the weight of the edge $i\rightarrow j$ (or $\infty$ if the edge is absent). At the end of the execution of this algorithm, $D[i,j]$ contains the length of the shortest path from $i$ to $j$. First, convince yourself that this is indeed the case (no need to submit this part).
 
@@ -305,5 +347,5 @@ Now, consider the modification where, instead of at line 4 above, the iterator f
 \end{code}
 What is the meaning of the value stored at $D[1,2]$, at the end of the execution of this modified algorithm? Justify your answer. 
 \begin{solution}
-
+At the end of the execution of this modified algorithm, the value stored at $D[1,2]$ is not necessarily the shortest distance from vertex $i=1$ to vertex $j=2$. Instead, it is the shortest distance from vertex $i=1$ to vertex $j=2$ via at most $i=1$ intermediate vertices. In other words, it is the shortest path from vertex $1$ to vertex $2$ via a direct edge $(1,2)$ or a path $(1,k,2)$ for some other vertex $k$---whichever has the lowest cost. First, the algorithm takes the shortest distance from $i$ to $j$ to be the weight of the edge $(i,j)$, if it exists, or $+\infty$ if not. So $D[1,2]=w(1,2)$ if an edge exists or $D[1,2]=+\infty$ if not. Then, the modified algorithm visits every pair of vertices $(i,j)$, and, for every intermediate vertex $1\leq k\leq n$, attempts to find a shorter path. When $i=1$ and $j=2$, for each $1\leq k\leq n$, if the path $(i,k,j)$ has a shorter total cost than the existing $D[i,j]$ (the length of the shortest path via no intermediate vertices), it is taken. Otherwise, it is not. This confirms our intuition.
 \end{solution}
